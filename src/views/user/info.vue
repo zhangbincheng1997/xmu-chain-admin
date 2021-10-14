@@ -52,21 +52,11 @@ export default {
         birthday: ''
       },
       rules: {
-        avatar: [
-          { required: true, message: '请上传头像', trigger: 'blur' }
-        ],
-        nickname: [
-          { required: true, message: '请输入昵称', trigger: 'blur' }
-        ],
-        email: [
-          { required: false, message: '请输入邮箱', trigger: 'blur' }
-        ],
-        gender: [
-          { required: false, message: '请输入性别', trigger: 'blur' }
-        ],
-        birthday: [
-          { required: false, message: '请输入生日', trigger: 'blur' }
-        ]
+        avatar: [{ required: true, message: '请上传头像', trigger: 'blur' }],
+        nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+        email: [{ required: false, message: '请输入邮箱', trigger: 'blur' }],
+        gender: [{ required: false, message: '请输入性别', trigger: 'blur' }],
+        birthday: [{ required: false, message: '请输入生日', trigger: 'blur' }]
       }
     }
   },

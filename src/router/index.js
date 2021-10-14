@@ -92,13 +92,25 @@ export const constantRoutes = [
         path: 'user',
         name: 'AdminUser',
         meta: { title: '用户管理' },
-        component: () => import('@/views/admin/user')
+        component: () => import('@/views/admin/role')
       },
       {
         path: 'role',
         name: 'AdminRole',
         meta: { title: '角色管理' },
         component: () => import('@/views/admin/role')
+      },
+      {
+        path: 'menu',
+        name: 'AdminMenu',
+        meta: { title: '菜单管理' },
+        component: () => import('@/views/admin/menu')
+      },
+      {
+        path: 'permission',
+        name: 'AdminPermission',
+        meta: { title: '权限管理' },
+        component: () => import('@/views/admin/permission')
       }
     ]
   },

@@ -26,12 +26,8 @@ export default {
         newPwd: ''
       },
       rules: {
-        oldPwd: [
-          { required: true, message: '请输入旧密码', trigger: 'blur' }
-        ],
-        newPwd: [
-          { required: true, message: '请输入新密码', trigger: 'blur' }
-        ]
+        oldPwd: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
+        newPwd: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
       }
     }
   },
