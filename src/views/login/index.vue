@@ -41,11 +41,21 @@
         </span>
       </el-form-item>
 
+      <el-form-item prop="key" hidden>
+        <el-input v-model="loginForm.key" autocomplete="off" />
+      </el-form-item>
+
+      <el-form-item prop="code">
+        <el-input v-model="loginForm.code" autocomplete="off" />
+      </el-form-item>
+
+      <el-image :src="url" @click="getCaptcha" />
+
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span>password: admin</span>
       </div>
 
     </el-form>
@@ -53,29 +63,34 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername, validPassword } from '@/utils/validate'
+
+import { getCaptcha } from '@/api/captcha'
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('Please enter the correct username'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (!validPassword(value)) {
+        callback(new Error('Please enter the correct password'))
       } else {
         callback()
       }
     }
     return {
+      url: '',
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: 'admin',
+        key: '',
+        code: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -94,7 +109,16 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.getCaptcha()
+  },
   methods: {
+    getCaptcha() {
+      getCaptcha().then(res => {
+        this.url = res.data.image
+        this.loginForm.key = res.data.key
+      })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
