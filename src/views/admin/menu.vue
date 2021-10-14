@@ -123,8 +123,10 @@ export default {
     handleEdit(row) {
       this.dialogType = 'edit'
       this.visible = true
-      this.selectId = row.id
-      this.form = JSON.parse(JSON.stringify(row))
+      this.$nextTick(() => {
+        this.selectId = row.id
+        this.form = JSON.parse(JSON.stringify(row))
+      }) // mounted
     },
     submitForm() {
       this.$refs.form.validate((valid) => {

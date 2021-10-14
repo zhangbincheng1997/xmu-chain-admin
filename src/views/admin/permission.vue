@@ -48,7 +48,14 @@
           <el-input v-model="form.url" />
         </el-form-item>
         <el-form-item label="权限方法" prop="method">
-          <el-input v-model="form.method" />
+          <el-select v-model="form.method" placeholder="请选择">
+            <el-option
+              v-for="item in methodOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="权限图标" prop="icon">
           <el-input v-model="form.icon" />
@@ -102,7 +109,13 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入权限名字', trigger: 'blur' }],
         url: [{ required: true, message: '请输入权限路径', trigger: 'blur' }]
-      }
+      },
+      methodOptions: [
+        { value: 'GET', label: 'GET' },
+        { value: 'POST', label: 'POST' },
+        { value: 'PUT', label: 'PUT' },
+        { value: 'DELETE', label: 'DELETE' }
+      ]
     }
   },
   created() {
@@ -127,8 +140,10 @@ export default {
     handleEdit(row) {
       this.dialogType = 'edit'
       this.visible = true
-      this.selectId = row.id
-      this.form = JSON.parse(JSON.stringify(row))
+      this.$nextTick(() => {
+        this.selectId = row.id
+        this.form = JSON.parse(JSON.stringify(row))
+      }) // mounted
     },
     submitForm() {
       this.$refs.form.validate((valid) => {
