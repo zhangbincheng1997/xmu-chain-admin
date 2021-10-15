@@ -92,7 +92,7 @@ export const constantRoutes = [
         path: 'user',
         name: 'AdminUser',
         meta: { title: '用户管理' },
-        component: () => import('@/views/admin/role')
+        component: () => import('@/views/admin/user')
       },
       {
         path: 'role',

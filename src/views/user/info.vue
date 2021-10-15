@@ -21,9 +21,7 @@
       </el-form-item>
       <el-form-item label="性别" prop="gender">
         <el-radio-group v-model="form.gender">
-          <el-radio :label="0">未知</el-radio>
-          <el-radio :label="1">男</el-radio>
-          <el-radio :label="2">女</el-radio>
+          <el-radio v-for="item in genderOptions" :key="item.label" :label="item.label">{{ item.value }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="生日" prop="birthday">
@@ -40,24 +38,20 @@
 <script>
 import { getInfo, updateInfo } from '@/api/user'
 import { upload } from '@/api/upload'
+import config from '@/config'
 
 export default {
   data() {
     return {
       form: {
         avatar: '',
-        nickname: '',
-        email: '',
-        gender: 0,
-        birthday: ''
+        nickname: ''
       },
       rules: {
         avatar: [{ required: true, message: '请上传头像', trigger: 'blur' }],
-        nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-        email: [{ required: false, message: '请输入邮箱', trigger: 'blur' }],
-        gender: [{ required: false, message: '请输入性别', trigger: 'blur' }],
-        birthday: [{ required: false, message: '请输入生日', trigger: 'blur' }]
-      }
+        nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }]
+      },
+      genderOptions: config.genderOptions
     }
   },
   created() {

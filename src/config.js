@@ -1,0 +1,19 @@
+export default {
+  genderMap: {
+    0: '未知',
+    1: '男',
+    2: '女'
+  },
+  genderOptions: [
+    { label: 0, value: '未知' },
+    { label: 1, value: '男' },
+    { label: 2, value: '女' }
+  ],
+  methodOptions: [
+    { label: '*', value: '*' },
+    { label: 'GET', value: 'GET' },
+    { label: 'POST', value: 'POST' },
+    { label: 'PUT', value: 'PUT' },
+    { label: 'DELETE', value: 'DELETE' }
+  ]
+}

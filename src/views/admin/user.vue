@@ -1,7 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button type="primary" icon="el-icon-user" @click="handleAdd">添加</el-button>
+      <el-input v-model="listQuery.keyword" placeholder="请输入关键词" prefix-icon="el-icon-search" style="width: 200px" clearable />
+      <el-button type="primary" icon="el-icon-search" @click="getList">查询</el-button>
+      <el-button type="primary" icon="el-icon-user" style="float:right;" @click="handleAdd">添加</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -13,13 +15,15 @@
       style="width: 100%"
     >
       <el-table-column label="ID" align="center" prop="id" width="100" fixed="left" />
-      <el-table-column label="菜单名字" align="center" prop="name" width="200" />
-      <el-table-column label="菜单路径" align="center" prop="url" width="200" />
-      <el-table-column label="菜单图标" align="center" prop="icon" width="100">
-        <template slot-scope="scope"><i :class="scope.row.icon" /></template>
+      <el-table-column label="头像" align="center" prop="avatar" width="100">
+        <template slot-scope="scope"><el-image :src="scope.row.avatar" :fit="fit" /></template>
       </el-table-column>
-      <el-table-column label="菜单排序" align="center" prop="sort" width="100" />
-      <el-table-column label="父节点PID" align="center" prop="pid" width="100" />
+      <el-table-column label="昵称" align="center" prop="nickname" width="100" />
+      <el-table-column label="邮箱" align="center" prop="email" width="100" />
+      <el-table-column label="性别" align="center" prop="gender" width="100">
+        <template slot-scope="scope">{{ genderMap[scope.row.gender] }}</template>
+      </el-table-column>
+      <el-table-column label="生日" align="center" prop="birthday" width="100" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column label="更新时间" align="center" prop="updateTime" />
       <el-table-column label="操作" align="center" width="120" fixed="right">
@@ -39,20 +43,31 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="菜单名字" prop="name">
-          <el-input v-model="form.name" />
+        <el-form-item label="头像" prop="avatar">
+          <el-upload
+            class="avatar-uploader"
+            action=""
+            :http-request="uploadAvatar"
+            :show-file-list="false"
+            accept=".jpg, .jpeg, .png"
+          >
+            <img v-if="form.avatar" :src="form.avatar" class="avatar" alt="">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
         </el-form-item>
-        <el-form-item label="菜单路径" prop="url">
-          <el-input v-model="form.url" />
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="form.nickname" />
         </el-form-item>
-        <el-form-item label="菜单图标" prop="icon">
-          <el-input v-model="form.icon" />
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" />
         </el-form-item>
-        <el-form-item label="菜单排序" prop="sort">
-          <el-input v-model="form.sort" />
+        <el-form-item label="性别" prop="gender">
+          <el-radio-group v-model="form.gender">
+            <el-radio v-for="item in genderOptions" :key="item.label" :label="item.label">{{ item.value }}</el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="父节点PID" prop="pid">
-          <el-input v-model="form.pid" />
+        <el-form-item label="生日" prop="birthday">
+          <el-date-picker v-model="form.birthday" type="date" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -64,13 +79,17 @@
 </template>
 
 <script>
-import { getMenuTree, addMenu, editMenu, removeMenu } from '@/api/menu'
+import { getUserList, addUser, editUser, removeUser } from '@/api/admin'
+import { upload } from '@/api/upload'
+import config from '@/config'
 import Pagination from '@/components/Pagination'
 
 // 查询
 const defaultListQuery = {
   page: 1,
-  limit: 10
+  limit: 10,
+  keyword: undefined, // 关键词
+  sort: undefined // ID排序
 }
 
 export default {
@@ -90,27 +109,40 @@ export default {
       selectId: undefined,
       visible: false,
       form: {
-        name: '',
-        url: '',
-        icon: undefined,
-        sort: undefined,
-        pid: undefined
+        avatar: '',
+        nickname: '',
+        email: undefined,
+        gender: undefined,
+        birthday: undefined
       },
       rules: {
-        name: [{ required: true, message: '请输入菜单名字', trigger: 'blur' }],
-        url: [{ required: true, message: '请输入菜单路径', trigger: 'blur' }]
-      }
+        avatar: [{ required: true, message: '请输入用户头像', trigger: 'blur' }],
+        nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }]
+      },
+      genderMap: config.genderMap,
+      genderOptions: config.genderOptions
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    uploadAvatar(param) {
+      if (param.file.size > 1024 * 1024 * 10) {
+        this.$message.error('上传图片大小不能超过10MB!')
+        return
+      }
+      const formData = new FormData()
+      formData.append('file', param.file)
+      upload(formData).then(res => {
+        this.form.avatar = res.data
+      })
+    },
     getList() {
       this.listLoading = true
-      getMenuTree().then(res => {
-        this.list = res.data
-        this.total = this.list.length
+      getUserList(this.listQuery).then(res => {
+        this.list = res.data.list
+        this.total = res.data.total
       }).finally(() => {
         this.listLoading = false
       })
@@ -131,12 +163,12 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.dialogType === 'add') {
-            addMenu(this.form).then(res => {
+            addUser(this.form).then(res => {
               this.resetForm()
               this.getList()
             })
           } else if (this.dialogType === 'edit') {
-            editMenu(this.selectId, this.form).then(res => {
+            editUser(this.selectId, this.form).then(res => {
               this.resetForm()
               this.getList()
             })
@@ -156,7 +188,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeMenu(row.id).then(res => {
+        removeUser(row.id).then(res => {
           this.getList()
         })
       })

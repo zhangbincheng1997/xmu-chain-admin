@@ -6,7 +6,6 @@
     <el-table
       v-loading="listLoading"
       :data="list.slice((listQuery.page-1)*listQuery.limit,listQuery.page*listQuery.limit)"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       row-key="id"
       default-expand-all
       border
@@ -49,12 +48,7 @@
         </el-form-item>
         <el-form-item label="权限方法" prop="method">
           <el-select v-model="form.method" placeholder="请选择">
-            <el-option
-              v-for="item in methodOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option v-for="item in methodOptions" :key="item.label" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
         <el-form-item label="权限图标" prop="icon">
@@ -77,7 +71,7 @@
 
 <script>
 import { getPermissionTree, addPermission, editPermission, removePermission } from '@/api/permission'
-
+import config from '@/config'
 import Pagination from '@/components/Pagination'
 
 // 查询
@@ -104,18 +98,18 @@ export default {
       visible: false,
       form: {
         name: '',
-        url: ''
+        url: '',
+        method: '',
+        icon: undefined,
+        sort: undefined,
+        pid: undefined
       },
       rules: {
         name: [{ required: true, message: '请输入权限名字', trigger: 'blur' }],
-        url: [{ required: true, message: '请输入权限路径', trigger: 'blur' }]
+        url: [{ required: true, message: '请输入权限路径', trigger: 'blur' }],
+        method: [{ required: true, message: '请输入权限方法', trigger: 'blur' }]
       },
-      methodOptions: [
-        { value: 'GET', label: 'GET' },
-        { value: 'POST', label: 'POST' },
-        { value: 'PUT', label: 'PUT' },
-        { value: 'DELETE', label: 'DELETE' }
-      ]
+      methodOptions: config.methodOptions
     }
   },
   created() {
@@ -125,10 +119,8 @@ export default {
     getList() {
       this.listLoading = true
       getPermissionTree().then(res => {
-        if (res.data instanceof Array) {
-          this.list = res.data
-          this.total = this.list.length
-        }
+        this.list = res.data
+        this.total = this.list.length
       }).finally(() => {
         this.listLoading = false
       })

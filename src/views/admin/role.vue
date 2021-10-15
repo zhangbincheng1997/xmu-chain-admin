@@ -49,7 +49,6 @@
 
 <script>
 import { getRoleList, addRole, editRole, removeRole } from '@/api/role'
-
 import Pagination from '@/components/Pagination'
 
 // 查询
@@ -75,10 +74,12 @@ export default {
       selectId: undefined,
       visible: false,
       form: {
-        name: ''
+        name: '',
+        content: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入角色名字', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入角色名字', trigger: 'blur' }],
+        content: [{ required: true, message: '请输入角色描述', trigger: 'blur' }]
       }
     }
   },
@@ -89,10 +90,8 @@ export default {
     getList() {
       this.listLoading = true
       getRoleList().then(res => {
-        if (res.data instanceof Array) {
-          this.list = res.data
-          this.total = this.list.length
-        }
+        this.list = res.data
+        this.total = this.list.length
       }).finally(() => {
         this.listLoading = false
       })

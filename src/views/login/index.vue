@@ -63,9 +63,8 @@
 </template>
 
 <script>
-import { validUsername, validPassword } from '@/utils/validate'
-
 import { getCaptcha } from '@/api/captcha'
+import { validUsername, validPassword } from '@/utils/validate'
 
 export default {
   name: 'Login',
