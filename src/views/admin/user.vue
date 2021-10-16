@@ -7,7 +7,7 @@
     </div>
     <el-table
       v-loading="listLoading"
-      :data="list.slice((listQuery.page-1)*listQuery.limit,listQuery.page*listQuery.limit)"
+      :data="list"
       row-key="id"
       default-expand-all
       border
@@ -18,14 +18,19 @@
       <el-table-column label="头像" align="center" prop="avatar" width="100">
         <template slot-scope="scope"><el-image :src="scope.row.avatar" :fit="fit" /></template>
       </el-table-column>
-      <el-table-column label="昵称" align="center" prop="nickname" width="100" />
-      <el-table-column label="邮箱" align="center" prop="email" width="100" />
+      <el-table-column label="昵称" align="center" prop="nickname" width="200" />
+      <el-table-column label="邮箱" align="center" prop="email" width="200" />
       <el-table-column label="性别" align="center" prop="gender" width="100">
         <template slot-scope="scope">{{ genderMap[scope.row.gender] }}</template>
       </el-table-column>
       <el-table-column label="生日" align="center" prop="birthday" width="100" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column label="更新时间" align="center" prop="updateTime" />
+      <el-table-column label="设置" align="center" width="60" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleRole(scope.row)">角色</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="120" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
@@ -33,7 +38,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog
       :title="dialogTitle[dialogType]"
@@ -75,11 +80,34 @@
         <el-button @click="resetForm">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="设置角色"
+      :visible.sync="roleVisible"
+      width="30%"
+      center
+      @close="resetRoleDialog"
+    >
+      <el-tree
+        ref="tree"
+        :data="roleData"
+        show-checkbox
+        default-expand-all
+        node-key="id"
+        highlight-current
+        :props="{ label: 'name' }"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitRoleDialog">确 定</el-button>
+        <el-button @click="resetRoleDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserList, addUser, editUser, removeUser } from '@/api/admin'
+import { getUserList, addUser, editUser, removeUser, getUserRole, setUserRole } from '@/api/admin'
+import { getRoleList } from '@/api/role'
 import { upload } from '@/api/upload'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
@@ -120,7 +148,10 @@ export default {
         nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }]
       },
       genderMap: config.genderMap,
-      genderOptions: config.genderOptions
+      genderOptions: config.genderOptions,
+
+      roleVisible: false,
+      roleData: undefined
     }
   },
   created() {
@@ -163,12 +194,12 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.dialogType === 'add') {
-            addUser(this.form).then(res => {
+            addUser(this.form).then(() => {
               this.resetForm()
               this.getList()
             })
           } else if (this.dialogType === 'edit') {
-            editUser(this.selectId, this.form).then(res => {
+            editUser(this.selectId, this.form).then(() => {
               this.resetForm()
               this.getList()
             })
@@ -188,10 +219,30 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeUser(row.id).then(res => {
+        removeUser(row.id).then(() => {
           this.getList()
         })
       })
+    },
+    handleRole(row) {
+      getRoleList().then(res => {
+        this.roleData = res.data
+        getUserRole(row.id).then(res => {
+          this.$refs.tree.setCheckedKeys(res.data)
+        })
+      })
+      this.roleVisible = true
+      this.selectId = row.id
+    },
+    submitRoleDialog() {
+      setUserRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+        this.resetRoleDialog()
+      })
+    },
+    resetRoleDialog() {
+      this.roleVisible = false
+      this.roleData = undefined
+      this.$refs.tree.setCheckedKeys([])
     }
   }
 }

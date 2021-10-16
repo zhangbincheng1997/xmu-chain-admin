@@ -36,3 +36,20 @@ export function removePermission(id) {
     method: 'delete'
   })
 }
+
+export function getRolePermission(id) {
+  return request({
+    url: '/permission/role/' + id,
+    method: 'get'
+  })
+}
+
+export function setRolePermission(id, permissionIds) {
+  return request({
+    url: '/permission/role/' + id,
+    method: 'post',
+    data: {
+      permissionIds: permissionIds
+    }
+  })
+}

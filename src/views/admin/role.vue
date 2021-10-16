@@ -12,9 +12,15 @@
     >
       <el-table-column label="ID" align="center" prop="id" width="100" fixed="left" />
       <el-table-column label="角色名字" align="center" prop="name" width="200" />
-      <el-table-column label="角色描述" align="center" prop="content" />
+      <el-table-column label="角色标签" align="center" prop="value" width="200" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column label="更新时间" align="center" prop="updateTime" />
+      <el-table-column label="设置" align="center" width="120" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleMenu(scope.row)">菜单</el-button>
+          <el-button type="text" @click="handlePermission(scope.row)">权限</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="120" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
@@ -35,8 +41,8 @@
         <el-form-item label="角色名字" prop="name">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="角色描述" prop="content">
-          <el-input v-model="form.content" />
+        <el-form-item label="角色标签" prop="tag">
+          <el-input v-model="form.tag" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -44,11 +50,35 @@
         <el-button @click="resetForm">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      :title="roleDialogTitle[roleDialogType]"
+      :visible.sync="roleVisible"
+      width="30%"
+      center
+      @close="resetRoleDialog"
+    >
+      <el-tree
+        ref="tree"
+        :data="roleData"
+        show-checkbox
+        default-expand-all
+        node-key="id"
+        highlight-current
+        :props="{ label: 'name' }"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitRoleDialog">确 定</el-button>
+        <el-button @click="resetRoleDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getRoleList, addRole, editRole, removeRole } from '@/api/role'
+import { getMenuTree, getRoleMenu, setRoleMenu } from '@/api/menu'
+import { getPermissionTree, getRolePermission, setRolePermission } from '@/api/permission'
 import Pagination from '@/components/Pagination'
 
 // 查询
@@ -75,12 +105,20 @@ export default {
       visible: false,
       form: {
         name: '',
-        content: ''
+        value: ''
       },
       rules: {
         name: [{ required: true, message: '请输入角色名字', trigger: 'blur' }],
-        content: [{ required: true, message: '请输入角色描述', trigger: 'blur' }]
-      }
+        value: [{ required: true, message: '请输入角色标签', trigger: 'blur' }]
+      },
+
+      roleDialogTitle: {
+        menu: '设置菜单',
+        permission: '设置权限'
+      },
+      roleDialogType: undefined,
+      roleVisible: false,
+      roleData: undefined
     }
   },
   created() {
@@ -112,12 +150,12 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.dialogType === 'add') {
-            addRole(this.form).then(res => {
+            addRole(this.form).then(() => {
               this.resetForm()
               this.getList()
             })
           } else if (this.dialogType === 'edit') {
-            editRole(this.selectId, this.form).then(res => {
+            editRole(this.selectId, this.form).then(() => {
               this.resetForm()
               this.getList()
             })
@@ -137,10 +175,48 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeRole(row.id).then(res => {
+        removeRole(row.id).then(() => {
           this.getList()
         })
       })
+    },
+    handleMenu(row) {
+      getMenuTree().then(res => {
+        this.roleData = res.data
+        getRoleMenu(row.id).then(res => {
+          this.$refs.tree.setCheckedKeys(res.data)
+        })
+      })
+      this.roleDialogType = 'menu'
+      this.roleVisible = true
+      this.selectId = row.id
+    },
+    handlePermission(row) {
+      getPermissionTree().then(res => {
+        this.roleData = res.data
+        getRolePermission(row.id).then(res => {
+          this.$refs.tree.setCheckedKeys(res.data)
+        })
+      })
+      this.roleDialogType = 'permission'
+      this.roleVisible = true
+      this.selectId = row.id
+    },
+    submitRoleDialog() {
+      if (this.roleDialogType === 'menu') {
+        setRoleMenu(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+          this.resetRoleDialog()
+        })
+      } else if (this.roleDialogType === 'permission') {
+        setRolePermission(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+          this.resetRoleDialog()
+        })
+      }
+    },
+    resetRoleDialog() {
+      this.roleVisible = false
+      this.roleData = undefined
+      this.$refs.tree.setCheckedKeys([])
     }
   }
 }

@@ -72,7 +72,8 @@ service.interceptors.response.use(
       // TODO: delete debug
       Message({
         message: res,
-        type: 'success'
+        type: 'success',
+        duration: 2 * 1000
       })
       return res
     }

@@ -36,3 +36,20 @@ export function removeMenu(id) {
     method: 'delete'
   })
 }
+
+export function getRoleMenu(id) {
+  return request({
+    url: '/menu/role/' + id,
+    method: 'get'
+  })
+}
+
+export function setRoleMenu(id, menuIds) {
+  return request({
+    url: '/menu/role/' + id,
+    method: 'post',
+    data: {
+      menuIds: menuIds
+    }
+  })
+}

@@ -24,19 +24,26 @@ export function editUser(id, data) {
   })
 }
 
-export function setUserRole(id, roleIds) {
-  return request({
-    url: '/admin/role/' + id,
-    method: 'put',
-    data: {
-      roleIds: roleIds
-    }
-  })
-}
-
 export function removeUser(id) {
   return request({
     url: '/admin/' + id,
     method: 'delete'
+  })
+}
+
+export function getUserRole(id) {
+  return request({
+    url: '/admin/role/' + id,
+    method: 'get'
+  })
+}
+
+export function setUserRole(id, roleIds) {
+  return request({
+    url: '/admin/role/' + id,
+    method: 'post',
+    data: {
+      roleIds: roleIds
+    }
   })
 }
