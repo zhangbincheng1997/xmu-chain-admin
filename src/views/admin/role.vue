@@ -1,16 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button type="primary" icon="el-icon-user" @click="handleAdd">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list.slice((listQuery.page-1)*listQuery.limit,listQuery.page*listQuery.limit)"
-      border
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="ID" align="center" prop="id" width="100" fixed="left" />
+      <el-table-column label="#" align="center" prop="id" width="100" fixed="left" />
       <el-table-column label="角色名字" align="center" prop="name" width="200" />
       <el-table-column label="角色标签" align="center" prop="value" width="200" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
@@ -76,9 +75,10 @@
 </template>
 
 <script>
-import { getRoleList, addRole, editRole, removeRole } from '@/api/role'
-import { getMenuTree, getRoleMenu, setRoleMenu } from '@/api/menu'
-import { getPermissionTree, getRolePermission, setRolePermission } from '@/api/permission'
+import { getRoleList, addRole, editRole, removeRole, getRoleMenu, setRoleMenu, getRolePermission, setRolePermission } from '@/api/adminRole'
+import { getMenuTree } from '@/api/adminMenu'
+import { getPermissionTree } from '@/api/adminPermission'
+import config from '@/config'
 import Pagination from '@/components/Pagination'
 
 // 查询
@@ -96,10 +96,7 @@ export default {
       list: [],
       total: 0,
 
-      dialogTitle: {
-        add: '添加',
-        edit: '编辑'
-      },
+      dialogTitle: config.dialogTitle,
       dialogType: undefined,
       selectId: undefined,
       visible: false,
@@ -112,10 +109,7 @@ export default {
         value: [{ required: true, message: '请输入角色标签', trigger: 'blur' }]
       },
 
-      roleDialogTitle: {
-        menu: '设置菜单',
-        permission: '设置权限'
-      },
+      roleDialogTitle: config.roleDialogTitle,
       roleDialogType: undefined,
       roleVisible: false,
       roleData: undefined
@@ -135,11 +129,11 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = 'add'
+      this.dialogType = config.ADD
       this.visible = true
     },
     handleEdit(row) {
-      this.dialogType = 'edit'
+      this.dialogType = config.EDIT
       this.visible = true
       this.$nextTick(() => {
         this.selectId = row.id
@@ -149,12 +143,12 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.dialogType === 'add') {
+          if (this.dialogType === config.ADD) {
             addRole(this.form).then(() => {
               this.resetForm()
               this.getList()
             })
-          } else if (this.dialogType === 'edit') {
+          } else if (this.dialogType === config.EDIT) {
             editRole(this.selectId, this.form).then(() => {
               this.resetForm()
               this.getList()
@@ -187,7 +181,7 @@ export default {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
-      this.roleDialogType = 'menu'
+      this.roleDialogType = config.MENU
       this.roleVisible = true
       this.selectId = row.id
     },
@@ -198,16 +192,16 @@ export default {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
-      this.roleDialogType = 'permission'
+      this.roleDialogType = config.PERMISSION
       this.roleVisible = true
       this.selectId = row.id
     },
     submitRoleDialog() {
-      if (this.roleDialogType === 'menu') {
+      if (this.roleDialogType === config.MENU) {
         setRoleMenu(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
           this.resetRoleDialog()
         })
-      } else if (this.roleDialogType === 'permission') {
+      } else if (this.roleDialogType === config.PERMISSION) {
         setRolePermission(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
           this.resetRoleDialog()
         })

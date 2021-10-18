@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getUserList(data) {
   return request({
-    url: '/admin/list',
+    url: '/admin/user/list',
     method: 'get',
     params: data
   })
@@ -10,7 +10,7 @@ export function getUserList(data) {
 
 export function addUser(data) {
   return request({
-    url: '/admin',
+    url: '/admin/user',
     method: 'post',
     data: data
   })
@@ -18,7 +18,7 @@ export function addUser(data) {
 
 export function editUser(id, data) {
   return request({
-    url: '/admin/' + id,
+    url: '/admin/user/' + id,
     method: 'put',
     data: data
   })
@@ -26,21 +26,21 @@ export function editUser(id, data) {
 
 export function removeUser(id) {
   return request({
-    url: '/admin/' + id,
+    url: '/admin/user/' + id,
     method: 'delete'
   })
 }
 
 export function getUserRole(id) {
   return request({
-    url: '/admin/role/' + id,
+    url: '/admin/user/role/' + id,
     method: 'get'
   })
 }
 
 export function setUserRole(id, roleIds) {
   return request({
-    url: '/admin/role/' + id,
+    url: '/admin/user/role/' + id,
     method: 'post',
     data: {
       roleIds: roleIds

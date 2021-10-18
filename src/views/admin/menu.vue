@@ -1,18 +1,17 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button type="primary" icon="el-icon-user" @click="handleAdd">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list.slice((listQuery.page-1)*listQuery.limit,listQuery.page*listQuery.limit)"
       row-key="id"
       default-expand-all
-      border
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="ID" align="center" prop="id" width="100" fixed="left" />
+      <el-table-column label="#" align="center" prop="id" width="100" fixed="left" />
       <el-table-column label="菜单名字" align="center" prop="name" width="200" />
       <el-table-column label="菜单路径" align="center" prop="url" width="200" />
       <el-table-column label="菜单图标" align="center" prop="icon" width="100">
@@ -51,8 +50,14 @@
         <el-form-item label="菜单排序" prop="sort">
           <el-input v-model="form.sort" />
         </el-form-item>
-        <el-form-item label="父节点PID" prop="pid">
-          <el-input v-model="form.pid" />
+        <el-form-item label="父节点" prop="pid">
+          <el-cascader
+            v-model="form.pid"
+            placeholder="默认根节点"
+            :options="list"
+            :props="{ value: 'id', label: 'name', expandTrigger: 'hover', emitPath: false, checkStrictly: true }"
+            :show-all-levels="false"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -64,7 +69,8 @@
 </template>
 
 <script>
-import { getMenuTree, addMenu, editMenu, removeMenu } from '@/api/menu'
+import { getMenuTree, addMenu, editMenu, removeMenu } from '@/api/adminMenu'
+import config from '@/config'
 import Pagination from '@/components/Pagination'
 
 // 查询
@@ -82,10 +88,7 @@ export default {
       list: [],
       total: 0,
 
-      dialogTitle: {
-        add: '添加',
-        edit: '编辑'
-      },
+      dialogTitle: config.dialogTitle,
       dialogType: undefined,
       selectId: undefined,
       visible: false,
@@ -116,11 +119,11 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = 'add'
+      this.dialogType = config.ADD
       this.visible = true
     },
     handleEdit(row) {
-      this.dialogType = 'edit'
+      this.dialogType = config.EDIT
       this.visible = true
       this.$nextTick(() => {
         this.selectId = row.id
@@ -130,12 +133,12 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.dialogType === 'add') {
+          if (this.dialogType === config.ADD) {
             addMenu(this.form).then(res => {
               this.resetForm()
               this.getList()
             })
-          } else if (this.dialogType === 'edit') {
+          } else if (this.dialogType === config.EDIT) {
             editMenu(this.selectId, this.form).then(res => {
               this.resetForm()
               this.getList()

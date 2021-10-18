@@ -3,18 +3,17 @@
     <div class="filter-container">
       <el-input v-model="listQuery.keyword" placeholder="请输入关键词" prefix-icon="el-icon-search" style="width: 200px" clearable />
       <el-button type="primary" icon="el-icon-search" @click="getList">查询</el-button>
-      <el-button type="primary" icon="el-icon-user" style="float:right;" @click="handleAdd">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
       row-key="id"
       default-expand-all
-      border
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="ID" align="center" prop="id" width="100" fixed="left" />
+      <el-table-column label="#" align="center" prop="id" width="100" fixed="left" />
       <el-table-column label="头像" align="center" prop="avatar" width="100">
         <template slot-scope="scope"><el-image :src="scope.row.avatar" :fit="fit" /></template>
       </el-table-column>
@@ -106,8 +105,8 @@
 </template>
 
 <script>
-import { getUserList, addUser, editUser, removeUser, getUserRole, setUserRole } from '@/api/admin'
-import { getRoleList } from '@/api/role'
+import { getUserList, addUser, editUser, removeUser, getUserRole, setUserRole } from '@/api/adminUser'
+import { getRoleList } from '@/api/adminRole'
 import { upload } from '@/api/upload'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
@@ -129,10 +128,7 @@ export default {
       list: [],
       total: 0,
 
-      dialogTitle: {
-        add: '添加',
-        edit: '编辑'
-      },
+      dialogTitle: config.dialogTitle,
       dialogType: undefined,
       selectId: undefined,
       visible: false,
@@ -179,11 +175,11 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = 'add'
+      this.dialogType = config.ADD
       this.visible = true
     },
     handleEdit(row) {
-      this.dialogType = 'edit'
+      this.dialogType = config.EDIT
       this.visible = true
       this.$nextTick(() => {
         this.selectId = row.id
@@ -193,12 +189,12 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.dialogType === 'add') {
+          if (this.dialogType === config.ADD) {
             addUser(this.form).then(() => {
               this.resetForm()
               this.getList()
             })
-          } else if (this.dialogType === 'edit') {
+          } else if (this.dialogType === config.EDIT) {
             editUser(this.selectId, this.form).then(() => {
               this.resetForm()
               this.getList()

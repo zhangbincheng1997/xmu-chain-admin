@@ -1,31 +1,31 @@
 import request from '@/utils/request'
 
-export function getRoleList() {
+export function getMenuTree() {
   return request({
-    url: '/role/list',
+    url: '/admin/menu/tree',
     method: 'get'
   })
 }
 
-export function addRole(data) {
+export function addMenu(data) {
   return request({
-    url: '/role',
+    url: '/admin/menu',
     method: 'post',
     data: data
   })
 }
 
-export function editRole(id, data) {
+export function editMenu(id, data) {
   return request({
-    url: '/role/' + id,
+    url: '/admin/menu/' + id,
     method: 'put',
     data: data
   })
 }
 
-export function removeRole(id) {
+export function removeMenu(id) {
   return request({
-    url: '/role/' + id,
+    url: '/admin/menu/' + id,
     method: 'delete'
   })
 }

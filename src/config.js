@@ -1,4 +1,16 @@
 export default {
+  ADD: 'add',
+  EDIT: 'edit',
+  MENU: 'menu',
+  PERMISSION: 'permission',
+  dialogTitle: {
+    add: '添加',
+    edit: '编辑'
+  },
+  roleDialogTitle: {
+    menu: '设置菜单',
+    permission: '设置权限'
+  },
   genderMap: {
     0: '未知',
     1: '男',

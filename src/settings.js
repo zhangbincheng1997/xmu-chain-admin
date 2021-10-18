@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: 'XMU-食品追溯',
 
   /**
    * @type {boolean} true | false
