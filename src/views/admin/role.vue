@@ -215,11 +215,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-</style>

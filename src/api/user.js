@@ -45,3 +45,10 @@ export function updatePassword(data) {
     data: data
   })
 }
+
+export function getMenu() {
+  return request({
+    url: '/user/menu',
+    method: 'get'
+  })
+}

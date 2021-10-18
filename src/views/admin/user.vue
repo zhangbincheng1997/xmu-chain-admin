@@ -15,7 +15,7 @@
     >
       <el-table-column label="#" align="center" prop="id" width="100" fixed="left" />
       <el-table-column label="头像" align="center" prop="avatar" width="100">
-        <template slot-scope="scope"><el-image :src="scope.row.avatar" :fit="fit" /></template>
+        <template slot-scope="scope"><el-image :src="scope.row.avatar" fit="fill" /></template>
       </el-table-column>
       <el-table-column label="昵称" align="center" prop="nickname" width="200" />
       <el-table-column label="邮箱" align="center" prop="email" width="200" />
@@ -245,9 +245,5 @@ export default {
 </script>
 
 <style lang="scss">
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
+  @import "~@/styles/upload.scss";
 </style>

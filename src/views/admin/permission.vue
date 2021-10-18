@@ -47,7 +47,7 @@
         </el-form-item>
         <el-form-item label="权限方法" prop="method">
           <el-select v-model="form.method" placeholder="请选择">
-            <el-option v-for="item in methodOptions" :key="item.label" :label="item.label" :value="item.value"/>
+            <el-option v-for="item in methodOptions" :key="item.label" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="权限图标" prop="icon">
@@ -143,12 +143,12 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.dialogType === config.ADD) {
-            addPermission(this.form).then(res => {
+            addPermission(this.form).then(() => {
               this.resetForm()
               this.getList()
             })
           } else if (this.dialogType === config.EDIT) {
-            editPermission(this.selectId, this.form).then(res => {
+            editPermission(this.selectId, this.form).then(() => {
               this.resetForm()
               this.getList()
             })
@@ -168,7 +168,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removePermission(row.id).then(res => {
+        removePermission(row.id).then(() => {
           this.getList()
         })
       })
@@ -176,11 +176,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-</style>

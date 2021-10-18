@@ -53,70 +53,10 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
-  },
-
-  {
-    path: '/user',
-    component: Layout,
-    name: 'User',
-    meta: {
-      title: '个人',
-      icon: 'user'
-    },
-    children: [
-      {
-        path: 'password',
-        name: 'UserPassword',
-        meta: { title: '修改密码' },
-        component: () => import('@/views/user/password')
-      },
-      {
-        path: 'info',
-        name: 'UserInfo',
-        meta: { title: '修改信息' },
-        component: () => import('@/views/user/info')
-      }
-    ]
-  },
-
-  {
-    path: '/admin',
-    component: Layout,
-    name: 'Admin',
-    meta: {
-      title: '管理',
-      icon: 'lock'
-    },
-    children: [
-      {
-        path: 'user',
-        name: 'AdminUser',
-        meta: { title: '用户管理' },
-        component: () => import('@/views/admin/user')
-      },
-      {
-        path: 'role',
-        name: 'AdminRole',
-        meta: { title: '角色管理' },
-        component: () => import('@/views/admin/role')
-      },
-      {
-        path: 'menu',
-        name: 'AdminMenu',
-        meta: { title: '菜单管理' },
-        component: () => import('@/views/admin/menu')
-      },
-      {
-        path: 'permission',
-        name: 'AdminPermission',
-        meta: { title: '权限管理' },
-        component: () => import('@/views/admin/permission')
-      }
-    ]
-  },
+  }
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

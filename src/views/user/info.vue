@@ -74,7 +74,7 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          updateInfo(this.form).then(res => {})
+          updateInfo(this.form).then(() => {})
         } else {
           return false
         }
@@ -88,9 +88,5 @@ export default {
 </script>
 
 <style lang="scss">
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
+  @import "~@/styles/upload.scss";
 </style>

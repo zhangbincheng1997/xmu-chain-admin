@@ -134,12 +134,12 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.dialogType === config.ADD) {
-            addMenu(this.form).then(res => {
+            addMenu(this.form).then(() => {
               this.resetForm()
               this.getList()
             })
           } else if (this.dialogType === config.EDIT) {
-            editMenu(this.selectId, this.form).then(res => {
+            editMenu(this.selectId, this.form).then(() => {
               this.resetForm()
               this.getList()
             })
@@ -159,7 +159,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeMenu(row.id).then(res => {
+        removeMenu(row.id).then(() => {
           this.getList()
         })
       })
@@ -167,11 +167,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-</style>
