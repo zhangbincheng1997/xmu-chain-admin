@@ -2,16 +2,7 @@
   <el-container>
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="头像" prop="avatar">
-        <el-upload
-          class="avatar-uploader"
-          action=""
-          :http-request="uploadAvatar"
-          :show-file-list="false"
-          accept=".jpg, .jpeg, .png"
-        >
-          <img v-if="form.avatar" :src="form.avatar" class="avatar" alt="">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
-        </el-upload>
+        <AvatarUpload :avatar="form.avatar" />
       </el-form-item>
       <el-form-item label="昵称" prop="nickname">
         <el-input v-model="form.nickname" autocomplete="off" />
@@ -37,10 +28,11 @@
 
 <script>
 import { getInfo, updateInfo } from '@/api/user'
-import { upload } from '@/api/upload'
 import config from '@/config'
+import AvatarUpload from '@/components/Upload/Avatar'
 
 export default {
+  components: { AvatarUpload },
   data() {
     return {
       form: {
@@ -60,17 +52,6 @@ export default {
     })
   },
   methods: {
-    uploadAvatar(param) {
-      if (param.file.size > 1024 * 1024 * 10) {
-        this.$message.error('上传图片大小不能超过10MB!')
-        return
-      }
-      const formData = new FormData()
-      formData.append('file', param.file)
-      upload(formData).then(res => {
-        this.form.avatar = res.data
-      })
-    },
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
@@ -86,7 +67,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  @import "~@/styles/upload.scss";
-</style>

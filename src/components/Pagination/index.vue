@@ -16,6 +16,7 @@
 
 <script>
 import { scrollTo } from '@/utils/scroll-to'
+
 export default {
   name: 'Pagination',
   props: {

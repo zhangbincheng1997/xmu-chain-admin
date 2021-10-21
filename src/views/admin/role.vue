@@ -40,8 +40,8 @@
         <el-form-item label="角色名字" prop="name">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="角色标签" prop="tag">
-          <el-input v-model="form.tag" />
+        <el-form-item label="角色标签" prop="value">
+          <el-input v-model="form.value" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
