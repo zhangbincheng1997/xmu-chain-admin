@@ -10,8 +10,6 @@ import VueClipboard from 'vue-clipboard2'
 
 import '@/styles/index.scss' // global css
 
-import '@/styles/common.css' // common css
-
 import App from './App'
 import store from './store'
 import router from './router'

@@ -22,21 +22,15 @@ export default {
     },
     data: {
       type: Array,
-      default: function() {
-        return []
-      }
+      default: () => []
     },
     transactionDataArr: {
       type: Array,
-      default: function() {
-        return []
-      }
+      default: () => []
     },
     size: {
-      type: Map,
-      default: function() {
-        return {}
-      }
+      type: Object,
+      default: () => {}
     }
   },
   data: function() {
@@ -125,7 +119,7 @@ export default {
           axisLabel: {
             interval: 1,
             textStyle: {
-              color: 'rgba(0,14,31,0.62)'
+              color: 'rgba(0, 14, 31, 0.62)'
             }
           }
         },
@@ -149,7 +143,7 @@ export default {
               }
             },
             textStyle: {
-              color: 'rgba(0,14,31,0.62)'
+              color: 'rgba(0, 14, 31, 0.62)'
             }
           }
         }
