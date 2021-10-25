@@ -1,43 +1,41 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="listQuery.keyword" placeholder="请输入关键词" prefix-icon="el-icon-search" style="width: 200px" clearable />
-      <el-button type="primary" icon="el-icon-search" @click="getList">查询</el-button>
+    <el-card class="box-card">
+      <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 500px;" clearable>
+        <el-button slot="append" icon="el-icon-search" @click="getList" />
+      </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
-    </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      row-key="id"
-      default-expand-all
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column label="#" align="center" prop="id" width="100" fixed="left" />
-      <el-table-column label="头像" align="center" prop="avatar" width="100">
-        <template slot-scope="scope"><el-image :src="scope.row.avatar" fit="fill" /></template>
-      </el-table-column>
-      <el-table-column label="昵称" align="center" prop="nickname" width="200" />
-      <el-table-column label="邮箱" align="center" prop="email" width="200" />
-      <el-table-column label="性别" align="center" prop="gender" width="100">
-        <template slot-scope="scope">{{ genderMap[scope.row.gender] }}</template>
-      </el-table-column>
-      <el-table-column label="生日" align="center" prop="birthday" width="100" />
-      <el-table-column label="创建时间" align="center" prop="createTime" />
-      <el-table-column label="更新时间" align="center" prop="updateTime" />
-      <el-table-column label="设置" align="center" width="60" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="text" @click="handleRole(scope.row)">角色</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="120" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+      <el-table
+        v-loading="loading"
+        :data="list"
+        @sort-change="handleSortChange"
+      >
+        <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
+        <el-table-column label="头像" prop="avatar" width="100" align="center">
+          <template slot-scope="scope"><el-image :src="scope.row.avatar" fit="fill" /></template>
+        </el-table-column>
+        <el-table-column label="昵称" prop="nickname" width="200" align="center" />
+        <el-table-column label="邮箱" prop="email" width="200" align="center" />
+        <el-table-column label="性别" prop="gender" width="100" align="center">
+          <template slot-scope="scope">{{ genderMap[scope.row.gender] }}</template>
+        </el-table-column>
+        <el-table-column label="生日" prop="birthday" width="100" align="center" />
+        <el-table-column label="创建时间" prop="createTime" align="center" />
+        <el-table-column label="更新时间" prop="updateTime" align="center" />
+        <el-table-column label="设置" width="60" align="center" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleRole(scope.row)">角色</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
+    </el-card>
 
     <el-dialog
       :title="dialogTitle[dialogType]"
@@ -84,7 +82,6 @@
         show-checkbox
         default-expand-all
         node-key="id"
-        highlight-current
         :props="{ label: 'name' }"
       />
       <div slot="footer" class="dialog-footer">
@@ -103,7 +100,7 @@ import AvatarUpload from '@/components/Upload/Avatar'
 import Pagination from '@/components/Pagination'
 
 // 查询
-const defaultListQuery = {
+const defaultQuery = {
   page: 1,
   limit: 10,
   keyword: undefined, // 关键词
@@ -111,17 +108,20 @@ const defaultListQuery = {
 }
 
 export default {
-  components: { AvatarUpload, Pagination },
+  components: {
+    AvatarUpload,
+    Pagination
+  },
   data() {
     return {
-      listLoading: false,
-      listQuery: Object.assign({}, defaultListQuery),
+      loading: false,
+      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
 
+      selectId: undefined,
       dialogTitle: config.dialogTitle,
       dialogType: undefined,
-      selectId: undefined,
       visible: false,
       form: {
         avatar: '',
@@ -141,18 +141,21 @@ export default {
       roleData: undefined
     }
   },
-  created() {
+  mounted() {
     this.getList()
   },
   methods: {
     getList() {
-      this.listLoading = true
-      getUserList(this.listQuery).then(res => {
+      this.loading = true
+      getUserList(this.query).then(res => {
+        this.loading = false
         this.list = res.data.list
         this.total = res.data.total
-      }).finally(() => {
-        this.listLoading = false
       })
+    },
+    handleSortChange({ column, prop, order }) {
+      this.query.sort = order === 'descending' // default ascending
+      this.getList()
     },
     handleAdd() {
       this.dialogType = config.ADD
@@ -161,10 +164,8 @@ export default {
     handleEdit(row) {
       this.dialogType = config.EDIT
       this.visible = true
-      this.$nextTick(() => {
-        this.selectId = row.id
-        this.form = JSON.parse(JSON.stringify(row))
-      }) // mounted
+      this.selectId = row.id
+      this.form = JSON.parse(JSON.stringify(row))
     },
     submitForm() {
       this.$refs.form.validate((valid) => {

@@ -1,18 +1,22 @@
 <template>
-  <el-container>
-    <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="旧密码" prop="oldPwd">
-        <el-input v-model="form.oldPwd" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="新密码" prop="newPwd">
-        <el-input v-model="form.newPwd" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button @click="resetForm">重置</el-button>
-      </el-form-item>
-    </el-form>
-  </el-container>
+  <div class="app-container">
+    <el-card class="box-card">
+      <el-container>
+        <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+          <el-form-item label="旧密码" prop="oldPwd">
+            <el-input v-model="form.oldPwd" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="新密码" prop="newPwd">
+            <el-input v-model="form.newPwd" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm">提交</el-button>
+            <el-button @click="resetForm">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-container>
+    </el-card>
+  </div>
 </template>
 
 <script>

@@ -43,7 +43,9 @@ const defaultQuery = {
 
 export default {
   name: 'ChainBlockInfo',
-  components: { Pagination },
+  components: {
+    Pagination
+  },
   data: function() {
     return {
       loading: false,

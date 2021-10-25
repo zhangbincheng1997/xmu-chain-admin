@@ -53,7 +53,9 @@ const defaultQuery = {
 
 export default {
   name: 'ChainTransactionInfo',
-  components: { Pagination },
+  components: {
+    Pagination
+  },
   data: function() {
     return {
       loading: false,

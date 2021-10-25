@@ -1,34 +1,30 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <el-card class="box-card">
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
-    </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list.slice((listQuery.page-1)*listQuery.limit,listQuery.page*listQuery.limit)"
-      row-key="id"
-      default-expand-all
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column label="#" align="center" prop="id" width="100" fixed="left" />
-      <el-table-column label="菜单名字" align="center" prop="name" width="200" />
-      <el-table-column label="菜单路径" align="center" prop="url" width="200" />
-      <el-table-column label="菜单图标" align="center" prop="icon" width="100">
-        <template slot-scope="scope"><i :class="scope.row.icon" /></template>
-      </el-table-column>
-      <el-table-column label="菜单排序" align="center" prop="sort" width="100" />
-      <el-table-column label="父节点PID" align="center" prop="pid" width="100" />
-      <el-table-column label="创建时间" align="center" prop="createTime" />
-      <el-table-column label="更新时间" align="center" prop="updateTime" />
-      <el-table-column label="操作" align="center" width="120" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" />
+      <el-table
+        v-loading="loading"
+        :data="list.slice((query.page-1)*query.limit,query.page*query.limit)"
+      >
+        <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
+        <el-table-column label="菜单名字" prop="name" width="200" align="center" />
+        <el-table-column label="菜单路径" prop="url" width="200" align="center" />
+        <el-table-column label="菜单图标" prop="icon" width="100" align="center">
+          <template slot-scope="scope"><i :class="scope.row.icon" /></template>
+        </el-table-column>
+        <el-table-column label="菜单排序" prop="sort" width="100" align="center" />
+        <!--<el-table-column label="父节点PID" prop="pid" width="100" align="center" />-->
+        <el-table-column label="创建时间" prop="createTime" align="center" />
+        <el-table-column label="更新时间" prop="updateTime" align="center" />
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" />
+    </el-card>
 
     <el-dialog
       :title="dialogTitle[dialogType]"
@@ -74,23 +70,25 @@ import config from '@/config'
 import Pagination from '@/components/Pagination'
 
 // 查询
-const defaultListQuery = {
+const defaultQuery = {
   page: 1,
   limit: 10
 }
 
 export default {
-  components: { Pagination },
+  components: {
+    Pagination
+  },
   data() {
     return {
-      listLoading: false,
-      listQuery: Object.assign({}, defaultListQuery),
+      loading: false,
+      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
 
+      selectId: undefined,
       dialogTitle: config.dialogTitle,
       dialogType: undefined,
-      selectId: undefined,
       visible: false,
       form: {
         name: '',
@@ -105,17 +103,16 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     this.getList()
   },
   methods: {
     getList() {
-      this.listLoading = true
+      this.loading = true
       getMenuTree().then(res => {
+        this.loading = false
         this.list = res.data
         this.total = this.list.length
-      }).finally(() => {
-        this.listLoading = false
       })
     },
     handleAdd() {
@@ -125,10 +122,8 @@ export default {
     handleEdit(row) {
       this.dialogType = config.EDIT
       this.visible = true
-      this.$nextTick(() => {
-        this.selectId = row.id
-        this.form = JSON.parse(JSON.stringify(row))
-      }) // mounted
+      this.selectId = row.id
+      this.form = JSON.parse(JSON.stringify(row))
     },
     submitForm() {
       this.$refs.form.validate((valid) => {
