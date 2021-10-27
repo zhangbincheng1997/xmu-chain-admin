@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.keyword" placeholder="请输入区块哈希或块高" style="width: 500px;float:right;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="getBlockList" />
+      <el-input v-model="searchKey" placeholder="请输入区块哈希或块高" style="width: 500px;float:right;" clearable>
+        <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>
       <el-table
         v-loading="loading"
         :data="list"
-        @row-click="clickTable"
+        @row-click="handleRowClick"
       >
         <el-table-column prop="blockNumber" label="块高" width="120" align="center">
           <template slot-scope="scope">
@@ -38,11 +38,12 @@ const defaultQuery = {
   page: 1,
   limit: 10,
   groupId: localStorage.getItem('groupId') || 1,
-  keyword: undefined // 关键词
+  transactionHash: undefined, // 交易hash
+  blockNumber: undefined // 块高
 }
 
 export default {
-  name: 'ChainBlockInfo',
+  name: 'BlockInfo',
   components: {
     Pagination
   },
@@ -51,13 +52,34 @@ export default {
       loading: false,
       query: Object.assign({}, defaultQuery),
       list: [],
-      total: 0
+      total: 0,
+      searchKey: ''
     }
   },
   mounted: function() {
+    if (this.$route.query.pkHash) {
+      this.query.pkHash = this.$route.query.pkHash
+      this.searchKey = this.query.pkHash
+    }
+    if (this.$route.query.blockNumber) {
+      this.query.blockNumber = this.$route.query.blockNumber
+      this.searchKey = this.query.blockNumber
+    }
     this.getBlockList()
   },
   methods: {
+    search() {
+      this.query.pkHash = undefined
+      this.query.blockNumber = undefined
+      if (this.searchKey) {
+        if (this.searchKey.length === 66) {
+          this.query.pkHash = this.searchKey
+        } else {
+          this.query.blockNumber = this.searchKey
+        }
+      }
+      this.getBlockList()
+    },
     getBlockList: function() {
       this.loading = true
       getBlockList(this.query).then(res => {
@@ -66,7 +88,7 @@ export default {
         this.total = res.totalCount
       })
     },
-    clickTable: function(row, column, $event) {
+    handleRowClick: function(row, column, $event) {
       const nodeName = $event.target.nodeName
       if (nodeName === 'I') return // copyPublicKey
       this.link(row.blockNumber)

@@ -1,7 +1,5 @@
 <template>
-  <div style="padding-left: 30px; padding-bottom: 2px; margin-bottom:12px;">
-    <div :id="chartId" style="height: 190px; margin: 0 auto;" />
-  </div>
+  <div :id="chartId" style="height: 200px;" />
 </template>
 
 <script>
