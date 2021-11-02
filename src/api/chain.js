@@ -40,18 +40,22 @@ export function getTransactionList(data) {
   })
 }
 
-export function getTransInfo(data) {
-  return request({
-    url: '/chain/transaction/transInfo',
-    method: 'get',
-    params: data
-  })
-}
-
-export function getTransactionReceipt(data) {
+export function getTransactionReceipt(transHash) {
   return request({
     url: '/chain/transaction/transactionReceipt',
     method: 'get',
-    params: data
+    params: {
+      transHash: transHash
+    }
+  })
+}
+
+export function decode(transHash) {
+  return request({
+    url: '/chain/decode',
+    method: 'get',
+    params: {
+      transHash: transHash
+    }
   })
 }
