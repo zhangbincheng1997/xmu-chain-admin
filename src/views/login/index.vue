@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getCaptcha } from '@/api/captcha'
+import { getCaptcha } from '@/api/base/captcha'
 import { validUsername, validPassword } from '@/utils/validate'
 
 export default {
@@ -108,7 +108,7 @@ export default {
       immediate: true
     }
   },
-  created() {
+  mounted() {
     this.getCaptcha()
   },
   methods: {

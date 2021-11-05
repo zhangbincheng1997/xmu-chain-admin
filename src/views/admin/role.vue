@@ -34,11 +34,11 @@
       center
       @close="resetForm"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="角色名字" prop="name">
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="角色名字" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="角色标签" prop="value">
+        <el-form-item label="角色标签" prop="value" required>
           <el-input v-model="form.value" />
         </el-form-item>
       </el-form>
@@ -72,9 +72,9 @@
 </template>
 
 <script>
-import { getRoleList, addRole, editRole, removeRole, getRoleMenu, setRoleMenu, getRolePermission, setRolePermission } from '@/api/adminRole'
-import { getMenuTree } from '@/api/adminMenu'
-import { getPermissionTree } from '@/api/adminPermission'
+import role from '@/api/admin/role'
+import menu from '@/api/admin/menu'
+import permission from '@/api/admin/permission'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -100,12 +100,8 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        name: '',
-        value: ''
-      },
-      rules: {
-        name: [{ required: true, message: '请输入角色名字', trigger: 'blur' }],
-        value: [{ required: true, message: '请输入角色标签', trigger: 'blur' }]
+        name: undefined,
+        value: undefined
       },
 
       roleDialogTitle: config.roleDialogTitle,
@@ -120,7 +116,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      getRoleList().then(res => {
+      role.list().then(res => {
         this.loading = false
         this.list = res.data
         this.total = this.list.length
@@ -134,26 +130,22 @@ export default {
       this.dialogType = config.EDIT
       this.visible = true
       this.selectId = row.id
-      this.form = JSON.parse(JSON.stringify(row))
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(row))
+      }) // mounted
     },
     submitForm() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          if (this.dialogType === config.ADD) {
-            addRole(this.form).then(() => {
-              this.resetForm()
-              this.getList()
-            })
-          } else if (this.dialogType === config.EDIT) {
-            editRole(this.selectId, this.form).then(() => {
-              this.resetForm()
-              this.getList()
-            })
-          }
-        } else {
-          return false
-        }
-      })
+      if (this.dialogType === config.ADD) {
+        role.add(this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
+      } else if (this.dialogType === config.EDIT) {
+        role.edit(this.selectId, this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
+      }
     },
     resetForm() {
       this.visible = false
@@ -161,19 +153,17 @@ export default {
     },
     handleRemove(row) {
       this.$confirm('是否删除？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeRole(row.id).then(() => {
+        role.remove(row.id).then(() => {
           this.getList()
         })
       })
     },
     handleMenu(row) {
-      getMenuTree().then(res => {
+      menu.tree().then(res => {
         this.roleData = res.data
-        getRoleMenu(row.id).then(res => {
+        role.getMenu(row.id).then(res => {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
@@ -182,9 +172,9 @@ export default {
       this.selectId = row.id
     },
     handlePermission(row) {
-      getPermissionTree().then(res => {
+      permission.tree().then(res => {
         this.roleData = res.data
-        getRolePermission(row.id).then(res => {
+        role.getPermission(row.id).then(res => {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
@@ -194,11 +184,11 @@ export default {
     },
     submitRoleDialog() {
       if (this.roleDialogType === config.MENU) {
-        setRoleMenu(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+        role.setMenu(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
           this.resetRoleDialog()
         })
       } else if (this.roleDialogType === config.PERMISSION) {
-        setRolePermission(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+        role.setPermission(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
           this.resetRoleDialog()
         })
       }

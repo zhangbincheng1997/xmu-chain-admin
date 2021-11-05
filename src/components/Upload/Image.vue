@@ -2,28 +2,28 @@
   <el-upload
     class="avatar-uploader"
     action=""
-    :http-request="uploadAvatar"
+    :http-request="uploadImage"
     :show-file-list="false"
     accept=".jpg, .jpeg, .png"
   >
-    <img v-if="avatar" :src="avatar" class="avatar" alt="">
+    <img v-if="image" :src="image" class="avatar" alt="">
     <i v-else class="el-icon-plus avatar-uploader-icon" />
   </el-upload>
 </template>
 
 <script>
-import { upload } from '@/api/upload'
+import { upload } from '@/api/base/upload'
 
 export default {
-  name: 'AvatarUpload',
+  name: 'ImageUpload',
   props: {
-    avatar: {
+    image: {
       type: String,
       default: ''
     }
   },
   methods: {
-    uploadAvatar(param) {
+    uploadImage(param) {
       if (param.file.size > 1024 * 1024 * 10) {
         this.$message.error('上传图片大小不能超过10MB!')
         return
@@ -31,7 +31,7 @@ export default {
       const formData = new FormData()
       formData.append('file', param.file)
       upload(formData).then(res => {
-        this.avatar = res.data
+        this.$emit('update:image', res.data) // 子组件向父组件传值
       })
     }
   }

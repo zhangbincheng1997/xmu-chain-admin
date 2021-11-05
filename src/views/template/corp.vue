@@ -1,62 +1,64 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
+      <el-input v-model="query.keyword" placeholder="ID/名称" style="width: 300px;" clearable>
+        <el-button slot="append" icon="el-icon-search" @click="getList" />
+      </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table
         v-loading="loading"
-        :data="list.slice((query.page-1)*query.limit,query.page*query.limit)"
-        row-key="id"
-        default-expand-all
+        :data="list"
       >
-        <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
-        <el-table-column label="菜单名字" prop="name" width="200" align="center" />
-        <el-table-column label="菜单路径" prop="url" width="200" align="center" />
-        <el-table-column label="菜单图标" prop="icon" width="100" align="center">
-          <template slot-scope="scope"><i :class="scope.row.icon" /></template>
+        <el-table-column label="#" prop="id" align="center" fixed="left" />
+        <el-table-column label="名称" prop="name" align="center" />
+        <el-table-column label="图片" prop="image" width="100" align="center">
+          <template slot-scope="scope"><el-image :src="scope.row.image" fit="fill" /></template>
         </el-table-column>
-        <el-table-column label="菜单排序" prop="sort" width="100" align="center" />
-        <!--<el-table-column label="父节点PID" prop="pid" width="100" align="center" />-->
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
-        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
     </el-card>
 
     <el-dialog
       :title="dialogTitle[dialogType]"
       :visible.sync="visible"
-      width="30%"
       center
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="菜单名字" prop="name" required>
+        <el-form-item label="名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="菜单路径" prop="url" required>
-          <el-input v-model="form.url" />
+        <el-form-item label="图片" prop="image" required>
+          <ImageUpload :image.sync="form.image" />
         </el-form-item>
-        <el-form-item label="菜单图标" prop="icon">
-          <el-input v-model="form.icon" />
-        </el-form-item>
-        <el-form-item label="菜单排序" prop="sort">
-          <el-input v-model="form.sort" />
-        </el-form-item>
-        <el-form-item label="父节点" prop="pid">
-          <el-cascader
-            v-model="form.pid"
-            placeholder="默认根节点"
-            :options="list"
-            :props="{ value: 'id', label: 'name', expandTrigger: 'hover', emitPath: false, checkStrictly: true }"
-            :show-all-levels="false"
-          />
-        </el-form-item>
+        <el-col :span="12">
+          <el-form-item label="育苗周期" prop="yumiao">
+            <el-input v-model="form.yumiao" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="灌溉周期" prop="guangai">
+            <el-input v-model="form.guangai" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="施肥周期" prop="shifei">
+            <el-input v-model="form.shifei" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="除草周期" prop="chucao">
+            <el-input v-model="form.chucao" />
+          </el-form-item>
+        </el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -67,18 +69,21 @@
 </template>
 
 <script>
-import menu from '@/api/admin/menu'
+import corp from '@/api/template/corp'
 import config from '@/config'
+import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
 
 // 查询
 const defaultQuery = {
   page: 1,
-  limit: 10
+  limit: 10,
+  keyword: undefined // ID/名称
 }
 
 export default {
   components: {
+    ImageUpload,
     Pagination
   },
   data() {
@@ -94,10 +99,11 @@ export default {
       visible: false,
       form: {
         name: undefined,
-        url: undefined,
-        icon: undefined,
-        sort: undefined,
-        pid: undefined
+        image: undefined,
+        yumiao: undefined,
+        guangai: undefined,
+        shifei: undefined,
+        chucao: undefined
       }
     }
   },
@@ -107,10 +113,10 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      menu.tree().then(res => {
+      corp.list(this.query).then(res => {
         this.loading = false
-        this.list = res.data
-        this.total = this.list.length
+        this.list = res.data.list
+        this.total = res.data.total
       })
     },
     handleAdd() {
@@ -127,12 +133,12 @@ export default {
     },
     submitForm() {
       if (this.dialogType === config.ADD) {
-        menu.add(this.form).then(() => {
+        corp.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
       } else if (this.dialogType === config.EDIT) {
-        menu.edit(this.selectId, this.form).then(() => {
+        corp.edit(this.selectId, this.form).then(() => {
           this.resetForm()
           this.getList()
         })
@@ -146,7 +152,7 @@ export default {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        menu.edit(row.id).then(() => {
+        corp.remove(row.id).then(() => {
           this.getList()
         })
       })

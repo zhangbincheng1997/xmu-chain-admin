@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
-export function getRoleList() {
+function list() {
   return request({
     url: '/admin/role/list',
     method: 'get'
   })
 }
 
-export function addRole(data) {
+function add(data) {
   return request({
     url: '/admin/role',
     method: 'post',
@@ -15,7 +15,7 @@ export function addRole(data) {
   })
 }
 
-export function editRole(id, data) {
+function edit(id, data) {
   return request({
     url: '/admin/role/' + id,
     method: 'put',
@@ -23,43 +23,54 @@ export function editRole(id, data) {
   })
 }
 
-export function removeRole(id) {
+function remove(id) {
   return request({
     url: '/admin/role/' + id,
     method: 'delete'
   })
 }
 
-export function getRoleMenu(id) {
+function getMenu(id) {
   return request({
     url: '/admin/role/menu/' + id,
     method: 'get'
   })
 }
 
-export function setRoleMenu(id, menuIds) {
+function setMenu(id, menuIds) {
   return request({
     url: '/admin/role/menu/' + id,
     method: 'post',
     data: {
-      menuIds: menuIds
+      ids: menuIds
     }
   })
 }
 
-export function getRolePermission(id) {
+function getPermission(id) {
   return request({
     url: '/admin/role/permission/' + id,
     method: 'get'
   })
 }
 
-export function setRolePermission(id, permissionIds) {
+function setPermission(id, permissionIds) {
   return request({
     url: '/admin/role/permission/' + id,
     method: 'post',
     data: {
-      permissionIds: permissionIds
+      ids: permissionIds
     }
   })
+}
+
+export default {
+  list,
+  add,
+  edit,
+  remove,
+  getMenu,
+  setMenu,
+  getPermission,
+  setPermission
 }

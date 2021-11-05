@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
-export function getPermissionTree() {
+function tree() {
   return request({
     url: '/admin/permission/tree',
     method: 'get'
   })
 }
 
-export function addPermission(data) {
+function add(data) {
   return request({
     url: '/admin/permission',
     method: 'post',
@@ -15,7 +15,7 @@ export function addPermission(data) {
   })
 }
 
-export function editPermission(id, data) {
+function edit(id, data) {
   return request({
     url: '/admin/permission/' + id,
     method: 'put',
@@ -23,9 +23,16 @@ export function editPermission(id, data) {
   })
 }
 
-export function removePermission(id) {
+function remove(id) {
   return request({
     url: '/admin/permission/' + id,
     method: 'delete'
   })
+}
+
+export default {
+  tree,
+  add,
+  edit,
+  remove
 }

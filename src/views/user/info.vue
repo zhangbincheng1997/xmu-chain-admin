@@ -2,15 +2,18 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-container>
-        <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-          <el-form-item label="头像" prop="avatar">
-            <AvatarUpload :avatar="form.avatar" />
+        <el-form ref="form" :model="form" label-width="100px">
+          <el-form-item label="头像" prop="avatar" required>
+            <ImageUpload :image.sync="form.avatar" />
           </el-form-item>
-          <el-form-item label="昵称" prop="nickname">
-            <el-input v-model="form.nickname" autocomplete="off" />
+          <el-form-item label="昵称" prop="nickname" required>
+            <el-input v-model="form.nickname" />
+          </el-form-item>
+          <el-form-item label="手机" prop="phone">
+            <el-input v-model="form.phone" />
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="form.email" autocomplete="off" />
+            <el-input v-model="form.email" />
           </el-form-item>
           <el-form-item label="性别" prop="gender">
             <el-radio-group v-model="form.gender">
@@ -33,39 +36,33 @@
 <script>
 import { getInfo, updateInfo } from '@/api/user'
 import config from '@/config'
-import AvatarUpload from '@/components/Upload/Avatar'
+import ImageUpload from '@/components/Upload/Image'
 
 export default {
   components: {
-    AvatarUpload
+    ImageUpload
   },
   data() {
     return {
       form: {
-        avatar: '',
-        nickname: ''
-      },
-      rules: {
-        avatar: [{ required: true, message: '请上传头像', trigger: 'blur' }],
-        nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }]
+        avatar: undefined,
+        nickname: undefined,
+        phone: undefined,
+        email: undefined,
+        gender: undefined,
+        birthday: undefined
       },
       genderOptions: config.genderOptions
     }
   },
-  created() {
+  mounted() {
     getInfo().then(res => {
       this.form = res.data
     })
   },
   methods: {
     submitForm() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          updateInfo(this.form).then(() => {})
-        } else {
-          return false
-        }
-      })
+      updateInfo(this.form).then(() => {})
     },
     resetForm() {
       this.$refs.form.resetFields()

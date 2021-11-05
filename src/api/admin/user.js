@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function getUserList(data) {
+function list(data) {
   return request({
     url: '/admin/user/list',
     method: 'get',
@@ -8,7 +8,7 @@ export function getUserList(data) {
   })
 }
 
-export function addUser(data) {
+function add(data) {
   return request({
     url: '/admin/user',
     method: 'post',
@@ -16,7 +16,7 @@ export function addUser(data) {
   })
 }
 
-export function editUser(id, data) {
+function edit(id, data) {
   return request({
     url: '/admin/user/' + id,
     method: 'put',
@@ -24,26 +24,35 @@ export function editUser(id, data) {
   })
 }
 
-export function removeUser(id) {
+function remove(id) {
   return request({
     url: '/admin/user/' + id,
     method: 'delete'
   })
 }
 
-export function getUserRole(id) {
+function getRole(id) {
   return request({
     url: '/admin/user/role/' + id,
     method: 'get'
   })
 }
 
-export function setUserRole(id, roleIds) {
+function setRole(id, roleIds) {
   return request({
     url: '/admin/user/role/' + id,
     method: 'post',
     data: {
-      roleIds: roleIds
+      ids: roleIds
     }
   })
+}
+
+export default {
+  list,
+  add,
+  edit,
+  remove,
+  getRole,
+  setRole
 }

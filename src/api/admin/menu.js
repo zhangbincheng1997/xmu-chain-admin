@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
-export function getMenuTree() {
+function tree() {
   return request({
     url: '/admin/menu/tree',
     method: 'get'
   })
 }
 
-export function addMenu(data) {
+function add(data) {
   return request({
     url: '/admin/menu',
     method: 'post',
@@ -15,7 +15,7 @@ export function addMenu(data) {
   })
 }
 
-export function editMenu(id, data) {
+function edit(id, data) {
   return request({
     url: '/admin/menu/' + id,
     method: 'put',
@@ -23,9 +23,16 @@ export function editMenu(id, data) {
   })
 }
 
-export function removeMenu(id) {
+function remove(id) {
   return request({
     url: '/admin/menu/' + id,
     method: 'delete'
   })
+}
+
+export default {
+  tree,
+  add,
+  edit,
+  remove
 }

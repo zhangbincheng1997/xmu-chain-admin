@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 500px;" clearable>
+      <el-input v-model="query.keyword" placeholder="ID/名称" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
@@ -15,11 +15,8 @@
           <template slot-scope="scope"><el-image :src="scope.row.avatar" fit="fill" /></template>
         </el-table-column>
         <el-table-column label="昵称" prop="nickname" width="200" align="center" />
+        <el-table-column label="手机" prop="phone" width="200" align="center" />
         <el-table-column label="邮箱" prop="email" width="200" align="center" />
-        <el-table-column label="性别" prop="gender" width="100" align="center">
-          <template slot-scope="scope">{{ genderMap[scope.row.gender] }}</template>
-        </el-table-column>
-        <el-table-column label="生日" prop="birthday" width="100" align="center" />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="设置" width="60" align="center" fixed="right">
@@ -44,12 +41,15 @@
       center
       @close="resetForm"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="头像" prop="avatar">
-          <AvatarUpload :avatar="form.avatar" />
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="头像" prop="avatar" required>
+          <ImageUpload :image.sync="form.avatar" />
         </el-form-item>
-        <el-form-item label="昵称" prop="nickname">
+        <el-form-item label="昵称" prop="nickname" required>
           <el-input v-model="form.nickname" />
+        </el-form-item>
+        <el-form-item label="手机" prop="phone">
+          <el-input v-model="form.phone" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" />
@@ -93,23 +93,23 @@
 </template>
 
 <script>
-import { getUserList, addUser, editUser, removeUser, getUserRole, setUserRole } from '@/api/adminUser'
-import { getRoleList } from '@/api/adminRole'
+import user from '@/api/admin/user'
+import role from '@/api/admin/role'
 import config from '@/config'
-import AvatarUpload from '@/components/Upload/Avatar'
+import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
 
 // 查询
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined, // 关键词
+  keyword: undefined, // ID/名称
   sort: undefined // ID排序
 }
 
 export default {
   components: {
-    AvatarUpload,
+    ImageUpload,
     Pagination
   },
   data() {
@@ -124,17 +124,13 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        avatar: '',
-        nickname: '',
+        avatar: undefined,
+        nickname: undefined,
+        phone: undefined,
         email: undefined,
         gender: undefined,
         birthday: undefined
       },
-      rules: {
-        avatar: [{ required: true, message: '请输入用户头像', trigger: 'blur' }],
-        nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }]
-      },
-      genderMap: config.genderMap,
       genderOptions: config.genderOptions,
 
       roleVisible: false,
@@ -147,7 +143,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      getUserList(this.query).then(res => {
+      user.list(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -165,26 +161,22 @@ export default {
       this.dialogType = config.EDIT
       this.visible = true
       this.selectId = row.id
-      this.form = JSON.parse(JSON.stringify(row))
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(row))
+      }) // mounted
     },
     submitForm() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          if (this.dialogType === config.ADD) {
-            addUser(this.form).then(() => {
-              this.resetForm()
-              this.getList()
-            })
-          } else if (this.dialogType === config.EDIT) {
-            editUser(this.selectId, this.form).then(() => {
-              this.resetForm()
-              this.getList()
-            })
-          }
-        } else {
-          return false
-        }
-      })
+      if (this.dialogType === config.ADD) {
+        user.add(this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
+      } else if (this.dialogType === config.EDIT) {
+        user.edit(this.selectId, this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
+      }
     },
     resetForm() {
       this.visible = false
@@ -192,19 +184,17 @@ export default {
     },
     handleRemove(row) {
       this.$confirm('是否删除？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeUser(row.id).then(() => {
+        user.remove(row.id).then(() => {
           this.getList()
         })
       })
     },
     handleRole(row) {
-      getRoleList().then(res => {
+      role.list().then(res => {
         this.roleData = res.data
-        getUserRole(row.id).then(res => {
+        user.getRole(row.id).then(res => {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
@@ -212,7 +202,7 @@ export default {
       this.selectId = row.id
     },
     submitRoleDialog() {
-      setUserRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+      user.setRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
         this.resetRoleDialog()
       })
     },

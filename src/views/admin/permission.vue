@@ -5,6 +5,8 @@
       <el-table
         v-loading="loading"
         :data="list.slice((query.page-1)*query.limit,query.page*query.limit)"
+        row-key="id"
+        default-expand-all
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
         <el-table-column label="权限名字" prop="name" width="200" align="center" />
@@ -34,14 +36,14 @@
       center
       @close="resetForm"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="权限名字" prop="name">
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="权限名字" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="权限路径" prop="url">
+        <el-form-item label="权限路径" prop="url" required>
           <el-input v-model="form.url" />
         </el-form-item>
-        <el-form-item label="权限方法" prop="method">
+        <el-form-item label="权限方法" prop="method" required>
           <el-select v-model="form.method" placeholder="请选择">
             <el-option v-for="item in methodOptions" :key="item.label" :label="item.label" :value="item.value" />
           </el-select>
@@ -71,7 +73,7 @@
 </template>
 
 <script>
-import { getPermissionTree, addPermission, editPermission, removePermission } from '@/api/adminPermission'
+import permission from '@/api/admin/permission'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -95,17 +97,12 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        name: '',
-        url: '',
-        method: '',
+        name: undefined,
+        url: undefined,
+        method: undefined,
         icon: undefined,
         sort: undefined,
         pid: undefined
-      },
-      rules: {
-        name: [{ required: true, message: '请输入权限名字', trigger: 'blur' }],
-        url: [{ required: true, message: '请输入权限路径', trigger: 'blur' }],
-        method: [{ required: true, message: '请输入权限方法', trigger: 'blur' }]
       },
       methodOptions: config.methodOptions
     }
@@ -116,7 +113,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      getPermissionTree().then(res => {
+      permission.tree().then(res => {
         this.loading = false
         this.list = res.data
         this.total = this.list.length
@@ -130,26 +127,22 @@ export default {
       this.dialogType = config.EDIT
       this.visible = true
       this.selectId = row.id
-      this.form = JSON.parse(JSON.stringify(row))
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(row))
+      }) // mounted
     },
     submitForm() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          if (this.dialogType === config.ADD) {
-            addPermission(this.form).then(() => {
-              this.resetForm()
-              this.getList()
-            })
-          } else if (this.dialogType === config.EDIT) {
-            editPermission(this.selectId, this.form).then(() => {
-              this.resetForm()
-              this.getList()
-            })
-          }
-        } else {
-          return false
-        }
-      })
+      if (this.dialogType === config.ADD) {
+        permission.add(this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
+      } else if (this.dialogType === config.EDIT) {
+        permission.edit(this.selectId, this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
+      }
     },
     resetForm() {
       this.visible = false
@@ -157,11 +150,9 @@ export default {
     },
     handleRemove(row) {
       this.$confirm('是否删除？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removePermission(row.id).then(() => {
+        permission.remove(row.id).then(() => {
           this.getList()
         })
       })
