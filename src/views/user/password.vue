@@ -4,10 +4,10 @@
       <el-container>
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="旧密码" prop="oldPwd" required>
-            <el-input v-model="form.oldPwd" type="password" />
+            <el-input v-model="form.oldPwd" type="password" autocomplete="off" />
           </el-form-item>
           <el-form-item label="新密码" prop="newPwd" required>
-            <el-input v-model="form.newPwd" type="password" />
+            <el-input v-model="form.newPwd" type="password" autocomplete="off" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm">提交</el-button>

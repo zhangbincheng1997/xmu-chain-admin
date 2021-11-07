@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.keyword" placeholder="ID/名称" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
@@ -12,9 +12,9 @@
         <el-table-column label="#" prop="id" align="center" fixed="left" />
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" width="100" align="center">
-          <template slot-scope="scope"><el-image :src="scope.row.image" fit="fill" /></template>
+          <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
-        <el-table-column label="描述" prop="content" width="200" align="center" show-overflow-tooltip />
+        <el-table-column label="介绍" prop="content" width="200" align="center" show-overflow-tooltip />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
@@ -28,7 +28,7 @@
     </el-card>
 
     <el-dialog
-      :title="dialogTitle[dialogType]"
+      :title="DialogTitle[dialogType]"
       :visible.sync="visible"
       center
       @close="resetForm"
@@ -38,26 +38,28 @@
           <el-input v-model="form.name" />
         </el-form-item>
         <el-form-item label="图片" prop="image" required>
-          <ImageUpload :image.sync="form.image" />
+          <AvatarUpload :avatar.sync="form.image" />
         </el-form-item>
-        <el-form-item label="描述" prop="content">
+        <el-form-item label="介绍" prop="content">
           <el-input v-model="form.content" type="textarea" />
         </el-form-item>
-        <el-col :span="8">
-          <el-form-item label="价格" prop="price">
-            <el-input v-model="form.price" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="重量" prop="weight">
-            <el-input v-model="form.weight" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="保质期" prop="exp">
-            <el-input v-model="form.exp" />
-          </el-form-item>
-        </el-col>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="价格" prop="price">
+              <el-input v-model="form.price" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="重量" prop="weight">
+              <el-input v-model="form.weight" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="保质期" prop="exp">
+              <el-input v-model="form.exp" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -70,19 +72,19 @@
 <script>
 import product from '@/api/template/product'
 import config from '@/config'
-import ImageUpload from '@/components/Upload/Image'
+import AvatarUpload from '@/components/Upload/Avatar'
 import Pagination from '@/components/Pagination'
 
 // 查询
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined // ID/名称
+  keyword: undefined // ID/NAME
 }
 
 export default {
   components: {
-    ImageUpload,
+    AvatarUpload,
     Pagination
   },
   data() {
@@ -93,7 +95,6 @@ export default {
       total: 0,
 
       selectId: undefined,
-      dialogTitle: config.dialogTitle,
       dialogType: undefined,
       visible: false,
       form: {
@@ -103,7 +104,10 @@ export default {
         price: undefined,
         weight: undefined,
         exp: undefined
-      }
+      },
+
+      DialogType: config.dialogType,
+      DialogTitle: config.dialogTitle
     }
   },
   mounted() {
@@ -119,11 +123,11 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = config.ADD
+      this.dialogType = this.DialogType.ADD
       this.visible = true
     },
     handleEdit(row) {
-      this.dialogType = config.EDIT
+      this.dialogType = this.DialogType.EDIT
       this.visible = true
       this.selectId = row.id
       this.$nextTick(() => {
@@ -131,12 +135,12 @@ export default {
       }) // mounted
     },
     submitForm() {
-      if (this.dialogType === config.ADD) {
+      if (this.dialogType === this.DialogType.ADD) {
         product.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
-      } else if (this.dialogType === config.EDIT) {
+      } else if (this.dialogType === this.DialogType.EDIT) {
         product.edit(this.selectId, this.form).then(() => {
           this.resetForm()
           this.getList()

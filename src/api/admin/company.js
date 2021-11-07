@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 function list(data) {
   return request({
-    url: '/admin/user/list',
+    url: '/admin/company/list',
     method: 'get',
     params: data
   })
@@ -10,7 +10,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/admin/user',
+    url: '/admin/company',
     method: 'post',
     data: data
   })
@@ -18,7 +18,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/admin/user/info' + id,
+    url: '/admin/company/info/' + id,
     method: 'put',
     data: data
   })
@@ -26,33 +26,16 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/admin/user/' + id,
+    url: '/admin/company' + id,
     method: 'delete'
   })
 }
 
 function updatePassword(id, data) {
   return request({
-    url: '/admin/user/password/' + id,
+    url: '/admin/company/password/' + id,
     method: 'put',
     data: data
-  })
-}
-
-function getRole(id) {
-  return request({
-    url: '/admin/user/role/' + id,
-    method: 'get'
-  })
-}
-
-function setRole(id, roleIds) {
-  return request({
-    url: '/admin/user/role/' + id,
-    method: 'post',
-    data: {
-      ids: roleIds
-    }
   })
 }
 
@@ -61,7 +44,5 @@ export default {
   add,
   edit,
   remove,
-  updatePassword,
-  getRole,
-  setRole
+  updatePassword
 }

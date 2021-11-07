@@ -1,15 +1,19 @@
 export default {
-  ADD: 'add',
-  EDIT: 'edit',
-  MENU: 'menu',
-  PERMISSION: 'permission',
+  dialogType: {
+    ADD: 'add',
+    EDIT: 'edit',
+    ROLE: 'role',
+    MENU: 'menu',
+    PERMISSION: 'permission',
+    PWD: 'pwd'
+  },
   dialogTitle: {
     add: '添加',
-    edit: '编辑'
-  },
-  roleDialogTitle: {
+    edit: '编辑',
+    role: '设置角色',
     menu: '设置菜单',
-    permission: '设置权限'
+    permission: '设置权限',
+    pwd: '重置密码'
   },
   genderOptions: [
     { label: 0, value: '未知' },

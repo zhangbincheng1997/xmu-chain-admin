@@ -9,14 +9,14 @@
         default-expand-all
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
-        <el-table-column label="权限名字" prop="name" width="200" align="center" />
-        <el-table-column label="权限路径" prop="url" width="200" align="center" />
-        <el-table-column label="权限方法" prop="method" width="100" align="center" />
-        <el-table-column label="权限图标" prop="icon" width="100" align="center">
+        <el-table-column label="权限名字" prop="name" align="center" />
+        <el-table-column label="权限路径" prop="url" align="center" />
+        <el-table-column label="权限方法" prop="method" align="center" />
+        <el-table-column label="权限图标" prop="icon" align="center">
           <template slot-scope="scope"><i :class="scope.row.icon" /></template>
         </el-table-column>
-        <el-table-column label="权限排序" prop="sort" width="100" align="center" />
-        <!--<el-table-column label="父节点PID" prop="pid" width="100" align="center" />-->
+        <el-table-column label="权限排序" prop="sort" align="center" />
+        <!--<el-table-column label="父节点PID" prop="pid" align="center" />-->
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" width="120" align="center" fixed="right">
@@ -30,7 +30,7 @@
     </el-card>
 
     <el-dialog
-      :title="dialogTitle[dialogType]"
+      :title="DialogTitle[dialogType]"
       :visible.sync="visible"
       width="30%"
       center
@@ -93,7 +93,6 @@ export default {
       total: 0,
 
       selectId: undefined,
-      dialogTitle: config.dialogTitle,
       dialogType: undefined,
       visible: false,
       form: {
@@ -104,6 +103,9 @@ export default {
         sort: undefined,
         pid: undefined
       },
+
+      DialogType: config.dialogType,
+      DialogTitle: config.dialogTitle,
       methodOptions: config.methodOptions
     }
   },
@@ -120,11 +122,11 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = config.ADD
+      this.dialogType = this.DialogType.ADD
       this.visible = true
     },
     handleEdit(row) {
-      this.dialogType = config.EDIT
+      this.dialogType = this.DialogType.EDIT
       this.visible = true
       this.selectId = row.id
       this.$nextTick(() => {
@@ -132,12 +134,12 @@ export default {
       }) // mounted
     },
     submitForm() {
-      if (this.dialogType === config.ADD) {
+      if (this.dialogType === this.DialogType.ADD) {
         permission.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
-      } else if (this.dialogType === config.EDIT) {
+      } else if (this.dialogType === this.DialogType.EDIT) {
         permission.edit(this.selectId, this.form).then(() => {
           this.resetForm()
           this.getList()

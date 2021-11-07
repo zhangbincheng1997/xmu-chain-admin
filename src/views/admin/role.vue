@@ -7,8 +7,8 @@
         :data="list.slice((query.page-1)*query.limit,query.page*query.limit)"
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
-        <el-table-column label="角色名字" prop="name" width="200" align="center" />
-        <el-table-column label="角色标签" prop="value" width="200" align="center" />
+        <el-table-column label="角色名字" prop="name" align="center" />
+        <el-table-column label="角色标签" prop="value" align="center" />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="设置" width="120" align="center" fixed="right">
@@ -28,7 +28,7 @@
     </el-card>
 
     <el-dialog
-      :title="dialogTitle[dialogType]"
+      :title="DialogTitle[dialogType]"
       :visible.sync="visible"
       width="30%"
       center
@@ -49,7 +49,7 @@
     </el-dialog>
 
     <el-dialog
-      :title="roleDialogTitle[roleDialogType]"
+      :title="DialogTitle[roleDialogType]"
       :visible.sync="roleVisible"
       width="30%"
       center
@@ -96,7 +96,6 @@ export default {
       total: 0,
 
       selectId: undefined,
-      dialogTitle: config.dialogTitle,
       dialogType: undefined,
       visible: false,
       form: {
@@ -104,10 +103,12 @@ export default {
         value: undefined
       },
 
-      roleDialogTitle: config.roleDialogTitle,
       roleDialogType: undefined,
       roleVisible: false,
-      roleData: undefined
+      roleData: undefined,
+
+      DialogType: config.dialogType,
+      DialogTitle: config.dialogTitle
     }
   },
   mounted() {
@@ -123,11 +124,11 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = config.ADD
+      this.dialogType = this.DialogType.ADD
       this.visible = true
     },
     handleEdit(row) {
-      this.dialogType = config.EDIT
+      this.dialogType = this.DialogType.EDIT
       this.visible = true
       this.selectId = row.id
       this.$nextTick(() => {
@@ -135,12 +136,12 @@ export default {
       }) // mounted
     },
     submitForm() {
-      if (this.dialogType === config.ADD) {
+      if (this.dialogType === this.DialogType.ADD) {
         role.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
-      } else if (this.dialogType === config.EDIT) {
+      } else if (this.dialogType === this.DialogType.EDIT) {
         role.edit(this.selectId, this.form).then(() => {
           this.resetForm()
           this.getList()
@@ -167,7 +168,7 @@ export default {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
-      this.roleDialogType = config.MENU
+      this.roleDialogType = this.DialogType.MENU
       this.roleVisible = true
       this.selectId = row.id
     },
@@ -178,16 +179,16 @@ export default {
           this.$refs.tree.setCheckedKeys(res.data)
         })
       })
-      this.roleDialogType = config.PERMISSION
+      this.roleDialogType = this.DialogType.PERMISSION
       this.roleVisible = true
       this.selectId = row.id
     },
     submitRoleDialog() {
-      if (this.roleDialogType === config.MENU) {
+      if (this.roleDialogType === this.DialogType.MENU) {
         role.setMenu(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
           this.resetRoleDialog()
         })
-      } else if (this.roleDialogType === config.PERMISSION) {
+      } else if (this.roleDialogType === this.DialogType.PERMISSION) {
         role.setPermission(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
           this.resetRoleDialog()
         })

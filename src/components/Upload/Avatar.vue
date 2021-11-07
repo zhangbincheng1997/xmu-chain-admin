@@ -1,13 +1,13 @@
 <template>
   <el-upload
-    class="image-uploader"
+    class="avatar-uploader"
     action=""
-    :http-request="uploadImage"
+    :http-request="uploadAvatar"
     :show-file-list="false"
     accept=".jpg, .jpeg, .png"
   >
-    <img v-if="image" :src="image" class="image" alt="">
-    <i v-else class="el-icon-plus image-uploader-icon" />
+    <img v-if="avatar" :src="avatar" class="avatar" alt="">
+    <i v-else class="el-icon-plus avatar-uploader-icon" />
   </el-upload>
 </template>
 
@@ -17,13 +17,13 @@ import { upload } from '@/api/base/upload'
 export default {
   name: 'AvatarUpload',
   props: {
-    image: {
+    avatar: {
       type: String,
       default: ''
     }
   },
   methods: {
-    uploadImage(param) {
+    uploadAvatar(param) {
       if (param.file.size > 1024 * 1024 * 10) {
         this.$message.error('上传图片大小不能超过10MB!')
         return
@@ -31,7 +31,7 @@ export default {
       const formData = new FormData()
       formData.append('file', param.file)
       upload(formData).then(res => {
-        this.$emit('update:image', res.data) // 子组件向父组件传值
+        this.$emit('update:avatar', res.data) // 子组件向父组件传值
       })
     }
   }
@@ -39,27 +39,27 @@ export default {
 </script>
 
 <style lang="scss">
-.image-uploader .el-upload {
+.avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
-.image-uploader .el-upload:hover {
+.avatar-uploader .el-upload:hover {
   border-color: #409EFF;
 }
-.image-uploader-icon {
+.avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
   text-align: center;
 }
-.image {
-  width: 178px;
-  height: 178px;
+.avatar {
+  width: 80px;
+  height: 80px;
   display: block;
 }
 </style>
