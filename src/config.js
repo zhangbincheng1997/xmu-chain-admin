@@ -1,5 +1,6 @@
 export default {
   dialogType: {
+    DETAIL: 'detail',
     ADD: 'add',
     EDIT: 'edit',
     ROLE: 'role',
@@ -8,6 +9,7 @@ export default {
     PWD: 'pwd'
   },
   dialogTitle: {
+    detail: '详细信息',
     add: '添加',
     edit: '编辑',
     role: '设置角色',

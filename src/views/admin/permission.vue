@@ -45,7 +45,7 @@
         </el-form-item>
         <el-form-item label="权限方法" prop="method" required>
           <el-select v-model="form.method" placeholder="请选择">
-            <el-option v-for="item in methodOptions" :key="item.label" :label="item.label" :value="item.value" />
+            <el-option v-for="item in methodOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="权限图标" prop="icon">

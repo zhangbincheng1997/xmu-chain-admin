@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
+      <el-input v-model="query.productId" placeholder="商品ID" style="width: 200px;" clearable />
+      <el-input v-model="query.processId" placeholder="加工ID" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
@@ -9,18 +10,15 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="#" prop="id" align="center" fixed="left" />
-        <el-table-column label="名称" prop="name" align="center" />
+        <el-table-column label="加工ID" prop="id" align="center" fixed="left" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
-        <el-table-column label="介绍" prop="content" width="200" align="center" show-overflow-tooltip />
+        <el-table-column label="内容" prop="content" align="center" show-overflow-tooltip />
         <el-table-column label="创建时间" prop="createTime" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
+            <el-button type="text" @click="handleDetail(scope.row)">详细信息</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -34,32 +32,16 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="名称" prop="name" required>
-          <el-input v-model="form.name" />
+        <el-form-item label="图片" prop="image">
+          <div v-if="dialogType === DialogType.ADD"><ImageUpload :image.sync="form.image" /></div>
+          <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" fit="fill" /></div>
         </el-form-item>
-        <el-form-item label="图片" prop="image" required>
-          <ImageUpload :image.sync="form.image" />
+        <el-form-item label="内容" prop="content">
+          <el-input v-model="form.content" :disabled="dialogType === DialogType.DETAIL" />
         </el-form-item>
-        <el-form-item label="介绍" prop="content">
-          <el-input v-model="form.content" type="textarea" />
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" :disabled="dialogType === DialogType.DETAIL" />
         </el-form-item>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="价格" prop="price">
-              <el-input v-model="form.price" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="重量" prop="weight">
-              <el-input v-model="form.weight" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="保质期" prop="exp">
-              <el-input v-model="form.exp" />
-            </el-form-item>
-          </el-col>
-        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -70,7 +52,7 @@
 </template>
 
 <script>
-import product from '@/api/template/product'
+// import { } from '@/api/'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -79,7 +61,8 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined // ID/NAME
+  productId: undefined, // 商品ID
+  processId: undefined // 加工ID
 }
 
 export default {
@@ -98,12 +81,9 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        name: undefined,
-        content: undefined,
         image: undefined,
-        price: undefined,
-        weight: undefined,
-        exp: undefined
+        content: undefined,
+        remark: undefined
       },
 
       DialogType: config.dialogType,
@@ -112,56 +92,43 @@ export default {
   },
   mounted() {
     if (this.$route.query.productId) {
-      this.query.keyword = this.$route.query.productId
+      this.query.productId = this.$route.query.productId
     }
     this.getList()
   },
   methods: {
     getList() {
       this.loading = true
-      product.list(this.query).then(res => {
-        this.loading = false
-        this.list = res.data.list
-        this.total = res.data.total
-      })
+      // getUserList(this.query).then(res => {
+      //   this.loading = false
+      //   this.list = res.data.list
+      //   this.total = res.data.total
+      // })
+      // test TODO
+      this.list = [{ 'id': '00000001', 'content': '生菜', 'remark': '备注', 'createTime': '2020-01-01', 'updateTime': '2020-01-01', 'image': 'http://www.littleredhat1997.com:8090/ipfs/QmYTMerJcBZxgkvKrzRw2iLcPJkDLVGUEkvi3odMkZLLiA?imageView2/1/w/80/h/80' }]
+      this.loading = false
     },
     handleAdd() {
       this.dialogType = this.DialogType.ADD
       this.visible = true
     },
-    handleEdit(row) {
+    handleDetail(row) {
       this.dialogType = this.DialogType.EDIT
       this.visible = true
-      this.selectId = row.id
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(row))
       }) // mounted
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
-        product.add(this.form).then(() => {
-          this.resetForm()
-          this.getList()
-        })
-      } else if (this.dialogType === this.DialogType.EDIT) {
-        product.edit(this.selectId, this.form).then(() => {
-          this.resetForm()
-          this.getList()
-        })
+        // TODO
+      } else if (this.dialogType === this.DialogType.DETAIL) {
+        this.resetForm()
       }
     },
     resetForm() {
       this.visible = false
       this.$refs.form.resetFields()
-    },
-    handleRemove(row) {
-      this.$confirm('是否删除？', '提示', {
-        type: 'warning'
-      }).then(() => {
-        product.remove(row.id).then(() => {
-          this.getList()
-        })
-      })
     }
   }
 }

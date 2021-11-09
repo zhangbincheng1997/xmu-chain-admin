@@ -120,3 +120,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.link {
+  color: royalblue;
+  cursor: pointer;
+}
+</style>
