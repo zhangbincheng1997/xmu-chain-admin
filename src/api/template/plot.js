@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+function getById(id) {
+  return request({
+    url: '/template/plot/' + id,
+    method: 'get'
+  })
+}
+
 function all() {
   return request({
     url: '/template/plot/all',
@@ -17,7 +24,7 @@ function list(data) {
 
 function listByPlaceId(id) {
   return request({
-    url: '/template/plot/corpId/' + id,
+    url: '/template/plot/placeId/' + id,
     method: 'get'
   })
 }
@@ -46,6 +53,7 @@ function remove(id) {
 }
 
 export default {
+  getById,
   all,
   list,
   listByPlaceId,

@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+function listByCode(code) {
+  return request({
+    url: '/trace/grow/list/' + code,
+    method: 'get'
+  })
+}
+
 function list(data) {
   return request({
     url: '/trace/grow/list',
@@ -32,6 +39,7 @@ function remove(id) {
 }
 
 export default {
+  listByCode,
   list,
   add,
   edit,

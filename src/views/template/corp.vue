@@ -9,7 +9,7 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="#" prop="id" align="center" fixed="left" />
+        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>

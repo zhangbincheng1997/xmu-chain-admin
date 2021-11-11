@@ -10,7 +10,11 @@
         :data="list"
       >
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
-        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left" />
+        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
+          <template slot-scope="scope">
+            <span class="link" @click="trace(scope.row.code)">{{ scope.row.code }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
@@ -39,7 +43,7 @@
         </el-form-item>
         <el-form-item label="图片" prop="image">
           <div v-if="dialogType === DialogType.ADD"><ImageUpload :image.sync="form.image" /></div>
-          <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" fit="fill" /></div>
+          <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" /></div>
         </el-form-item>
         <el-form-item label="地点" prop="location">
           <el-input v-model="form.location" :disabled="dialogType === DialogType.DETAIL" />
@@ -63,6 +67,7 @@
 </template>
 
 <script>
+import router from '@/router'
 import transport from '@/api/trace/transport'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
@@ -142,7 +147,21 @@ export default {
     resetForm() {
       this.visible = false
       this.$refs.form.resetFields()
+    },
+    trace: function(val) {
+      router.push({
+        path: '/trace/info',
+        query: {
+          code: val
+        }
+      })
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.link {
+  color: royalblue;
+  cursor: pointer;
+}
+</style>

@@ -9,7 +9,11 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left" />
+        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
+          <template slot-scope="scope">
+            <span class="link" @click="trace(scope.row.code)">{{ scope.row.code }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="批次" prop="batch" align="center" />
         <el-table-column label="作物" prop="corpId" align="center">
           <template slot-scope="scope">
@@ -56,15 +60,15 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="作物模板" prop="corpId" required>
-              <el-select v-model="form.corpId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL">
+              <el-select v-model="form.corpId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL" @change="handleCorpChange">
                 <el-option v-for="item in corpTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="商品模板" prop="productId" required>
+            <el-form-item v-if="form.corpId" label="商品模板" prop="productId" required>
               <el-select v-model="form.productId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL">
-                <el-option v-for="item in productTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+                <el-option v-for="item in productSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -72,15 +76,15 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="产地模板" prop="placeId" required>
-              <el-select v-model="form.placeId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL">
+              <el-select v-model="form.placeId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL" @change="handlePlaceChange">
                 <el-option v-for="item in placeTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="地块模板" prop="plotId" required>
+            <el-form-item v-if="form.placeId" label="地块模板" prop="plotId" required>
               <el-select v-model="form.plotId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL">
-                <el-option v-for="item in plotTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+                <el-option v-for="item in plotSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -137,6 +141,8 @@ export default {
       productTemplateList: [],
       placeTemplateList: [],
       plotTemplateList: [],
+      productSelectList: [],
+      plotSelectList: [],
 
       DialogType: config.dialogType,
       DialogTitle: config.dialogTitle
@@ -193,6 +199,14 @@ export default {
       this.visible = false
       this.$refs.form.resetFields()
     },
+    trace: function(val) {
+      router.push({
+        path: '/trace/info',
+        query: {
+          code: val
+        }
+      })
+    },
     link: function(type, val) {
       router.push({
         path: '/template/' + type,
@@ -204,6 +218,14 @@ export default {
     getById(list, id) {
       const template = list.find(obj => obj.id === id)
       return template.name + '(' + template.id + ')'
+    },
+    handleCorpChange(val) {
+      this.form.productId = undefined
+      product.listByCorpId(val).then(res => { this.productSelectList = res.data })
+    },
+    handlePlaceChange(val) {
+      this.form.plotId = undefined
+      plot.listByPlaceId(val).then(res => { this.plotSelectList = res.data })
     }
   }
 }

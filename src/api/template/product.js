@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+function getById(id) {
+  return request({
+    url: '/template/product/' + id,
+    method: 'get'
+  })
+}
+
 function all() {
   return request({
     url: '/template/product/all',
@@ -46,6 +53,7 @@ function remove(id) {
 }
 
 export default {
+  getById,
   all,
   list,
   listByCorpId,

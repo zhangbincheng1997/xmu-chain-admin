@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+function getById(id) {
+  return request({
+    url: '/template/place/' + id,
+    method: 'get'
+  })
+}
+
 function all() {
   return request({
     url: '/template/place/all',
@@ -39,6 +46,7 @@ function remove(id) {
 }
 
 export default {
+  getById,
   all,
   list,
   add,

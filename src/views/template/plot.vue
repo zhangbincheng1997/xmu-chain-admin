@@ -9,7 +9,7 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="#" prop="id" align="center" fixed="left" />
+        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="产地" prop="place" align="center">
           <template slot-scope="scope">
             <span class="link" @click="link(scope.row.placeId)">{{ getPlaceById(scope.row.placeId) }}</span>

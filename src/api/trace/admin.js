@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+function getByCode(code) {
+  return request({
+    url: '/trace/admin/' + code,
+    method: 'get'
+  })
+}
+
 function list(data) {
   return request({
     url: '/trace/admin/list',
@@ -32,6 +39,7 @@ function remove(id) {
 }
 
 export default {
+  getByCode,
   list,
   add,
   edit,
