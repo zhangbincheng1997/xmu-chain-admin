@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
@@ -9,18 +9,18 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
-        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left" />
+        <el-table-column label="#" prop="id" align="center" fixed="left" />
+        <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
-        <el-table-column label="温度" prop="temperature" align="center" />
-        <el-table-column label="湿度" prop="humidity" align="center" />
-        <el-table-column label="光照" prop="light" align="center" />
+        <el-table-column label="地址" prop="address" width="200" align="center" show-overflow-tooltip />
         <el-table-column label="创建时间" prop="createTime" align="center" />
+        <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleDetail(scope.row)">详细信息</el-button>
+            <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -34,33 +34,30 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="溯源码" prop="code" required>
-          <el-input v-model="form.code" :disabled="dialogType === DialogType.DETAIL" />
+        <el-form-item label="名称" prop="name" required>
+          <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="图片" prop="image">
-          <div v-if="dialogType === DialogType.ADD"><ImageUpload :image.sync="form.image" /></div>
-          <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" fit="fill" /></div>
+        <el-form-item label="图片" prop="image" required>
+          <ImageUpload :image.sync="form.image" />
+        </el-form-item>
+        <el-form-item label="地址" prop="name">
+          <el-input v-model="form.address" />
+        </el-form-item>
+        <el-form-item label="介绍" prop="content">
+          <el-input v-model="form.content" type="textarea" />
         </el-form-item>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="温度" prop="temperature">
-              <el-input v-model="form.temperature" :disabled="dialogType === DialogType.DETAIL" />
+          <el-col :span="12">
+            <el-form-item label="面积" prop="area">
+              <el-input v-model="form.area" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="湿度" prop="humidity">
-              <el-input v-model="form.humidity" :disabled="dialogType === DialogType.DETAIL" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="光照" prop="light">
-              <el-input v-model="form.light" :disabled="dialogType === DialogType.DETAIL" />
+          <el-col :span="12">
+            <el-form-item label="海拔" prop="altitude">
+              <el-input v-model="form.altitude" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" :disabled="dialogType === DialogType.DETAIL" />
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -71,7 +68,7 @@
 </template>
 
 <script>
-import grow from '@/api/trace/grow'
+import place from '@/api/template/place'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -80,7 +77,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  code: undefined // 溯源码
+  keyword: undefined // ID/NAME
 }
 
 export default {
@@ -99,12 +96,12 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        code: undefined,
+        name: undefined,
         image: undefined,
-        temperature: undefined,
-        humidity: undefined,
-        light: undefined,
-        remark: undefined
+        address: undefined,
+        content: undefined,
+        area: undefined,
+        altitude: undefined
       },
 
       DialogType: config.dialogType,
@@ -112,15 +109,15 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.code) {
-      this.query.code = this.$route.query.code
+    if (this.$route.query.id) {
+      this.query.keyword = this.$route.query.id
     }
     this.getList()
   },
   methods: {
     getList() {
       this.loading = true
-      grow.list(this.query).then(res => {
+      place.list(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -130,26 +127,39 @@ export default {
       this.dialogType = this.DialogType.ADD
       this.visible = true
     },
-    handleDetail(row) {
-      this.dialogType = this.DialogType.DETAIL
+    handleEdit(row) {
+      this.dialogType = this.DialogType.EDIT
       this.visible = true
+      this.selectId = row.id
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(row))
       }) // mounted
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
-        grow.add(this.form).then(() => {
+        place.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
-      } else if (this.dialogType === this.DialogType.DETAIL) {
-        this.resetForm()
+      } else if (this.dialogType === this.DialogType.EDIT) {
+        place.edit(this.selectId, this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
       }
     },
     resetForm() {
       this.visible = false
       this.$refs.form.resetFields()
+    },
+    handleRemove(row) {
+      this.$confirm('是否删除？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        place.remove(row.id).then(() => {
+          this.getList()
+        })
+      })
     }
   }
 }

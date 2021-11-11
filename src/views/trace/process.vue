@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.productId" placeholder="商品ID" style="width: 200px;" clearable />
-      <el-input v-model="query.processId" placeholder="加工ID" style="width: 300px;" clearable>
+      <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
@@ -10,7 +9,8 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="加工ID" prop="id" align="center" fixed="left" />
+        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
+        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
@@ -32,6 +32,9 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="溯源码" prop="code" required>
+          <el-input v-model="form.code" :disabled="dialogType === DialogType.DETAIL" />
+        </el-form-item>
         <el-form-item label="图片" prop="image">
           <div v-if="dialogType === DialogType.ADD"><ImageUpload :image.sync="form.image" /></div>
           <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" fit="fill" /></div>
@@ -52,7 +55,7 @@
 </template>
 
 <script>
-// import { } from '@/api/'
+import process from '@/api/trace/process'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -61,8 +64,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  productId: undefined, // 商品ID
-  processId: undefined // 加工ID
+  code: undefined // 溯源码
 }
 
 export default {
@@ -81,6 +83,7 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
+        code: undefined,
         image: undefined,
         content: undefined,
         remark: undefined
@@ -91,22 +94,19 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.productId) {
-      this.query.productId = this.$route.query.productId
+    if (this.$route.query.code) {
+      this.query.code = this.$route.query.code
     }
     this.getList()
   },
   methods: {
     getList() {
       this.loading = true
-      // getUserList(this.query).then(res => {
-      //   this.loading = false
-      //   this.list = res.data.list
-      //   this.total = res.data.total
-      // })
-      // test TODO
-      this.list = [{ 'id': '00000001', 'content': '生菜', 'remark': '备注', 'createTime': '2020-01-01', 'updateTime': '2020-01-01', 'image': 'http://www.littleredhat1997.com:8090/ipfs/QmYTMerJcBZxgkvKrzRw2iLcPJkDLVGUEkvi3odMkZLLiA?imageView2/1/w/80/h/80' }]
-      this.loading = false
+      process.list(this.query).then(res => {
+        this.loading = false
+        this.list = res.data.list
+        this.total = res.data.total
+      })
     },
     handleAdd() {
       this.dialogType = this.DialogType.ADD
@@ -121,7 +121,10 @@ export default {
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
-        // TODO
+        process.add(this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
       } else if (this.dialogType === this.DialogType.DETAIL) {
         this.resetForm()
       }

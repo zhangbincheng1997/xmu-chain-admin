@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+function all() {
+  return request({
+    url: '/template/corp/all',
+    method: 'get'
+  })
+}
+
 function list(data) {
   return request({
     url: '/template/corp/list',
@@ -32,6 +39,7 @@ function remove(id) {
 }
 
 export default {
+  all,
   list,
   add,
   edit,

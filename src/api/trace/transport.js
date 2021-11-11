@@ -1,30 +1,16 @@
 import request from '@/utils/request'
 
-function all() {
-  return request({
-    url: '/template/product/all',
-    method: 'get'
-  })
-}
-
 function list(data) {
   return request({
-    url: '/template/product/list',
+    url: '/trace/transport/list',
     method: 'get',
     params: data
   })
 }
 
-function listByCorpId(id) {
-  return request({
-    url: '/template/product/corpId/' + id,
-    method: 'get'
-  })
-}
-
 function add(data) {
   return request({
-    url: '/template/product',
+    url: '/trace/transport',
     method: 'post',
     data: data
   })
@@ -32,7 +18,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/template/product/' + id,
+    url: '/trace/transport/' + id,
     method: 'put',
     data: data
   })
@@ -40,15 +26,13 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/template/product/' + id,
+    url: '/trace/transport/' + id,
     method: 'delete'
   })
 }
 
 export default {
-  all,
   list,
-  listByCorpId,
   add,
   edit,
   remove

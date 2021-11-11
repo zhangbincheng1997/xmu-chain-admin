@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.productId" placeholder="商品ID" style="width: 200px;" clearable />
-      <el-input v-model="query.transportId" placeholder="物流ID" style="width: 300px;" clearable>
+      <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
@@ -10,9 +9,14 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="物流ID" prop="id" align="center" fixed="left" />
-        <el-table-column label="出发地" prop="start" align="center" />
-        <el-table-column label="目的地" prop="end" align="center" />
+        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
+        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left" />
+        <el-table-column label="图片" prop="image" width="100" align="center">
+          <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
+        </el-table-column>
+        <el-table-column label="地点" prop="location" align="center" />
+        <el-table-column label="经度" prop="longitude" align="center" />
+        <el-table-column label="纬度" prop="latitude" align="center" />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
@@ -30,11 +34,21 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="出发地" prop="start">
-          <el-input v-model="form.start" :disabled="dialogType === DialogType.DETAIL" />
+        <el-form-item label="溯源码" prop="code" required>
+          <el-input v-model="form.code" :disabled="dialogType === DialogType.DETAIL" />
         </el-form-item>
-        <el-form-item label="目的地" prop="end">
-          <el-input v-model="form.end" :disabled="dialogType === DialogType.DETAIL" />
+        <el-form-item label="图片" prop="image">
+          <div v-if="dialogType === DialogType.ADD"><ImageUpload :image.sync="form.image" /></div>
+          <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" fit="fill" /></div>
+        </el-form-item>
+        <el-form-item label="地点" prop="location">
+          <el-input v-model="form.location" :disabled="dialogType === DialogType.DETAIL" />
+        </el-form-item>
+        <el-form-item label="经度" prop="longitude">
+          <el-input v-model="form.longitude" :disabled="dialogType === DialogType.DETAIL" />
+        </el-form-item>
+        <el-form-item label="纬度" prop="latitude">
+          <el-input v-model="form.latitude" :disabled="dialogType === DialogType.DETAIL" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" :disabled="dialogType === DialogType.DETAIL" />
@@ -49,20 +63,21 @@
 </template>
 
 <script>
-// import { } from '@/api/'
+import transport from '@/api/trace/transport'
 import config from '@/config'
+import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
 
 // 查询
 const defaultQuery = {
   page: 1,
   limit: 10,
-  productId: undefined, // 商品ID
-  transportId: undefined // 物流ID
+  code: undefined // 溯源码
 }
 
 export default {
   components: {
+    ImageUpload,
     Pagination
   },
   data() {
@@ -76,8 +91,11 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        start: undefined,
-        end: undefined,
+        code: undefined,
+        image: undefined,
+        location: undefined,
+        longitude: undefined,
+        latitude: undefined,
         remark: undefined
       },
 
@@ -86,22 +104,19 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.productId) {
-      this.query.productId = this.$route.query.productId
+    if (this.$route.query.code) {
+      this.query.code = this.$route.query.code
     }
     this.getList()
   },
   methods: {
     getList() {
       this.loading = true
-      // getUserList(this.query).then(res => {
-      //   this.loading = false
-      //   this.list = res.data.list
-      //   this.total = res.data.total
-      // })
-      // test TODO
-      this.list = [{ 'id': '00000001', 'start': '广州', 'end': '深圳', 'remark': '备注', 'createTime': '2020-01-01' }]
-      this.loading = false
+      transport.list(this.query).then(res => {
+        this.loading = false
+        this.list = res.data.list
+        this.total = res.data.total
+      })
     },
     handleAdd() {
       this.dialogType = this.DialogType.ADD
@@ -116,7 +131,10 @@ export default {
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
-        // TODO
+        transport.add(this.form).then(() => {
+          this.resetForm()
+          this.getList()
+        })
       } else if (this.dialogType === this.DialogType.DETAIL) {
         this.resetForm()
       }

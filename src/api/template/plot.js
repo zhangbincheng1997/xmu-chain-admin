@@ -2,29 +2,29 @@ import request from '@/utils/request'
 
 function all() {
   return request({
-    url: '/template/product/all',
+    url: '/template/plot/all',
     method: 'get'
   })
 }
 
 function list(data) {
   return request({
-    url: '/template/product/list',
+    url: '/template/plot/list',
     method: 'get',
     params: data
   })
 }
 
-function listByCorpId(id) {
+function listByPlaceId(id) {
   return request({
-    url: '/template/product/corpId/' + id,
+    url: '/template/plot/corpId/' + id,
     method: 'get'
   })
 }
 
 function add(data) {
   return request({
-    url: '/template/product',
+    url: '/template/plot',
     method: 'post',
     data: data
   })
@@ -32,7 +32,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/template/product/' + id,
+    url: '/template/plot/' + id,
     method: 'put',
     data: data
   })
@@ -40,7 +40,7 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/template/product/' + id,
+    url: '/template/plot/' + id,
     method: 'delete'
   })
 }
@@ -48,7 +48,7 @@ function remove(id) {
 export default {
   all,
   list,
-  listByCorpId,
+  listByPlaceId,
   add,
   edit,
   remove

@@ -10,6 +10,11 @@
         :data="list"
       >
         <el-table-column label="#" prop="id" align="center" fixed="left" />
+        <el-table-column label="产地" prop="place" align="center">
+          <template slot-scope="scope">
+            <span class="link" @click="link(scope.row.placeId)">{{ getPlaceById(scope.row.placeId) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
@@ -33,6 +38,11 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="产地模板" prop="place" required>
+          <el-select v-model="form.placeId" placeholder="请选择">
+            <el-option v-for="item in placeTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
@@ -41,25 +51,13 @@
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="灌溉周期" prop="guangai">
-              <el-input v-model="form.guangai" />
+            <el-form-item label="土壤类型" prop="soilType">
+              <el-input v-model="form.soilType" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="施肥周期" prop="shifei">
-              <el-input v-model="form.shifei" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="除草周期" prop="chucao">
-              <el-input v-model="form.chucao" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="除虫周期" prop="chuchong">
-              <el-input v-model="form.chuchong" />
+            <el-form-item label="土壤酸碱度" prop="soilPh">
+              <el-input v-model="form.soilPh" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -73,7 +71,9 @@
 </template>
 
 <script>
-import corp from '@/api/template/corp'
+import router from '@/router'
+import place from '@/api/template/place'
+import plot from '@/api/template/plot'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -101,13 +101,13 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
+        placeId: undefined,
         name: undefined,
         image: undefined,
-        guangai: undefined,
-        shifei: undefined,
-        chucao: undefined,
-        chuchong: undefined
+        soilType: undefined,
+        soilPh: undefined
       },
+      placeTemplateList: [],
 
       DialogType: config.dialogType,
       DialogTitle: config.dialogTitle
@@ -122,10 +122,13 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      corp.list(this.query).then(res => {
-        this.loading = false
-        this.list = res.data.list
-        this.total = res.data.total
+      place.all().then(res => {
+        this.placeTemplateList = res.data
+        plot.list(this.query).then(res => {
+          this.loading = false
+          this.list = res.data.list
+          this.total = res.data.total
+        })
       })
     },
     handleAdd() {
@@ -142,12 +145,12 @@ export default {
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
-        corp.add(this.form).then(() => {
+        plot.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
       } else if (this.dialogType === this.DialogType.EDIT) {
-        corp.edit(this.selectId, this.form).then(() => {
+        plot.edit(this.selectId, this.form).then(() => {
           this.resetForm()
           this.getList()
         })
@@ -161,11 +164,29 @@ export default {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        corp.remove(row.id).then(() => {
+        plot.remove(row.id).then(() => {
           this.getList()
         })
       })
+    },
+    link: function(val) {
+      router.push({
+        path: '/template/place',
+        query: {
+          id: val
+        }
+      })
+    },
+    getPlaceById(id) {
+      const place = this.placeTemplateList.find(obj => obj.id === id)
+      return place.name + '(' + place.id + ')'
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.link {
+  color: royalblue;
+  cursor: pointer;
+}
+</style>

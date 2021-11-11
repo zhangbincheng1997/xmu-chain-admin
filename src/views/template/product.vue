@@ -10,6 +10,11 @@
         :data="list"
       >
         <el-table-column label="#" prop="id" align="center" fixed="left" />
+        <el-table-column label="作物" prop="product" align="center">
+          <template slot-scope="scope">
+            <span class="link" @click="link(scope.row.corpId)">{{ getCorpById(scope.row.corpId) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
@@ -34,6 +39,11 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="作物模板" prop="corpId" required>
+          <el-select v-model="form.corpId" placeholder="请选择">
+            <el-option v-for="item in corpTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
@@ -70,6 +80,8 @@
 </template>
 
 <script>
+import router from '@/router'
+import corp from '@/api/template/corp'
 import product from '@/api/template/product'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
@@ -98,31 +110,36 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
+        corpId: undefined,
         name: undefined,
-        content: undefined,
         image: undefined,
+        content: undefined,
         price: undefined,
         weight: undefined,
         exp: undefined
       },
+      corpTemplateList: [],
 
       DialogType: config.dialogType,
       DialogTitle: config.dialogTitle
     }
   },
   mounted() {
-    if (this.$route.query.productId) {
-      this.query.keyword = this.$route.query.productId
+    if (this.$route.query.id) {
+      this.query.keyword = this.$route.query.id
     }
     this.getList()
   },
   methods: {
     getList() {
       this.loading = true
-      product.list(this.query).then(res => {
-        this.loading = false
-        this.list = res.data.list
-        this.total = res.data.total
+      corp.all().then(res => {
+        this.corpTemplateList = res.data
+        product.list(this.query).then(res => {
+          this.loading = false
+          this.list = res.data.list
+          this.total = res.data.total
+        })
       })
     },
     handleAdd() {
@@ -162,7 +179,25 @@ export default {
           this.getList()
         })
       })
+    },
+    link: function(val) {
+      router.push({
+        path: '/template/corp',
+        query: {
+          id: val
+        }
+      })
+    },
+    getCorpById(id) {
+      const corp = this.corpTemplateList.find(obj => obj.id === id)
+      return corp.name + '(' + corp.id + ')'
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.link {
+  color: royalblue;
+  cursor: pointer;
+}
+</style>
