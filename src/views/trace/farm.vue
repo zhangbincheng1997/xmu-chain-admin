@@ -18,9 +18,7 @@
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
-        <el-table-column label="温度" prop="temperature" align="center" />
-        <el-table-column label="湿度" prop="humidity" align="center" />
-        <el-table-column label="光照" prop="light" align="center" />
+        <el-table-column label="内容" prop="content" align="center" show-overflow-tooltip />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
@@ -45,23 +43,9 @@
           <el-form-item label="图片" prop="image">
             <ImageUpload :image.sync="form.image" />
           </el-form-item>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="温度" prop="temperature">
-                <el-input v-model="form.temperature" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="湿度" prop="humidity">
-                <el-input v-model="form.humidity" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="光照" prop="light">
-                <el-input v-model="form.light" />
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-form-item label="内容" prop="content">
+            <el-input v-model="form.content" />
+          </el-form-item>
           <el-form-item label="备注" prop="remark">
             <el-input v-model="form.remark" />
           </el-form-item>
@@ -69,12 +53,10 @@
       </div>
       <div v-if="dialogType === DialogType.DETAIL">
         <el-descriptions :title="'# ' + form.id + ' - ' + form.createTime">
-          <el-descriptions-item label="温度">{{ form.temperature }}</el-descriptions-item>
-          <el-descriptions-item label="湿度">{{ form.humidity }}</el-descriptions-item>
-          <el-descriptions-item label="光照">{{ form.light }}</el-descriptions-item>
+          <el-descriptions-item label="内容">{{ form.content }}</el-descriptions-item>
           <el-descriptions-item label="备注">{{ form.remark }}</el-descriptions-item>
         </el-descriptions>
-        <el-image :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" />
+        <el-image v-if="form.image" :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" />
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -86,7 +68,7 @@
 
 <script>
 import router from '@/router'
-import grow from '@/api/trace/grow'
+import farm from '@/api/trace/farm'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -116,9 +98,7 @@ export default {
       form: {
         code: undefined,
         image: undefined,
-        temperature: undefined,
-        humidity: undefined,
-        light: undefined,
+        content: undefined,
         remark: undefined
       },
 
@@ -135,7 +115,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      grow.list(this.query).then(res => {
+      farm.list(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -153,7 +133,7 @@ export default {
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
-        grow.add(this.form).then(() => {
+        farm.add(this.form).then(() => {
           this.resetForm()
           this.getList()
         })

@@ -1,22 +1,15 @@
 import request from '@/utils/request'
 
-function getById(id) {
+function listByCode(code) {
   return request({
-    url: '/template/product/' + id,
-    method: 'get'
-  })
-}
-
-function all() {
-  return request({
-    url: '/template/product/all',
+    url: '/trace/farm/list/' + code,
     method: 'get'
   })
 }
 
 function list(data) {
   return request({
-    url: '/template/product/list',
+    url: '/trace/farm/list',
     method: 'get',
     params: data
   })
@@ -24,7 +17,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/template/product',
+    url: '/trace/farm',
     method: 'post',
     data: data
   })
@@ -32,7 +25,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/template/product/' + id,
+    url: '/trace/farm/' + id,
     method: 'put',
     data: data
   })
@@ -40,14 +33,13 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/template/product/' + id,
+    url: '/trace/farm/' + id,
     method: 'delete'
   })
 }
 
 export default {
-  getById,
-  all,
+  listByCode,
   list,
   add,
   edit,

@@ -12,7 +12,7 @@
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
           <template slot-scope="scope">
-            <span class="link" @click="trace(scope.row.code)">{{ scope.row.code }}</span>
+            <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
           </template>
         </el-table-column>
         <el-table-column label="图片" prop="image" width="100" align="center">
@@ -37,27 +37,37 @@
       center
       @close="resetForm"
     >
-      <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="溯源码" prop="code" required>
-          <el-input v-model="form.code" :disabled="dialogType === DialogType.DETAIL" />
-        </el-form-item>
-        <el-form-item label="图片" prop="image">
-          <div v-if="dialogType === DialogType.ADD"><ImageUpload :image.sync="form.image" /></div>
-          <div v-if="dialogType === DialogType.DETAIL"><el-image :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" /></div>
-        </el-form-item>
-        <el-form-item label="地点" prop="location">
-          <el-input v-model="form.location" :disabled="dialogType === DialogType.DETAIL" />
-        </el-form-item>
-        <el-form-item label="经度" prop="longitude">
-          <el-input v-model="form.longitude" :disabled="dialogType === DialogType.DETAIL" />
-        </el-form-item>
-        <el-form-item label="纬度" prop="latitude">
-          <el-input v-model="form.latitude" :disabled="dialogType === DialogType.DETAIL" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" :disabled="dialogType === DialogType.DETAIL" />
-        </el-form-item>
-      </el-form>
+      <div v-if="dialogType === DialogType.ADD">
+        <el-form ref="form" :model="form" label-width="100px">
+          <el-form-item label="溯源码" prop="code" required>
+            <el-input v-model="form.code" />
+          </el-form-item>
+          <el-form-item label="图片" prop="image">
+            <ImageUpload :image.sync="form.image" />
+          </el-form-item>
+          <el-form-item label="地点" prop="location">
+            <el-input v-model="form.location" />
+          </el-form-item>
+          <el-form-item label="经度" prop="longitude">
+            <el-input v-model="form.longitude" />
+          </el-form-item>
+          <el-form-item label="纬度" prop="latitude">
+            <el-input v-model="form.latitude" />
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="form.remark" />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-if="dialogType === DialogType.DETAIL">
+        <el-descriptions :title="'# ' + form.id + ' - ' + form.createTime">
+          <el-descriptions-item label="地点">{{ form.location }}</el-descriptions-item>
+          <el-descriptions-item label="经度">{{ form.longitude }}</el-descriptions-item>
+          <el-descriptions-item label="纬度">{{ form.latitude }}</el-descriptions-item>
+          <el-descriptions-item label="备注">{{ form.remark }}</el-descriptions-item>
+        </el-descriptions>
+        <el-image v-if="form.image" :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" />
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="resetForm">取 消</el-button>
@@ -126,13 +136,12 @@ export default {
     handleAdd() {
       this.dialogType = this.DialogType.ADD
       this.visible = true
+      this.form = {}
     },
     handleDetail(row) {
       this.dialogType = this.DialogType.DETAIL
       this.visible = true
-      this.$nextTick(() => {
-        this.form = JSON.parse(JSON.stringify(row))
-      }) // mounted
+      this.form = JSON.parse(JSON.stringify(row))
     },
     submitForm() {
       if (this.dialogType === this.DialogType.ADD) {
@@ -148,7 +157,7 @@ export default {
       this.visible = false
       this.$refs.form.resetFields()
     },
-    trace: function(val) {
+    linkTrace: function(val) {
       router.push({
         path: '/trace/info',
         query: {

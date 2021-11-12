@@ -148,7 +148,7 @@ export default {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        menu.edit(row.id).then(() => {
+        menu.remove(row.id).then(() => {
           this.getList()
         })
       })

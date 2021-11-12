@@ -63,6 +63,15 @@
             <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
           </div>
         </el-tab-pane>
+        <el-tab-pane label="农事情况">
+          <div v-for="item in farmList" :key="item.id">
+            <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
+              <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
+              <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
+            </el-descriptions>
+            <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
+          </div>
+        </el-tab-pane>
         <el-tab-pane label="加工情况">
           <div v-for="item in processList" :key="item.id">
             <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
@@ -109,6 +118,7 @@ import place from '@/api/template/place'
 import plot from '@/api/template/plot'
 import admin from '@/api/trace/admin'
 import grow from '@/api/trace/grow'
+import farm from '@/api/trace/farm'
 import process from '@/api/trace/process'
 import transport from '@/api/trace/transport'
 
@@ -121,6 +131,7 @@ export default {
       placeTemplate: {},
       plotTemplate: {},
       growList: [],
+      farmList: [],
       processList: [],
       transportList: [],
       isOk: true
@@ -145,6 +156,7 @@ export default {
         plot.getById(template.plotId).then(res => { this.plotTemplate = res.data })
         // trace 溯源
         grow.listByCode(this.code).then(res => { this.growList = res.data })
+        farm.listByCode(this.code).then(res => { this.farmList = res.data })
         process.listByCode(this.code).then(res => { this.processList = res.data })
         transport.listByCode(this.code).then(res => { this.transportList = res.data })
       })

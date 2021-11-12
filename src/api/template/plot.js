@@ -22,13 +22,6 @@ function list(data) {
   })
 }
 
-function listByPlaceId(id) {
-  return request({
-    url: '/template/plot/placeId/' + id,
-    method: 'get'
-  })
-}
-
 function add(data) {
   return request({
     url: '/template/plot',
@@ -56,7 +49,6 @@ export default {
   getById,
   all,
   list,
-  listByPlaceId,
   add,
   edit,
   remove

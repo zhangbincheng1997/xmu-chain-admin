@@ -11,7 +11,7 @@
       >
         <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
           <template slot-scope="scope">
-            <span class="link" @click="trace(scope.row.code)">{{ scope.row.code }}</span>
+            <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
           </template>
         </el-table-column>
         <el-table-column label="批次" prop="batch" align="center" />
@@ -199,19 +199,19 @@ export default {
       this.visible = false
       this.$refs.form.resetFields()
     },
-    trace: function(val) {
-      router.push({
-        path: '/trace/info',
-        query: {
-          code: val
-        }
-      })
-    },
     link: function(type, val) {
       router.push({
         path: '/template/' + type,
         query: {
           id: val
+        }
+      })
+    },
+    linkTrace: function(val) {
+      router.push({
+        path: '/trace/info',
+        query: {
+          code: val
         }
       })
     },
@@ -221,11 +221,11 @@ export default {
     },
     handleCorpChange(val) {
       this.form.productId = undefined
-      product.listByCorpId(val).then(res => { this.productSelectList = res.data })
+      this.productSelectList = this.productTemplateList.filter(obj => obj.corpId === val)
     },
     handlePlaceChange(val) {
       this.form.plotId = undefined
-      plot.listByPlaceId(val).then(res => { this.plotSelectList = res.data })
+      this.plotSelectList = this.plotTemplateList.filter(obj => obj.placeId === val)
     }
   }
 }
