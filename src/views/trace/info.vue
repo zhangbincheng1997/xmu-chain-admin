@@ -92,6 +92,19 @@
             <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
           </div>
         </el-tab-pane>
+        <el-tab-pane label="扫码情况">
+          <div v-for="item in transportList" :key="item.id">
+            <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
+              <el-descriptions-item label="用户">{{ item.username }}</el-descriptions-item>
+              <el-descriptions-item label="IP">{{ item.ip }}</el-descriptions-item>
+              <el-descriptions-item label="地点">{{ item.location }}</el-descriptions-item>
+              <el-descriptions-item label="经度">{{ item.longitude }}</el-descriptions-item>
+              <el-descriptions-item label="纬度">{{ item.latitude }}</el-descriptions-item>
+              <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
+            </el-descriptions>
+            <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
+          </div>
+        </el-tab-pane>
       </el-tabs>
       <div v-if="isOk">
         <el-result icon="success" title="校验成功" sub-title="该证据自上链之日起未被篡改！">
@@ -121,6 +134,7 @@ import grow from '@/api/trace/grow'
 import farm from '@/api/trace/farm'
 import process from '@/api/trace/process'
 import transport from '@/api/trace/transport'
+import scan from '@/api/scan'
 
 export default {
   data() {
@@ -134,6 +148,7 @@ export default {
       farmList: [],
       processList: [],
       transportList: [],
+      scanList: [],
       isOk: true
     }
   },
@@ -159,6 +174,7 @@ export default {
         farm.listByCode(this.code).then(res => { this.farmList = res.data })
         process.listByCode(this.code).then(res => { this.processList = res.data })
         transport.listByCode(this.code).then(res => { this.transportList = res.data })
+        scan.listByCode(this.code).then(res => { this.scanList = res.data })
       })
     },
     handleCheck() {
