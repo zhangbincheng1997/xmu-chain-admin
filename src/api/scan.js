@@ -1,5 +1,16 @@
 import request from '@/utils/request'
 
+function getQRCode(code) {
+  return request({
+    // url: '/scan/getQRCode',
+    url: '/scan/getQRCodeBase64',
+    method: 'get',
+    params: {
+      code: code
+    }
+  })
+}
+
 function listByCode(code) {
   return request({
     url: '/scan/list/' + code,
@@ -16,6 +27,7 @@ function list(data) {
 }
 
 export default {
+  getQRCode,
   listByCode,
   list
 }

@@ -6,7 +6,8 @@ export default {
     ROLE: 'role',
     MENU: 'menu',
     PERMISSION: 'permission',
-    PWD: 'pwd'
+    PWD: 'pwd',
+    QRCODE: 'qrCode'
   },
   dialogTitle: {
     detail: '详细信息',
@@ -15,7 +16,8 @@ export default {
     role: '设置角色',
     menu: '设置菜单',
     permission: '设置权限',
-    pwd: '重置密码'
+    pwd: '重置密码',
+    qrCode: '二维码'
   },
   genderOptions: [
     { label: 0, value: '未知' },

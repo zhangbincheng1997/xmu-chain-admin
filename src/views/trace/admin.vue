@@ -38,6 +38,7 @@
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleDetail(scope.row)">详细信息</el-button>
+            <el-button type="text" @click="getQRCode(scope.row.code)">二维码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -95,6 +96,17 @@
         <el-button @click="resetForm">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      :title="DialogTitle[DialogType.QRCODE]"
+      :visible.sync="qrCodeVisible"
+      center
+      width="300px"
+      height="300px"
+      @close="qrCode = undefined"
+    >
+      <el-image :src="qrCode" fit="fill" />
+    </el-dialog>
   </div>
 </template>
 
@@ -105,6 +117,7 @@ import product from '@/api/template/product'
 import place from '@/api/template/place'
 import plot from '@/api/template/plot'
 import admin from '@/api/trace/admin'
+import scan from '@/api/scan'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -143,6 +156,8 @@ export default {
       plotTemplateList: [],
       productSelectList: [],
       plotSelectList: [],
+      qrCode: undefined,
+      qrCodeVisible: undefined,
 
       DialogType: config.dialogType,
       DialogTitle: config.dialogTitle
@@ -198,6 +213,10 @@ export default {
     resetForm() {
       this.visible = false
       this.$refs.form.resetFields()
+    },
+    getQRCode(code) {
+      this.qrCodeVisible = true
+      scan.getQRCode(code).then((res) => { this.qrCode = res.data })
     },
     link: function(type, val) {
       router.push({
