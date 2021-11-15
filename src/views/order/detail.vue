@@ -19,7 +19,10 @@
                 <el-descriptions-item label="收货人手机">{{ orderInfo.phone }}</el-descriptions-item>
                 <el-descriptions-item label="收货人地址">{{ orderInfo.address }}</el-descriptions-item>
                 <el-descriptions-item label="订单状态">
-                  <el-tag>{{ OrderStatusMap[orderInfo.status] }}</el-tag>
+                  <el-tag v-if="orderInfo.status === OrderStatusType.NEW" type="warning">{{ OrderStatusMap[orderInfo.status] }}</el-tag>
+                  <el-tag v-if="orderInfo.status === OrderStatusType.TAKE || orderInfo.status === OrderStatusType.SEND">{{ OrderStatusMap[orderInfo.status] }}</el-tag>
+                  <el-tag v-if="orderInfo.status === OrderStatusType.RECEIVE" type="success">{{ OrderStatusMap[orderInfo.status] }}</el-tag>
+                  <el-tag v-if="orderInfo.status === OrderStatusType.CLOSE_USER || orderInfo.status === OrderStatusType.CLOSE_ADMIN" type="danger">{{ OrderStatusMap[orderInfo.status] }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
               <el-button @click="handleUpdateOrderInfo">修改订单信息</el-button>
@@ -139,6 +142,7 @@ export default {
   },
   methods: {
     init() {
+      if (!this.selectId) return
       order.getOrderStatus(this.selectId).then((res) => {
         this.orderStatus = res.data
         order.getOrderInfo(this.selectId).then((res) => { this.orderInfo = res.data })

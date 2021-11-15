@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
+      <el-input v-model="query.tagId" placeholder="标签编号" style="width: 200px;" clearable />
+      <el-input v-model="query.keyword" placeholder="关键词（用户/IP/地点）" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-table
@@ -9,9 +10,9 @@
         :data="list"
       >
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
-        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
+        <el-table-column label="标签编号" prop="tagId" width="100" align="center" fixed="left">
           <template slot-scope="scope">
-            <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
+            <span class="link" @click="linkTag(scope.row.tagId)">{{ scope.row.tagId }}</span>
           </template>
         </el-table-column>
         <el-table-column label="用户" prop="username" align="center" />
@@ -36,12 +37,12 @@
       @close="visible=false"
     >
       <el-descriptions :title="'# ' + form.id + ' - ' + form.createTime">
+        <el-descriptions-item label="标签编号">{{ form.tagId }}</el-descriptions-item>
         <el-descriptions-item label="用户">{{ form.username }}</el-descriptions-item>
         <el-descriptions-item label="IP">{{ form.ip }}</el-descriptions-item>
         <el-descriptions-item label="地点">{{ form.location }}</el-descriptions-item>
         <el-descriptions-item label="经度">{{ form.longitude }}</el-descriptions-item>
         <el-descriptions-item label="纬度">{{ form.latitude }}</el-descriptions-item>
-        <el-descriptions-item label="备注">{{ form.remark }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
   </div>
@@ -49,7 +50,7 @@
 
 <script>
 import router from '@/router'
-import scan from '@/api/scan'
+import tag from '@/api/tag'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -57,7 +58,8 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  code: undefined // 溯源码
+  tagId: undefined,
+  keyword: undefined
 }
 
 export default {
@@ -75,13 +77,12 @@ export default {
       dialogType: undefined,
       visible: false,
       form: {
-        code: undefined,
+        tagId: undefined,
         username: undefined,
         ip: undefined,
         location: undefined,
         longitude: undefined,
-        latitude: undefined,
-        remark: undefined
+        latitude: undefined
       },
 
       DialogType: config.dialogType,
@@ -97,7 +98,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      scan.list(this.query).then(res => {
+      tag.listSearch(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -107,11 +108,11 @@ export default {
       this.visible = true
       this.form = JSON.parse(JSON.stringify(row))
     },
-    linkTrace: function(val) {
+    linkTag: function(val) {
       router.push({
-        path: '/trace/info',
+        path: '/tag/index',
         query: {
-          code: val
+          id: val
         }
       })
     }

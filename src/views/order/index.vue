@@ -11,8 +11,8 @@
         v-loading="loading"
         :data="list"
       >
-        <el-table-column label="订单编号" prop="id" width="50" align="center" fixed="left" />
-        <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
+        <el-table-column label="订单编号" prop="id" align="center" fixed="left" />
+        <el-table-column label="溯源码" prop="code" align="center" fixed="left">
           <template slot-scope="scope">
             <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
           </template>
@@ -22,7 +22,12 @@
         <el-table-column label="收货人手机" prop="phone" align="center" />
         <el-table-column label="收货人地址" prop="address" align="center" />
         <el-table-column label="订单状态" prop="status" align="center">
-          <template slot-scope="scope"><el-tag>{{ OrderStatusMap[scope.row.status] }}</el-tag></template>
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status === OrderStatusType.NEW" type="warning">{{ OrderStatusMap[scope.row.status] }}</el-tag>
+            <el-tag v-if="scope.row.status === OrderStatusType.TAKE || scope.row.status === OrderStatusType.SEND">{{ OrderStatusMap[scope.row.status] }}</el-tag>
+            <el-tag v-if="scope.row.status === OrderStatusType.RECEIVE" type="success">{{ OrderStatusMap[scope.row.status] }}</el-tag>
+            <el-tag v-if="scope.row.status === OrderStatusType.CLOSE_USER || scope.row.status === OrderStatusType.CLOSE_ADMIN" type="danger">{{ OrderStatusMap[scope.row.status] }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
@@ -74,7 +79,8 @@ export default {
       },
 
       OrderStatusOptions: config.orderStatusOptions,
-      OrderStatusMap: config.orderStatusMap
+      OrderStatusMap: config.orderStatusMap,
+      OrderStatusType: config.orderStatusType
     }
   },
   mounted() {
@@ -105,7 +111,7 @@ export default {
     },
     linkDetail: function(val) {
       router.push({
-        path: '/tag/detail',
+        path: '/order/detail',
         query: {
           id: val
         }

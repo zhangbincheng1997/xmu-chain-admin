@@ -7,7 +7,8 @@ export default {
     MENU: 'menu',
     PERMISSION: 'permission',
     PWD: 'pwd',
-    QRCODE: 'qrCode'
+    QRCODE: 'qrCode',
+    GENERATE: 'generate'
   },
   dialogTitle: {
     detail: '详细信息',
@@ -17,7 +18,8 @@ export default {
     menu: '设置菜单',
     permission: '设置权限',
     pwd: '重置密码',
-    qrCode: '二维码'
+    qrCode: '二维码',
+    generate: '生成防伪码'
   },
   genderOptions: [
     { label: 0, value: '未知' },
@@ -54,5 +56,20 @@ export default {
     RECEIVE: 3,
     CLOSE_USER: -1,
     CLOSE_ADMIN: -2
+  },
+  tagStatusOptions: [
+    { label: '未操作', value: 0 },
+    { label: '已绑定', value: 1 },
+    { label: '报废/废弃', value: 2 }
+  ],
+  tagStatusMap: {
+    0: '未操作',
+    1: '已绑定',
+    2: '报废/废弃'
+  },
+  tagStatusType: {
+    NONE: 0,
+    BIND: 1,
+    DISCARD: 2
   }
 }
