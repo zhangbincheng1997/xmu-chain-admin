@@ -23,25 +23,8 @@ function add(data) {
   })
 }
 
-function edit(id, data) {
-  return request({
-    url: '/trace/grow/' + id,
-    method: 'put',
-    data: data
-  })
-}
-
-function remove(id) {
-  return request({
-    url: '/trace/grow/' + id,
-    method: 'delete'
-  })
-}
-
 export default {
   listByCode,
   list,
-  add,
-  edit,
-  remove
+  add
 }

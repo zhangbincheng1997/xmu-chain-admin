@@ -10,7 +10,7 @@
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-button icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成防伪码</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成防伪码</el-button>
       <br>
       <span v-if="selectIds.length > 0">
         <el-select v-model="selectStatus" placeholder="标签状态" clearable>
@@ -174,7 +174,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .link {
-  color: royalblue;
+  color: #0db1c1;
   cursor: pointer;
 }
 </style>

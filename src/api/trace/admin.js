@@ -23,17 +23,17 @@ function add(data) {
   })
 }
 
-function edit(id, data) {
+function edit(code, data) {
   return request({
-    url: '/trace/admin/' + id,
+    url: '/trace/admin/' + code,
     method: 'put',
     data: data
   })
 }
 
-function remove(id) {
+function remove(code) {
   return request({
-    url: '/trace/admin/' + id,
+    url: '/trace/admin/' + code,
     method: 'delete'
   })
 }

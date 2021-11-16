@@ -15,7 +15,8 @@
           <template slot-scope="scope"><i :class="scope.row.icon" /></template>
         </el-table-column>
         <el-table-column label="菜单排序" prop="sort" align="center" />
-        <!--<el-table-column label="父节点PID" prop="pid" align="center" />-->
+        <!--<el-table-column label="菜单父节点PID" prop="pid" align="center" />-->
+        <el-table-column label="菜单是否隐藏" prop="hidden" align="center" />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" width="120" align="center" fixed="right">
@@ -57,6 +58,9 @@
             :show-all-levels="false"
           />
         </el-form-item>
+        <el-form-item label="菜单是否隐藏" prop="hidden">
+          <el-switch v-model="form.hidden" active-text="是" inactive-text="否" />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -96,7 +100,8 @@ export default {
         url: undefined,
         icon: undefined,
         sort: undefined,
-        pid: undefined
+        pid: undefined,
+        hidden: undefined
       },
 
       DialogType: config.dialogType,

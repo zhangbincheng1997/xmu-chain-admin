@@ -16,7 +16,7 @@
           <template slot-scope="scope"><i :class="scope.row.icon" /></template>
         </el-table-column>
         <el-table-column label="权限排序" prop="sort" align="center" />
-        <!--<el-table-column label="父节点PID" prop="pid" align="center" />-->
+        <!--<el-table-column label="权限父节点PID" prop="pid" align="center" />-->
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" width="120" align="center" fixed="right">

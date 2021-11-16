@@ -18,30 +18,30 @@
               <el-form-item label="上链时间"><span>2021-03-14</span></el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="作物信息">
-            <el-form label-width="100px">
-              <el-form-item label="名称"><span>{{ corpTemplate.name }}</span></el-form-item>
-              <el-form-item label="图片"><el-image :src="corpTemplate.image" :preview-src-list="[corpTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
-              <el-form-item label="灌溉周期"><span>{{ corpTemplate.guangai }}</span></el-form-item>
-              <el-form-item label="施肥周期"><span>{{ corpTemplate.shifei }}</span></el-form-item>
-              <el-form-item label="除草周期"><span>{{ corpTemplate.chucao }}</span></el-form-item>
-              <el-form-item label="除虫周期"><span>{{ corpTemplate.chuchong }}</span></el-form-item>
-            </el-form>
-          </el-tab-pane>
           <el-tab-pane label="商品信息">
             <el-form label-width="100px">
               <el-form-item label="名称"><span>{{ productTemplate.name }}</span></el-form-item>
-              <el-form-item label="图片"><el-image :src="productTemplate.image" :preview-src-list="[productTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="图片"><el-image v-if="productTemplate.image" :src="productTemplate.image" :preview-src-list="[productTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
               <el-form-item label="介绍"><span>{{ productTemplate.content }}</span></el-form-item>
               <el-form-item label="价格"><span>{{ productTemplate.price }}</span></el-form-item>
               <el-form-item label="重量"><span>{{ productTemplate.weight }}</span></el-form-item>
               <el-form-item label="过期时间"><span>{{ productTemplate.exp }}</span></el-form-item>
             </el-form>
           </el-tab-pane>
+          <el-tab-pane label="作物信息">
+            <el-form label-width="100px">
+              <el-form-item label="名称"><span>{{ corpTemplate.name }}</span></el-form-item>
+              <el-form-item label="图片"><el-image v-if="corpTemplate.image" :src="corpTemplate.image" :preview-src-list="[corpTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="灌溉周期"><span>{{ corpTemplate.guangai }}</span></el-form-item>
+              <el-form-item label="施肥周期"><span>{{ corpTemplate.shifei }}</span></el-form-item>
+              <el-form-item label="除草周期"><span>{{ corpTemplate.chucao }}</span></el-form-item>
+              <el-form-item label="除虫周期"><span>{{ corpTemplate.chuchong }}</span></el-form-item>
+            </el-form>
+          </el-tab-pane>
           <el-tab-pane label="产地信息">
             <el-form label-width="100px">
               <el-form-item label="名称"><span>{{ placeTemplate.name }}</span></el-form-item>
-              <el-form-item label="图片"><el-image :src="placeTemplate.image" :preview-src-list="[placeTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="图片"><el-image v-if="placeTemplate.image" :src="placeTemplate.image" :preview-src-list="[placeTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
               <el-form-item label="地址"><span>{{ placeTemplate.address }}</span></el-form-item>
               <el-form-item label="介绍"><span>{{ placeTemplate.content }}</span></el-form-item>
               <el-form-item label="面积"><span>{{ placeTemplate.area }}</span></el-form-item>
@@ -51,7 +51,7 @@
           <el-tab-pane label="地块信息">
             <el-form label-width="100px">
               <el-form-item label="名称"><span>{{ plotTemplate.name }}</span></el-form-item>
-              <el-form-item label="图片"><el-image :src="plotTemplate.image" :preview-src-list="[plotTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="图片"><el-image v-if="plotTemplate.image" :src="plotTemplate.image" :preview-src-list="[plotTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
               <el-form-item label="土壤类型"><span>{{ plotTemplate.soilType }}</span></el-form-item>
               <el-form-item label="土壤酸碱度"><span>{{ plotTemplate.soilPh }}</span></el-form-item>
             </el-form>
@@ -163,6 +163,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 span {
-  color: forestgreen;
+  color: #727476;
 }
 </style>

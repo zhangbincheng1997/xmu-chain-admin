@@ -14,15 +14,15 @@
             <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="批次" prop="batch" align="center" />
-        <el-table-column label="作物" prop="corpId" align="center">
-          <template slot-scope="scope">
-            <span class="link" @click="link('corp', scope.row.corpId)">{{ getById(placeTemplateList, scope.row.corpId) }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="批次编号" prop="batch" align="center" />
         <el-table-column label="商品" prop="productId" align="center">
           <template slot-scope="scope">
             <span class="link" @click="link('product', scope.row.productId)">{{ getById(productTemplateList, scope.row.productId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="作物" prop="corpId" align="center">
+          <template slot-scope="scope">
+            <span class="link" @click="link('corp', scope.row.corpId)">{{ getById(corpTemplateList, scope.row.corpId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="产地" prop="placeId" align="center">
@@ -68,7 +68,10 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.corpId" label="商品模板" prop="productId" required>
-              <el-select v-model="form.productId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL">
+              <el-select v-if="dialogType === DialogType.DETAIL" v-model="form.productId" placeholder="请选择" disabled>
+                <el-option v-for="item in productTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+              </el-select>
+              <el-select v-if="dialogType === DialogType.ADD" v-model="form.productId" placeholder="请选择">
                 <el-option v-for="item in productSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
@@ -84,7 +87,10 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.placeId" label="地块模板" prop="plotId" required>
-              <el-select v-model="form.plotId" placeholder="请选择" :disabled="dialogType === DialogType.DETAIL">
+              <el-select v-if="dialogType === DialogType.DETAIL" v-model="form.plotId" placeholder="请选择" disabled>
+                <el-option v-for="item in plotTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+              </el-select>
+              <el-select v-if="dialogType === DialogType.ADD" v-model="form.plotId" placeholder="请选择">
                 <el-option v-for="item in plotSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
@@ -192,7 +198,7 @@ export default {
     handleDetail(row) {
       this.dialogType = this.DialogType.DETAIL
       this.visible = true
-      this.selectId = row.id
+      this.selectId = row.code
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(row))
       }) // mounted
@@ -251,7 +257,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .link {
-    color: royalblue;
+    color: #0db1c1;
     cursor: pointer;
   }
 </style>

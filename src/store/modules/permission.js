@@ -35,7 +35,8 @@ function getRoutes(data) {
     const route = {
       path: item.url,
       name: 'menu_' + item.id,
-      meta: { title: item.name, icon: item.icon }
+      meta: { title: item.name, icon: item.icon },
+      hidden: item.hidden
     }
     if (item.children) {
       route.children = getRoutes(item.children)
