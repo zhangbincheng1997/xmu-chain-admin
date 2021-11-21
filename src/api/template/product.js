@@ -1,22 +1,24 @@
 import request from '@/utils/request'
 
+const API = '/service-trace/api/v1/template/product'
+
 function getById(id) {
   return request({
-    url: '/template/product/' + id,
+    url: API + '/' + id,
     method: 'get'
   })
 }
 
 function all() {
   return request({
-    url: '/template/product/all',
+    url: API + '/all',
     method: 'get'
   })
 }
 
 function list(data) {
   return request({
-    url: '/template/product/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -24,7 +26,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/template/product',
+    url: API,
     method: 'post',
     data: data
   })
@@ -32,7 +34,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/template/product/' + id,
+    url: API + '/' + id,
     method: 'put',
     data: data
   })
@@ -40,7 +42,7 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/template/product/' + id,
+    url: API + '/' + id,
     method: 'delete'
   })
 }

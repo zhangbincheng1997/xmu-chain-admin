@@ -1,8 +1,10 @@
 import request from '@/utils/request'
 
+const API = '/service-trace/api/v1/order'
+
 function list(data) {
   return request({
-    url: '/order/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -10,29 +12,28 @@ function list(data) {
 
 function getOrderInfo(id) {
   return request({
-    // url: '/order/info/' + id,
-    url: '/order/info/' + id,
+    url: API + '/info/' + id,
     method: 'get'
   })
 }
 
 function getOrderExpress(id) {
   return request({
-    url: '/order/express/' + id,
+    url: API + '/express/' + id,
     method: 'get'
   })
 }
 
 function getOrderStatus(id) {
   return request({
-    url: '/order/status/' + id,
+    url: API + '/status/' + id,
     method: 'get'
   })
 }
 
 function saveOrder(data) {
   return request({
-    url: '/order',
+    url: API,
     method: 'post',
     data: data
   })
@@ -40,7 +41,7 @@ function saveOrder(data) {
 
 function updateOrder(id, data) {
   return request({
-    url: '/order/' + id,
+    url: API + '/' + id,
     method: 'put',
     data: data
   })
@@ -48,7 +49,7 @@ function updateOrder(id, data) {
 
 function saveOrUpdateOrderExpress(data) {
   return request({
-    url: '/order/express',
+    url: API + '/express',
     method: 'post',
     data: data
   })
@@ -56,28 +57,28 @@ function saveOrUpdateOrderExpress(data) {
 
 function take(id) {
   return request({
-    url: '/order/take/' + id,
+    url: API + '/take/' + id,
     method: 'post'
   })
 }
 
 function send(id) {
   return request({
-    url: '/order/send/' + id,
+    url: API + '/send/' + id,
     method: 'post'
   })
 }
 
 function receive(id) {
   return request({
-    url: '/order/receive/' + id,
+    url: API + '/receive/' + id,
     method: 'post'
   })
 }
 
 function close(id) {
   return request({
-    url: '/order/close/' + id,
+    url: API + '/close/' + id,
     method: 'post'
   })
 }

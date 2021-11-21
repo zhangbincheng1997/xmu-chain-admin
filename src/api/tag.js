@@ -1,8 +1,10 @@
 import request from '@/utils/request'
 
+const API = '/service-trace/api/v1/tag'
+
 function check(code, securityCode) {
   return request({
-    url: '/tag/check',
+    url: API + '/check',
     method: 'post',
     data: {
       code: code,
@@ -13,7 +15,7 @@ function check(code, securityCode) {
 
 function generate(code, count) {
   return request({
-    url: '/tag/generate',
+    url: API + '/generate',
     method: 'post',
     data: {
       code: code,
@@ -24,7 +26,7 @@ function generate(code, count) {
 
 function status(ids, status) {
   return request({
-    url: '/tag/status',
+    url: API + '/status',
     method: 'post',
     data: {
       ids: ids,
@@ -35,7 +37,7 @@ function status(ids, status) {
 
 function list(data) {
   return request({
-    url: '/tag/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -43,7 +45,7 @@ function list(data) {
 
 function listSearch(data) {
   return request({
-    url: '/tag/search/list',
+    url: API + '/search/list',
     method: 'get',
     params: data
   })

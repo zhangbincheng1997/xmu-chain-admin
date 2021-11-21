@@ -1,8 +1,10 @@
 import request from '@/utils/request'
 
+const API = '/service-admin/api/v1/user'
+
 function list(data) {
   return request({
-    url: '/admin/user/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -10,7 +12,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/admin/user',
+    url: API,
     method: 'post',
     data: data
   })
@@ -18,7 +20,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/admin/user/info' + id,
+    url: API + '/info' + id,
     method: 'put',
     data: data
   })
@@ -26,14 +28,14 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/admin/user/' + id,
+    url: API + '/' + id,
     method: 'delete'
   })
 }
 
 function updatePassword(id, data) {
   return request({
-    url: '/admin/user/password/' + id,
+    url: API + '/password/' + id,
     method: 'put',
     data: data
   })
@@ -41,14 +43,14 @@ function updatePassword(id, data) {
 
 function getRole(id) {
   return request({
-    url: '/admin/user/role/' + id,
+    url: API + '/role/' + id,
     method: 'get'
   })
 }
 
 function setRole(id, roleIds) {
   return request({
-    url: '/admin/user/role/' + id,
+    url: API + '/role/' + id,
     method: 'post',
     data: {
       ids: roleIds

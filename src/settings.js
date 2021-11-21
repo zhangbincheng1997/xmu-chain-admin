@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'XMU-食品追溯',
+  title: 'XMU-食品溯源（管理端）',
 
   /**
    * @type {boolean} true | false

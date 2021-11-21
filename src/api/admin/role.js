@@ -1,15 +1,17 @@
 import request from '@/utils/request'
 
+const API = '/service-admin/api/v1/role'
+
 function list() {
   return request({
-    url: '/admin/role/list',
+    url: API + '/list',
     method: 'get'
   })
 }
 
 function add(data) {
   return request({
-    url: '/admin/role',
+    url: API,
     method: 'post',
     data: data
   })
@@ -17,7 +19,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/admin/role/' + id,
+    url: API + '/' + id,
     method: 'put',
     data: data
   })
@@ -25,21 +27,21 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/admin/role/' + id,
+    url: API + '/' + id,
     method: 'delete'
   })
 }
 
 function getMenu(id) {
   return request({
-    url: '/admin/role/menu/' + id,
+    url: API + '/menu/' + id,
     method: 'get'
   })
 }
 
 function setMenu(id, menuIds) {
   return request({
-    url: '/admin/role/menu/' + id,
+    url: API + '/menu/' + id,
     method: 'post',
     data: {
       ids: menuIds
@@ -49,14 +51,14 @@ function setMenu(id, menuIds) {
 
 function getPermission(id) {
   return request({
-    url: '/admin/role/permission/' + id,
+    url: API + '/permission/' + id,
     method: 'get'
   })
 }
 
 function setPermission(id, permissionIds) {
   return request({
-    url: '/admin/role/permission/' + id,
+    url: API + '/permission/' + id,
     method: 'post',
     data: {
       ids: permissionIds

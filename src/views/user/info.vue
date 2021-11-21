@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getInfo, updateInfo } from '@/api/user'
+import { getInfo, updateInfo } from '@/api/me'
 import config from '@/config'
 import AvatarUpload from '@/components/Upload/Avatar'
 

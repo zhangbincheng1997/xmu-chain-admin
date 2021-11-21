@@ -1,15 +1,17 @@
 import request from '@/utils/request'
 
+const API = '/service-admin/api/v1/menu'
+
 function tree() {
   return request({
-    url: '/admin/menu/tree',
+    url: API + '/tree',
     method: 'get'
   })
 }
 
 function add(data) {
   return request({
-    url: '/admin/menu',
+    url: API,
     method: 'post',
     data: data
   })
@@ -17,7 +19,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/admin/menu/' + id,
+    url: API + '/' + id,
     method: 'put',
     data: data
   })
@@ -25,7 +27,7 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/admin/menu/' + id,
+    url: API + '/' + id,
     method: 'delete'
   })
 }

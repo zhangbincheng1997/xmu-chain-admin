@@ -58,7 +58,7 @@
                   <div class="block-amount">
                     <p class="trans-hash">
                       <i class="el-icon-coin" />
-                      <router-link :to="{'path': '/chain/blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">
+                      <router-link :to="{'path': '/browser/blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">
                         块高 {{ item.blockNumber }}
                       </router-link>
                     </p>
@@ -90,7 +90,7 @@
                   <div class="block-amount">
                     <p class="trans-hash">
                       <i class="el-icon-copy-document" title="复制" @click="copyNodeIdKey(item.transHash)" />
-                      <router-link :to="{'path': '/chain/transactionInfo', 'query': {transactionHash: item.transHash}}" class="node-ip">
+                      <router-link :to="{'path': '/browser/transactionInfo', 'query': {transactionHash: item.transHash}}" class="node-ip">
                         {{ item.transHash }}
                       </router-link>
                     </p>
@@ -125,10 +125,10 @@ import block_img from '@/assets/images/block.png'
 import nodes_img from '@/assets/images/nodes.png'
 import transaction_img from '@/assets/images/transation.png'
 import contract_img from '@/assets/images/contract_img.png'
-import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/chain'
+import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/browser'
 
 export default {
-  name: 'ChainHome',
+  name: 'BrowserHome',
   components: {
     'v-chart': charts
   },
@@ -266,10 +266,10 @@ export default {
     goRouter: function(val) {
       switch (val) {
         case 'blocks':
-          router.push('/chain/blockInfo')
+          router.push('/browser/blockInfo')
           break
         case 'transactions':
-          router.push('/chain/transactionInfo')
+          router.push('/browser/transactionInfo')
           break
       }
     },

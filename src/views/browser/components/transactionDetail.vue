@@ -69,7 +69,7 @@
         <el-form-item label="logs:">
           <span v-if="!decodeLogs" style="color: deeppink">{{ receipt.logs }}</span>
           <div v-else>
-            <div v-for="(event, i) in result.events" :key="i" class="input-data">
+            <div v-for="(event, i) in result.logs" :key="i" class="input-data">
               <div class="input-label">
                 <span class="label">methodId:</span>
                 <span>{{ event.methodId }}</span>
@@ -135,7 +135,7 @@
 </style>
 
 <script>
-import { getTransactionReceipt, decode } from '@/api/chain'
+import { getTransactionReceipt, decode } from '@/api/browser'
 
 export default {
   name: 'TransactionDetail',

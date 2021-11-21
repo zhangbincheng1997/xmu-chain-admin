@@ -23,20 +23,20 @@
         </el-table-column>
         <el-table-column prop="blockTimestamp" label="创建时间" width="280" align="center" />
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getBlockList" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.pageNumber" :limit.sync="query.pageSize" @pagination="getBlockList" />
     </el-card>
   </div>
 </template>
 
 <script>
 import router from '@/router'
-import { getBlockList } from '@/api/chain'
+import { getBlockList } from '@/api/browser'
 import Pagination from '@/components/Pagination'
 
 // 查询
 const defaultQuery = {
-  page: 1,
-  limit: 10,
+  pageNumber: 1,
+  pageSize: 10,
   groupId: localStorage.getItem('groupId') || 1,
   transactionHash: undefined, // 交易hash
   blockNumber: undefined // 块高
@@ -95,7 +95,7 @@ export default {
     },
     link: function(val) {
       router.push({
-        path: '/chain/transactionInfo',
+        path: '/browser/transactionInfo',
         query: {
           blockNumber: val
         }

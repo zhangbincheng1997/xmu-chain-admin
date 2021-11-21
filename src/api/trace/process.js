@@ -1,15 +1,17 @@
 import request from '@/utils/request'
 
+const API = '/service-trace/api/v1/trace/process'
+
 function listByCode(code) {
   return request({
-    url: '/trace/process/list/' + code,
+    url: API + '/list/' + code,
     method: 'get'
   })
 }
 
 function list(data) {
   return request({
-    url: '/trace/process/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -17,7 +19,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/trace/process',
+    url: API,
     method: 'post',
     data: data
   })

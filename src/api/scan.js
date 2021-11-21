@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
+const API = '/service-trace/api/v1/qrcode'
+
 function getQRCode(code) {
   return request({
-    // url: '/tag/getQRCode',
-    url: '/scan/getQRCodeBase64',
+    url: API + '/getBase64',
     method: 'get',
     params: {
       code: code

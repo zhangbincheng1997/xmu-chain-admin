@@ -1,8 +1,10 @@
 import request from '@/utils/request'
 
+const API = '/service-admin/api/v1/company'
+
 function list(data) {
   return request({
-    url: '/admin/company/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -10,7 +12,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/admin/company',
+    url: API,
     method: 'post',
     data: data
   })
@@ -18,7 +20,7 @@ function add(data) {
 
 function edit(id, data) {
   return request({
-    url: '/admin/company/info/' + id,
+    url: API + '/info/' + id,
     method: 'put',
     data: data
   })
@@ -26,14 +28,14 @@ function edit(id, data) {
 
 function remove(id) {
   return request({
-    url: '/admin/company' + id,
+    url: API + '/' + id,
     method: 'delete'
   })
 }
 
 function updatePassword(id, data) {
   return request({
-    url: '/admin/company/password/' + id,
+    url: API + '/' + id,
     method: 'put',
     data: data
   })

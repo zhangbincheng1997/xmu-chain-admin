@@ -1,8 +1,10 @@
 import request from '@/utils/request'
 
+const API = '/service-eth/api/v1/browser'
+
 export function getNumberData(data) {
   return request({
-    url: '/chain/group/general',
+    url: API + '/group/general',
     method: 'get',
     params: data
   })
@@ -10,7 +12,7 @@ export function getNumberData(data) {
 
 export function getChartData(data) {
   return request({
-    url: '/chain/group/transDaily',
+    url: API + '/group/transDaily',
     method: 'get',
     params: data
   })
@@ -18,7 +20,7 @@ export function getChartData(data) {
 
 export function getNodeList(data) {
   return request({
-    url: '/chain/node/nodeList',
+    url: API + '/node/nodeList',
     method: 'get',
     params: data
   })
@@ -26,7 +28,7 @@ export function getNodeList(data) {
 
 export function getBlockList(data) {
   return request({
-    url: '/chain/block/blockList',
+    url: API + '/block/blockList',
     method: 'get',
     params: data
   })
@@ -34,7 +36,7 @@ export function getBlockList(data) {
 
 export function getTransactionList(data) {
   return request({
-    url: '/chain/transaction/transList',
+    url: API + '/transaction/transList',
     method: 'get',
     params: data
   })
@@ -42,7 +44,7 @@ export function getTransactionList(data) {
 
 export function getTransactionReceipt(transHash) {
   return request({
-    url: '/chain/transaction/transactionReceipt',
+    url: API + '/transaction/transactionReceipt',
     method: 'get',
     params: {
       transHash: transHash
@@ -52,7 +54,7 @@ export function getTransactionReceipt(transHash) {
 
 export function decode(transHash) {
   return request({
-    url: '/chain/decode',
+    url: API + '/decode',
     method: 'get',
     params: {
       transHash: transHash

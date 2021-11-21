@@ -1,15 +1,17 @@
 import request from '@/utils/request'
 
+const API = '/service-trace/api/v1/trace/admin'
+
 function getByCode(code) {
   return request({
-    url: '/trace/admin/' + code,
+    url: API + '/' + code,
     method: 'get'
   })
 }
 
 function list(data) {
   return request({
-    url: '/trace/admin/list',
+    url: API + '/list',
     method: 'get',
     params: data
   })
@@ -17,7 +19,7 @@ function list(data) {
 
 function add(data) {
   return request({
-    url: '/trace/admin',
+    url: API,
     method: 'post',
     data: data
   })
@@ -25,7 +27,7 @@ function add(data) {
 
 function edit(code, data) {
   return request({
-    url: '/trace/admin/' + code,
+    url: API + '/' + code,
     method: 'put',
     data: data
   })
@@ -33,7 +35,7 @@ function edit(code, data) {
 
 function remove(code) {
   return request({
-    url: '/trace/admin/' + code,
+    url: API + '/' + code,
     method: 'delete'
   })
 }
