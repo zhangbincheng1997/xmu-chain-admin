@@ -6,6 +6,8 @@ export default {
     ROLE: 'role',
     MENU: 'menu',
     PERMISSION: 'permission',
+    ADD_ADMIN: 'addAdmin',
+    ADD_MEMBER: 'addMember',
     PWD: 'pwd',
     QRCODE: 'qrCode',
     GENERATE: 'generate'
@@ -17,6 +19,8 @@ export default {
     role: '设置角色',
     menu: '设置菜单',
     permission: '设置权限',
+    addAdmin: '添加管理员',
+    addMember: '添加员工',
     pwd: '重置密码',
     qrCode: '二维码',
     generate: '生成防伪码'

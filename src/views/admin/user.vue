@@ -1,19 +1,25 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
+      <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
+        <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
+      <el-input v-model="query.companyId" placeholder="企业Id" style="width: 200px;" clearable />
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
       <el-table
         v-loading="loading"
         :data="list"
         @sort-change="handleSortChange"
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
+        <el-table-column label="企业ID" prop="companyId" align="center" />
         <el-table-column label="头像" prop="avatar" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" fit="fill" /></template>
         </el-table-column>
+        <el-table-column label="账号" prop="username" align="center" />
         <el-table-column label="姓名" prop="name" align="center" />
         <el-table-column label="手机" prop="phone" align="center" />
         <el-table-column label="邮箱" prop="email" align="center" />
@@ -45,7 +51,7 @@
         <el-form-item label="账号" prop="username" required>
           <el-input v-model="form.username" autocomplete="off" :disabled="dialogType === DialogType.EDIT" />
         </el-form-item>
-        <el-form-item v-if="dialogType === DialogType.ADD" label="密码" prop="password" required>
+        <el-form-item v-if="dialogType === DialogType.ADD_MEMBER" label="密码" prop="password" required>
           <el-input v-model="form.password" type="password" autocomplete="off" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar" required>
@@ -139,6 +145,8 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
+  roleId: undefined,
+  companyId: undefined,
   keyword: undefined, // ID/NAME
   sort: undefined // ID排序
 }
@@ -182,9 +190,15 @@ export default {
     }
   },
   mounted() {
+    this.init()
     this.getList()
   },
   methods: {
+    init() {
+      role.list().then(res => {
+        this.roleData = res.data
+      })
+    },
     getList() {
       this.loading = true
       user.list(this.query).then(res => {
@@ -198,7 +212,7 @@ export default {
       this.getList()
     },
     handleAdd() {
-      this.dialogType = this.DialogType.ADD
+      this.dialogType = this.DialogType.ADD_MEMBER
       this.visible = true
     },
     handleEdit(row) {
@@ -210,8 +224,8 @@ export default {
       }) // mounted
     },
     submitForm() {
-      if (this.dialogType === this.DialogType.ADD) {
-        user.add(this.form).then(() => {
+      if (this.dialogType === this.DialogType.ADD_MEMBER) {
+        user.saveCompanyMember(this.form).then(() => {
           this.resetForm()
           this.getList()
         })
@@ -240,14 +254,11 @@ export default {
       this.$refs.pwdForm.resetFields()
     },
     handleRole(row) {
-      role.list().then(res => {
-        this.roleData = res.data
-        user.getRole(row.id).then(res => {
-          this.$refs.tree.setCheckedKeys(res.data)
-        })
+      user.getRole(row.id).then(res => {
+        this.roleVisible = true
+        this.selectId = row.id
+        this.$refs.tree.setCheckedKeys(res.data)
       })
-      this.roleVisible = true
-      this.selectId = row.id
     },
     submitRoleDialog() {
       user.setRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
@@ -256,7 +267,6 @@ export default {
     },
     resetRoleDialog() {
       this.roleVisible = false
-      this.roleData = undefined
       this.$refs.tree.setCheckedKeys([])
     },
     handleRemove(row) {

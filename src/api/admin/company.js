@@ -33,18 +33,9 @@ function remove(id) {
   })
 }
 
-function updatePassword(id, data) {
-  return request({
-    url: API + '/' + id,
-    method: 'put',
-    data: data
-  })
-}
-
 export default {
   list,
   add,
   edit,
-  remove,
-  updatePassword
+  remove
 }

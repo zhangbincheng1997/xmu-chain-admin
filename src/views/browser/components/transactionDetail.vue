@@ -17,7 +17,7 @@
       <el-form label-position="left" class="demo-table-expand">
         <el-form-item label="type:">{{ result.type }}</el-form-item>
         <el-form-item label="input:">
-          <span v-if="!decodeInput" style="color: deeppink">{{ receipt.input }}</span>
+          <span v-if="!decodeInput" style="color: #727476">{{ receipt.input }}</span>
           <div v-else-if="result.input">
             <div class="input-data">
               <div class="input-label">
@@ -42,7 +42,7 @@
           <el-button type="primary" @click="decodeInputClick">{{ decodeInput ? "还原" : "解码" }}</el-button>
         </el-form-item>
         <el-form-item label="output:">
-          <span v-if="!decodeOutput" style="color: deeppink">{{ receipt.output }}</span>
+          <span v-if="!decodeOutput" style="color: #727476">{{ receipt.output }}</span>
           <div v-else-if="result.output">
             <div class="input-data">
               <div class="input-label">
@@ -67,28 +67,28 @@
           <el-button type="primary" @click="decodeOutputClick">{{ decodeOutput ? "还原" : "解码" }}</el-button>
         </el-form-item>
         <el-form-item label="logs:">
-          <span v-if="!decodeLogs" style="color: deeppink">{{ receipt.logs }}</span>
-          <div v-else>
-            <div v-for="(event, i) in result.logs" :key="i" class="input-data">
+          <div v-for="(log, i) in result.logs" :key="i" class="input-data">
+            <span v-if="!decodeLogs" style="color: #727476">{{ receipt.logs[i] }}</span>
+            <div v-else>
               <div class="input-label">
                 <span class="label">methodId:</span>
-                <span>{{ event.methodId }}</span>
+                <span>{{ log.methodId }}</span>
               </div>
               <div class="input-label">
                 <span class="label">function:</span>
-                <span>{{ event.function }}</span>
+                <span>{{ log.function }}</span>
               </div>
               <div class="input-label">
                 <span class="label">address:</span>
-                <span>{{ event.address }}</span>
+                <span>{{ log.address }}</span>
               </div>
               <div class="input-label">
                 <span class="label">topics:</span>
-                <span>{{ event.topics }}</span>
+                <span>{{ log.topics }}</span>
               </div>
               <div class="input-label">
                 <span class="label">params:</span>
-                <el-table :data="event.params">
+                <el-table :data="log.params">
                   <el-table-column label="name" prop="name" width="200" align="center" />
                   <el-table-column label="type" prop="type" width="200" align="center" />
                   <el-table-column label="data" prop="data" width="200" align="center" />

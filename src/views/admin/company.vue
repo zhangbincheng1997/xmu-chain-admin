@@ -19,13 +19,10 @@
         <el-table-column label="联系电话" prop="contactPhone" align="center" />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
-        <el-table-column label="设置" width="60" align="center" fixed="right">
-          <template slot-scope="scope">
-            <el-button type="text" @click="handlePwd(scope.row)">密码</el-button>
-          </template>
-        </el-table-column>
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
+            <el-button type="text" @click="handleAddAdmin(scope.row)">添加管理员</el-button>
+            <br>
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
           </template>
@@ -115,26 +112,36 @@
     </el-dialog>
 
     <el-dialog
-      :title="DialogTitle[DialogType.PWD]"
-      :visible.sync="pwdVisible"
+      :title="DialogTitle[DialogType.ADD_ADMIN]"
+      :visible.sync="addVisible"
       width="30%"
       center
-      @close="resetPwdDialog"
+      @close="resetAddDialog"
     >
-      <el-form ref="pwdForm" :model="pwdForm" label-width="100px">
+      <el-form ref="pwdForm" :model="addForm" label-width="100px">
+        <el-form-item label="企业ID" prop="companyId" hidden>
+          <el-input v-model="addForm.companyId" />
+        </el-form-item>
+        <el-form-item label="企业名字" prop="companyName">
+          <el-input v-model="addForm.companyName" disabled />
+        </el-form-item>
+        <el-form-item label="账号" prop="username" required>
+          <el-input v-model="addForm.username" autocomplete="off" />
+        </el-form-item>
         <el-form-item label="密码" prop="password" required>
-          <el-input v-model="pwdForm.password" type="password" autocomplete="off" />
+          <el-input v-model="addForm.password" type="password" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitPwdDialog">确 定</el-button>
-        <el-button @click="resetPwdDialog">取 消</el-button>
+        <el-button type="primary" @click="submitAddDialog">确 定</el-button>
+        <el-button @click="resetAddDialog">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import user from '@/api/admin/user'
 import company from '@/api/admin/company'
 import config from '@/config'
 import AvatarUpload from '@/components/Upload/Avatar'
@@ -182,8 +189,11 @@ export default {
         businessLicense: undefined
       },
 
-      pwdVisible: false,
-      pwdForm: {
+      addVisible: false,
+      addForm: {
+        companyId: undefined,
+        companyName: undefined,
+        username: undefined,
         password: undefined
       },
 
@@ -236,17 +246,18 @@ export default {
       this.visible = false
       this.$refs.form.resetFields()
     },
-    handlePwd(row) {
-      this.pwdVisible = true
-      this.selectId = row.id
+    handleAddAdmin(row) {
+      this.addVisible = true
+      this.addForm.companyId = row.id
+      this.addForm.companyName = row.name
     },
-    submitPwdDialog() {
-      company.updatePassword(this.selectId, this.pwdForm).then(() => {
-        this.resetPwdDialog()
+    submitAddDialog() {
+      user.saveCompanyAdmin(this.addForm).then(() => {
+        this.resetAddDialog()
       })
     },
-    resetPwdDialog() {
-      this.pwdVisible = false
+    resetAddDialog() {
+      this.addVisible = false
       this.$refs.pwdForm.resetFields()
     },
     handleRemove(row) {
