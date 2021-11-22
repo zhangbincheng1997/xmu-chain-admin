@@ -6,8 +6,6 @@ const API = '/service-auth/oauth'
 // client_id: xmu-chain-service-admin
 // client_secret: 123456
 export function login(data) {
-  data['grant_type'] = 'password'
-  // data['grant_type'] = 'captcha'
   return request({
     url: API + '/token',
     method: 'post',
