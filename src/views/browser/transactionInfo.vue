@@ -34,8 +34,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import { getTransactionList } from '@/api/browser'
+import { getTransactionList } from '@/api/service-eth/browser'
 import Pagination from '@/components/Pagination'
 import transactionDetail from './components/transactionDetail'
 
@@ -44,8 +43,8 @@ const defaultQuery = {
   pageNumber: 1,
   pageSize: 10,
   groupId: localStorage.getItem('groupId') || 1,
-  transactionHash: undefined, // 区块hash
-  blockNumber: undefined // 块高
+  transactionHash: undefined,
+  blockNumber: undefined
 }
 
 export default {
@@ -101,7 +100,7 @@ export default {
       this.$refs.refTable.toggleRowExpansion(row)
     },
     link: function(val) {
-      router.push({
+      this.$router.push({
         path: '/browser/blockInfo',
         query: {
           blockNumber: val

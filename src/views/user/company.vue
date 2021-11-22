@@ -93,7 +93,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getCompanyInfo, updateCompanyInfo } from '@/api/me'
+import { getCompanyInfo, updateCompanyInfo } from '@/api/service-admin/me'
 import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
 

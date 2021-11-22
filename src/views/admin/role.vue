@@ -72,9 +72,9 @@
 </template>
 
 <script>
-import role from '@/api/admin/role'
-import menu from '@/api/admin/menu'
-import permission from '@/api/admin/permission'
+import role from '@/api/service-admin/role'
+import menu from '@/api/service-admin/menu'
+import permission from '@/api/service-admin/permission'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 

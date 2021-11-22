@@ -118,14 +118,13 @@
 </template>
 
 <script>
-import router from '@/router'
 import charts from './components/chart'
 import sRight from '@/assets/images/s-right.png'
 import block_img from '@/assets/images/block.png'
 import nodes_img from '@/assets/images/nodes.png'
 import transaction_img from '@/assets/images/transation.png'
 import contract_img from '@/assets/images/contract_img.png'
-import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/browser'
+import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/service-eth/browser'
 
 export default {
   name: 'BrowserHome',
@@ -266,10 +265,10 @@ export default {
     goRouter: function(val) {
       switch (val) {
         case 'blocks':
-          router.push('/browser/blockInfo')
+          this.$router.push('/browser/blockInfo')
           break
         case 'transactions':
-          router.push('/browser/transactionInfo')
+          this.$router.push('/browser/transactionInfo')
           break
       }
     },

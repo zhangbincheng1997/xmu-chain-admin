@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import corp from '@/api/template/corp'
+import corp from '@/api/service-trace/template/corp'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -82,7 +82,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined // ID/NAME
+  keyword: undefined
 }
 
 export default {

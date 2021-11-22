@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import permission from '@/api/admin/permission'
+import permission from '@/api/service-admin/permission'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 

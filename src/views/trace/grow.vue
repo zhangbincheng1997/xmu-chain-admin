@@ -85,8 +85,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import grow from '@/api/trace/grow'
+import grow from '@/api/service-trace/trace/grow'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -95,7 +94,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  code: undefined // 溯源码
+  code: undefined
 }
 
 export default {
@@ -166,7 +165,7 @@ export default {
       this.$refs.form.resetFields()
     },
     linkTrace: function(val) {
-      router.push({
+      this.$router.push({
         path: '/trace/info',
         query: {
           code: val

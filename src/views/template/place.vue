@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import place from '@/api/template/place'
+import place from '@/api/service-trace/template/place'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -77,7 +77,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined // ID/NAME
+  keyword: undefined
 }
 
 export default {

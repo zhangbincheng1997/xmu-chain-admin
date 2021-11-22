@@ -37,8 +37,7 @@
 </template>
 
 <script>
-import order from '@/api/order'
-import router from "@/router";
+import order from '@/api/service-trace/order'
 
 export default {
   data() {
@@ -57,7 +56,7 @@ export default {
   methods: {
     submitForm() {
       order.saveOrder(this.form).then((res) => {
-        router.push({
+        this.$router.push({
           path: '/order/detail',
           query: {
             id: res.data

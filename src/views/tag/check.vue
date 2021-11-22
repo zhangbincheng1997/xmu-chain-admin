@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import tag from '@/api/tag'
+import tag from '@/api/service-trace/tag'
 
 export default {
   data() {
@@ -63,7 +62,7 @@ export default {
       })
     },
     linkTag: function(val) {
-      router.push({
+      this.$router.push({
         path: '/tag/index',
         query: {
           id: val

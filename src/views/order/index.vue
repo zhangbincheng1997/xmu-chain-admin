@@ -43,8 +43,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import order from '@/api/order'
+import order from '@/api/service-trace/order'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -52,8 +51,8 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  id: undefined, // 订单编号
-  status: undefined // 订单状态
+  id: undefined,
+  status: undefined
 }
 
 export default {
@@ -102,7 +101,7 @@ export default {
       })
     },
     linkTrace: function(val) {
-      router.push({
+      this.$router.push({
         path: '/trace/info',
         query: {
           code: val
@@ -110,7 +109,7 @@ export default {
       })
     },
     linkDetail: function(val) {
-      router.push({
+      this.$router.push({
         path: '/order/detail',
         query: {
           id: val

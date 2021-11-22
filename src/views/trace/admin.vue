@@ -117,13 +117,12 @@
 </template>
 
 <script>
-import router from '@/router'
-import corp from '@/api/template/corp'
-import product from '@/api/template/product'
-import place from '@/api/template/place'
-import plot from '@/api/template/plot'
-import admin from '@/api/trace/admin'
-import scan from '@/api/scan'
+import corp from '@/api/service-trace/template/corp'
+import product from '@/api/service-trace/template/product'
+import place from '@/api/service-trace/template/place'
+import plot from '@/api/service-trace/template/plot'
+import admin from '@/api/service-trace/trace/admin'
+import scan from '@/api/service-trace/scan'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -131,7 +130,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  code: undefined // 溯源码
+  code: undefined
 }
 
 export default {
@@ -225,7 +224,7 @@ export default {
       scan.getQRCode(code).then((res) => { this.qrCode = res.data })
     },
     link: function(type, val) {
-      router.push({
+      this.$router.push({
         path: '/template/' + type,
         query: {
           id: val
@@ -233,7 +232,7 @@ export default {
       })
     },
     linkTrace: function(val) {
-      router.push({
+      this.$router.push({
         path: '/trace/info',
         query: {
           code: val

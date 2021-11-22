@@ -29,8 +29,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import { getBlockList } from '@/api/browser'
+import { getBlockList } from '@/api/service-eth/browser'
 import Pagination from '@/components/Pagination'
 
 // 查询
@@ -38,8 +37,8 @@ const defaultQuery = {
   pageNumber: 1,
   pageSize: 10,
   groupId: localStorage.getItem('groupId') || 1,
-  transactionHash: undefined, // 交易hash
-  blockNumber: undefined // 块高
+  transactionHash: undefined,
+  blockNumber: undefined
 }
 
 export default {
@@ -94,7 +93,7 @@ export default {
       this.link(row.blockNumber)
     },
     link: function(val) {
-      router.push({
+      this.$router.push({
         path: '/browser/transactionInfo',
         query: {
           blockNumber: val

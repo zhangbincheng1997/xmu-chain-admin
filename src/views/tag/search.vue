@@ -49,8 +49,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import tag from '@/api/tag'
+import tag from '@/api/service-trace/tag'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -109,7 +108,7 @@ export default {
       this.form = JSON.parse(JSON.stringify(row))
     },
     linkTag: function(val) {
-      router.push({
+      this.$router.push({
         path: '/tag/index',
         query: {
           id: val

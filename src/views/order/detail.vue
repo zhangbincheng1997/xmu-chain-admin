@@ -103,8 +103,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import order from '@/api/order'
+import order from '@/api/service-trace/order'
 import config from '@/config'
 
 export default {
@@ -203,7 +202,7 @@ export default {
       })
     },
     linkTrace: function(val) {
-      router.push({
+      this.$router.push({
         path: '/trace/info',
         query: {
           code: val

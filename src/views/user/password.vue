@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { updatePassword } from '@/api/me'
+import { updatePassword } from '@/api/service-admin/me'
 
 export default {
   data() {

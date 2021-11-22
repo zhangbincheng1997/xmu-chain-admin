@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import menu from '@/api/admin/menu'
+import menu from '@/api/service-admin/menu'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 

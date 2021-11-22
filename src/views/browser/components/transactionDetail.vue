@@ -135,7 +135,7 @@
 </style>
 
 <script>
-import { getTransactionReceipt, decode } from '@/api/browser'
+import { getTransactionReceipt, decode } from '@/api/service-eth/browser'
 
 export default {
   name: 'TransactionDetail',

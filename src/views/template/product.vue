@@ -80,9 +80,8 @@
 </template>
 
 <script>
-import router from '@/router'
-import corp from '@/api/template/corp'
-import product from '@/api/template/product'
+import corp from '@/api/service-trace/template/corp'
+import product from '@/api/service-trace/template/product'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -91,7 +90,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined // ID/NAME
+  keyword: undefined
 }
 
 export default {
@@ -181,7 +180,7 @@ export default {
       })
     },
     link: function(val) {
-      router.push({
+      this.$router.push({
         path: '/template/corp',
         query: {
           id: val

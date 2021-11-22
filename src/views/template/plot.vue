@@ -71,9 +71,8 @@
 </template>
 
 <script>
-import router from '@/router'
-import place from '@/api/template/place'
-import plot from '@/api/template/plot'
+import place from '@/api/service-trace/template/place'
+import plot from '@/api/service-trace/template/plot'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
 import Pagination from '@/components/Pagination'
@@ -82,7 +81,7 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined // ID/NAME
+  keyword: undefined
 }
 
 export default {
@@ -170,7 +169,7 @@ export default {
       })
     },
     link: function(val) {
-      router.push({
+      this.$router.push({
         path: '/template/place',
         query: {
           id: val

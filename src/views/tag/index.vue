@@ -67,8 +67,7 @@
 </template>
 
 <script>
-import router from '@/router'
-import tag from '@/api/tag'
+import tag from '@/api/service-trace/tag'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
 
@@ -162,7 +161,7 @@ export default {
       this.$refs.genData.resetFields()
     },
     linkTrace: function(val) {
-      router.push({
+      this.$router.push({
         path: '/trace/info',
         query: {
           code: val

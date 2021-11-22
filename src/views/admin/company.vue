@@ -135,8 +135,8 @@
 </template>
 
 <script>
-import user from '@/api/admin/user'
-import company from '@/api/admin/company'
+import user from '@/api/service-admin/user'
+import company from '@/api/service-admin/company'
 import config from '@/config'
 import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
@@ -146,8 +146,8 @@ import Pagination from '@/components/Pagination'
 const defaultQuery = {
   page: 1,
   limit: 10,
-  keyword: undefined, // ID/NAME
-  sort: undefined // ID排序
+  keyword: undefined,
+  sort: undefined
 }
 
 export default {

@@ -114,15 +114,15 @@
 </template>
 
 <script>
-import company from '@/api/admin/company'
-import corp from '@/api/template/corp'
-import product from '@/api/template/product'
-import place from '@/api/template/place'
-import plot from '@/api/template/plot'
-import admin from '@/api/trace/admin'
-import grow from '@/api/trace/grow'
-import farm from '@/api/trace/farm'
-import process from '@/api/trace/process'
+import company from '@/api/service-admin/company'
+import corp from '@/api/service-trace/template/corp'
+import product from '@/api/service-trace/template/product'
+import place from '@/api/service-trace/template/place'
+import plot from '@/api/service-trace/template/plot'
+import admin from '@/api/service-trace/trace/admin'
+import grow from '@/api/service-trace/trace/grow'
+import farm from '@/api/service-trace/trace/farm'
+import process from '@/api/service-trace/trace/process'
 
 export default {
   data() {
@@ -160,7 +160,7 @@ export default {
         product.getById(this.template.productId).then(res => { this.productTemplate = res.data })
         place.getById(this.template.placeId).then(res => { this.placeTemplate = res.data })
         plot.getById(this.template.plotId).then(res => { this.plotTemplate = res.data })
-        // trace 溯源
+        // service-trace 溯源
         grow.listByCode(this.code).then(res => { this.growList = res.data })
         farm.listByCode(this.code).then(res => { this.farmList = res.data })
         process.listByCode(this.code).then(res => { this.processList = res.data })

@@ -136,8 +136,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import user from '@/api/admin/user'
-import role from '@/api/admin/role'
+import user from '@/api/service-admin/user'
+import role from '@/api/service-admin/role'
 import config from '@/config'
 import AvatarUpload from '@/components/Upload/Avatar'
 import Pagination from '@/components/Pagination'
@@ -148,8 +148,8 @@ const defaultQuery = {
   limit: 10,
   roleId: undefined,
   companyId: undefined,
-  keyword: undefined, // ID/NAME
-  sort: undefined // ID排序
+  keyword: undefined,
+  sort: undefined
 }
 
 export default {
