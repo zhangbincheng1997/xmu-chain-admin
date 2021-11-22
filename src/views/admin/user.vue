@@ -4,7 +4,7 @@
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-input v-if="isSuperAdmin" v-model="query.companyId" placeholder="企业Id" style="width: 200px;" clearable />
+      <el-input v-if="true" v-model="query.companyId" placeholder="企业Id" style="width: 200px;" clearable />
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
@@ -135,7 +135,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import user from '@/api/service-admin/user'
 import role from '@/api/service-admin/role'
 import config from '@/config'
@@ -189,11 +188,6 @@ export default {
       DialogTitle: config.dialogTitle,
       genderOptions: config.genderOptions
     }
-  },
-  computed: {
-    ...mapGetters([
-      'isSuperAdmin'
-    ])
   },
   mounted() {
     this.init()

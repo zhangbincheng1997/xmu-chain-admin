@@ -1,53 +1,73 @@
 import { constantRoutes } from '@/router'
-import { getMenu } from '@/api/service-admin/me'
 import Layout from '@/layout'
+import { getMenuRouteList } from '@/api/service-admin/menu'
+
+/**
+ * Use meta.role to determine if the current user has permission
+ * @param roles
+ * @param route
+ */
+function hasPermission(roles, route) {
+  // 超级管理员放行
+  if (roles.includes('SUPER_ADMIN')) {
+    return true
+  }
+  if (route.meta && route.meta.roles) {
+    return roles.some(role => route.meta.roles.includes(role))
+  } else {
+    return true
+  }
+}
+
+/**
+ * Filter asynchronous routing tables by recursion
+ * @param routes asyncRoutes
+ * @param roles
+ */
+export function filterAsyncRoutes(routes, roles) {
+  const res = []
+  routes.forEach(route => {
+    const tmp = { ...route }
+    if (hasPermission(roles, tmp)) {
+      const component = tmp.component
+      if (route.component) {
+        if (component === 'Layout') {
+          tmp.component = Layout
+        } else {
+          tmp.component = (resolve) => require([`@/views/${component}`], resolve)
+        }
+        if (tmp.children) {
+          tmp.children = filterAsyncRoutes(tmp.children, roles)
+        }
+      }
+      res.push(tmp)
+    }
+  })
+  return res
+}
 
 const state = {
-  routes: []
+  routes: [],
+  addRoutes: []
 }
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
+    state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
   }
 }
 
 const actions = {
-  getRoutes({ commit }) {
-    return new Promise((resolve, reject) => {
-      getMenu(state.token).then(response => {
-        const { data } = response
-        const routes = data ? getRoutes(data) : []
-        // NOTE: 刷新页面 跳转404
-        routes.push({ path: '*', redirect: '/404', hidden: true })
-        commit('SET_ROUTES', routes)
-        resolve(routes)
-      }).catch(error => {
-        reject(error)
+  generateRoutes({ commit }, roles) {
+    return new Promise(resolve => {
+      getMenuRouteList().then(response => {
+        const accessedRoutes = filterAsyncRoutes(response.data, roles)
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
       })
     })
   }
-}
-
-function getRoutes(data) {
-  const routes = []
-  data.forEach(item => {
-    const route = {
-      path: item.url,
-      name: 'menu_' + item.id,
-      meta: { title: item.name, icon: item.icon },
-      hidden: item.hidden
-    }
-    if (item.children) {
-      route.children = getRoutes(item.children)
-      route.component = Layout
-    } else {
-      // menu.component = () => import('@/views' + item.url)
-      route.component = (resolve) => require([`@/views${item.url}`], resolve)
-    }
-    routes.push(route)
-  })
-  return routes
 }
 
 export default {

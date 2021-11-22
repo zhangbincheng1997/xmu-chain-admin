@@ -33,15 +33,6 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  },
-  SET_IS_SUPER_ADMIN: (state, isSuperAdmin) => {
-    state.isSuperAdmin = isSuperAdmin
-  },
-  SET_IS_COMPANY_ADMIN: (state, isCompanyAdmin) => {
-    state.isCompanyAdmin = isCompanyAdmin
-  },
-  SET_IS_COMPANY_MEMBER: (state, isCompanyMember) => {
-    state.isCompanyMember = isCompanyMember
   }
 }
 
@@ -102,11 +93,7 @@ const actions = {
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-        commit('SET_ROLES', roles.map(item => item.name))
-        const roleIds = roles.map(item => parseInt(item.id))
-        commit('SET_IS_SUPER_ADMIN', roleIds.indexOf(SUPER_ADMIN) >= 0)
-        commit('SET_IS_COMPANY_ADMIN', roleIds.indexOf(COMPANY_ADMIN) >= 0)
-        commit('SET_IS_COMPANY_MEMBER', roleIds.indexOf(COMPANY_MEMBER) >= 0)
+        commit('SET_ROLES', roles)
         resolve(data)
       }).catch(error => {
         reject(error)

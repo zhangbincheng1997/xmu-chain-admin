@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-container>
-        <div v-if="isSuperAdmin || isCompanyAdmin">
+        <div v-if="true">
           <el-form ref="form" :model="form" label-width="100px">
             <el-form-item label="标志" prop="logo" required>
               <AvatarUpload :avatar.sync="form.logo" />
@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { getCompanyInfo, updateCompanyInfo } from '@/api/service-admin/me'
 import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
@@ -119,12 +118,6 @@ export default {
         businessLicense: undefined
       }
     }
-  },
-  computed: {
-    ...mapGetters([
-      'isSuperAdmin',
-      'isCompanyAdmin'
-    ])
   },
   mounted() {
     getCompanyInfo().then(res => {
