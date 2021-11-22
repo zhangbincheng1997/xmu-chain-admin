@@ -25,6 +25,21 @@ export function updatePassword(data) {
   })
 }
 
+export function getCompanyInfo() {
+  return request({
+    url: API + '/info/company',
+    method: 'get'
+  })
+}
+
+export function updateCompanyInfo(data) {
+  return request({
+    url: API + '/info/company',
+    method: 'put',
+    data: data
+  })
+}
+
 export function getMenu() {
   return request({
     url: API + '/menu',

@@ -4,7 +4,7 @@
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-input v-model="query.companyId" placeholder="企业Id" style="width: 200px;" clearable />
+      <el-input v-if="isSuperAdmin" v-model="query.companyId" placeholder="企业Id" style="width: 200px;" clearable />
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
@@ -15,7 +15,7 @@
         @sort-change="handleSortChange"
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="企业ID" prop="companyId" align="center" />
+        <el-table-column v-if="isSuperAdmin" label="企业ID" prop="companyId" align="center" />
         <el-table-column label="头像" prop="avatar" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" fit="fill" /></template>
         </el-table-column>
@@ -135,6 +135,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import user from '@/api/admin/user'
 import role from '@/api/admin/role'
 import config from '@/config'
@@ -188,6 +189,11 @@ export default {
       DialogTitle: config.dialogTitle,
       genderOptions: config.genderOptions
     }
+  },
+  computed: {
+    ...mapGetters([
+      'isSuperAdmin'
+    ])
   },
   mounted() {
     this.init()

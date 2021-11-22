@@ -12,12 +12,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    if (config.url.indexOf('/oauth/token') >= 0) {
-      // client_id: xmu-chain-admin
-      // client_secret: 123456
-      // base64(client_id:client_secret)
-      config.headers['Authorization'] = 'Basic eG11LWNoYWluLWFkbWluOjEyMzQ1Ng=='
-    } else if (store.getters.token) {
+    if (store.getters.token) {
       config.headers['Authorization'] = 'Bearer ' + getToken()
     }
     return config

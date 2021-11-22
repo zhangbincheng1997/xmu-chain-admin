@@ -10,18 +10,26 @@
       </div>
       <div v-else>
         <el-tabs type="border-card">
-          <el-tab-pane label="链上信息">
+          <el-tab-pane label="企业信息">
             <el-form label-width="100px">
-              <el-form-item label="区块高度"><span>123456</span></el-form-item>
-              <el-form-item label="交易哈希"><span>0x...</span></el-form-item>
-              <el-form-item label="上链机构"><span>0x...</span></el-form-item>
-              <el-form-item label="上链时间"><span>2021-03-14</span></el-form-item>
+              <el-form-item label="图片"><el-image v-if="companyInfo.logo" :src="companyInfo.logo" :preview-src-list="[companyInfo.logo]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="名称"><span>{{ companyInfo.name }}</span></el-form-item>
+              <el-form-item label="法人"><span>{{ companyInfo.legalPerson }}</span></el-form-item>
+              <el-form-item label="联系人"><span>{{ companyInfo.contactPerson }}</span></el-form-item>
+              <el-form-item label="联系电话"><span>{{ companyInfo.contactPhone }}</span></el-form-item>
+              <el-form-item label="联系地址"><span>{{ companyInfo.contactAddress }}</span></el-form-item>
+              <el-form-item label="成立日期"><span>{{ companyInfo.foundDate }}</span></el-form-item>
+              <el-form-item label="官方网站"><span>{{ companyInfo.officialWebsite }}</span></el-form-item>
+              <el-form-item label="注册号码"><span>{{ companyInfo.registerNumber }}</span></el-form-item>
+              <el-form-item label="注册资本"><span>{{ companyInfo.registerCapital }}</span></el-form-item>
+              <el-form-item label="营业范围"><span>{{ companyInfo.businessScope }}</span></el-form-item>
+              <el-form-item label="营业执照"><el-image v-if="companyInfo.businessLicense" :src="companyInfo.businessLicense" :preview-src-list="[companyInfo.businessLicense]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="商品信息">
             <el-form label-width="100px">
-              <el-form-item label="名称"><span>{{ productTemplate.name }}</span></el-form-item>
               <el-form-item label="图片"><el-image v-if="productTemplate.image" :src="productTemplate.image" :preview-src-list="[productTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="名称"><span>{{ productTemplate.name }}</span></el-form-item>
               <el-form-item label="介绍"><span>{{ productTemplate.content }}</span></el-form-item>
               <el-form-item label="价格"><span>{{ productTemplate.price }}</span></el-form-item>
               <el-form-item label="重量"><span>{{ productTemplate.weight }}</span></el-form-item>
@@ -30,8 +38,8 @@
           </el-tab-pane>
           <el-tab-pane label="作物信息">
             <el-form label-width="100px">
-              <el-form-item label="名称"><span>{{ corpTemplate.name }}</span></el-form-item>
               <el-form-item label="图片"><el-image v-if="corpTemplate.image" :src="corpTemplate.image" :preview-src-list="[corpTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="名称"><span>{{ corpTemplate.name }}</span></el-form-item>
               <el-form-item label="灌溉周期"><span>{{ corpTemplate.guangai }}</span></el-form-item>
               <el-form-item label="施肥周期"><span>{{ corpTemplate.shifei }}</span></el-form-item>
               <el-form-item label="除草周期"><span>{{ corpTemplate.chucao }}</span></el-form-item>
@@ -40,8 +48,8 @@
           </el-tab-pane>
           <el-tab-pane label="产地信息">
             <el-form label-width="100px">
-              <el-form-item label="名称"><span>{{ placeTemplate.name }}</span></el-form-item>
               <el-form-item label="图片"><el-image v-if="placeTemplate.image" :src="placeTemplate.image" :preview-src-list="[placeTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="名称"><span>{{ placeTemplate.name }}</span></el-form-item>
               <el-form-item label="地址"><span>{{ placeTemplate.address }}</span></el-form-item>
               <el-form-item label="介绍"><span>{{ placeTemplate.content }}</span></el-form-item>
               <el-form-item label="面积"><span>{{ placeTemplate.area }}</span></el-form-item>
@@ -50,8 +58,8 @@
           </el-tab-pane>
           <el-tab-pane label="地块信息">
             <el-form label-width="100px">
-              <el-form-item label="名称"><span>{{ plotTemplate.name }}</span></el-form-item>
               <el-form-item label="图片"><el-image v-if="plotTemplate.image" :src="plotTemplate.image" :preview-src-list="[plotTemplate.image]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+              <el-form-item label="名称"><span>{{ plotTemplate.name }}</span></el-form-item>
               <el-form-item label="土壤类型"><span>{{ plotTemplate.soilType }}</span></el-form-item>
               <el-form-item label="土壤酸碱度"><span>{{ plotTemplate.soilPh }}</span></el-form-item>
             </el-form>
@@ -106,6 +114,7 @@
 </template>
 
 <script>
+import company from '@/api/admin/company'
 import corp from '@/api/template/corp'
 import product from '@/api/template/product'
 import place from '@/api/template/place'
@@ -120,6 +129,7 @@ export default {
     return {
       code: undefined,
       template: undefined,
+      companyInfo: {},
       corpTemplate: {},
       productTemplate: {},
       placeTemplate: {},
@@ -145,6 +155,7 @@ export default {
         console.log(this.template)
         if (!this.template) return
         // template 模板
+        company.getById(this.template.companyId).then(res => { this.companyInfo = res.data })
         corp.getById(this.template.corpId).then(res => { this.corpTemplate = res.data })
         product.getById(this.template.productId).then(res => { this.productTemplate = res.data })
         place.getById(this.template.placeId).then(res => { this.placeTemplate = res.data })

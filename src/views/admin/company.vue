@@ -38,12 +38,6 @@
       @close="resetForm"
     >
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="账号" prop="username" required>
-          <el-input v-model="form.username" autocomplete="off" :disabled="dialogType === DialogType.EDIT" />
-        </el-form-item>
-        <el-form-item v-if="dialogType === DialogType.ADD" label="密码" prop="password" required>
-          <el-input v-model="form.password" type="password" autocomplete="off" />
-        </el-form-item>
         <el-form-item label="标志" prop="logo" required>
           <AvatarUpload :avatar.sync="form.logo" />
         </el-form-item>

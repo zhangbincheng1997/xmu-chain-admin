@@ -17,7 +17,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getMenu(state.token).then(response => {
         const { data } = response
-        const routes = getRoutes(data)
+        const routes = data ? getRoutes(data) : []
         // NOTE: 刷新页面 跳转404
         routes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_ROUTES', routes)

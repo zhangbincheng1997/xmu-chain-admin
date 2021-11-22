@@ -2,6 +2,13 @@ import request from '@/utils/request'
 
 const API = '/service-admin/api/v1/company'
 
+function getById(id) {
+  return request({
+    url: API + '/' + id,
+    method: 'get'
+  })
+}
+
 function list(data) {
   return request({
     url: API + '/list',
@@ -34,6 +41,7 @@ function remove(id) {
 }
 
 export default {
+  getById,
   list,
   add,
   edit,
