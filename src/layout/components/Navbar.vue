@@ -16,20 +16,27 @@
               Home
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+          <a target="_blank" href="https://github.com/zhangbincheng1997">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">注销</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
 
-    <span class="name-roles">{{ name }}{{ roles }}</span>
+    <div class="right-menu">
+      <span class="name-roles">{{ name }}</span>
+      <el-dropdown @command="handleChangeRole">
+        <span class="el-dropdown-link">
+          {{ role }}<i class="el-icon-arrow-down el-icon--right" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(role, i) in roles" :key="i" :command="role">{{ role }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 
@@ -44,11 +51,15 @@ export default {
     Hamburger
   },
   computed: {
+    role() {
+      return this.$store.state.role
+    },
     ...mapGetters([
       'sidebar',
       'avatar',
       'name',
-      'roles'
+      'roles',
+      'role'
     ])
   },
   methods: {
@@ -58,6 +69,11 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    handleChangeRole(role) {
+      this.$store.dispatch('user/changeRole', role).then(() => {
+        // this.$router.push('/')
+      })
     }
   }
 }

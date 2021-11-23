@@ -1,21 +1,21 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
+      <el-input v-if="checkPermission(['SUPER_ADMIN'])" v-model="query.companyId" placeholder="企业ID" style="width: 200px;" clearable />
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-input v-if="true" v-model="query.companyId" placeholder="企业Id" style="width: 200px;" clearable />
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
+      <el-button v-if="checkPermission(['COMPANY_ADMIN'])" type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
       <el-table
         v-loading="loading"
         :data="list"
         @sort-change="handleSortChange"
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column v-if="isSuperAdmin" label="企业ID" prop="companyId" align="center" />
+        <el-table-column v-if="checkPermission(['SUPER_ADMIN'])" label="企业ID" prop="companyId" align="center" />
         <el-table-column label="头像" prop="avatar" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" fit="fill" /></template>
         </el-table-column>
@@ -122,6 +122,7 @@
         ref="tree"
         :data="roleData"
         show-checkbox
+        check-strictly
         default-expand-all
         node-key="id"
         :props="{ label: 'name' }"
@@ -135,6 +136,7 @@
 </template>
 
 <script>
+import checkPermission from '@/utils/permission'
 import user from '@/api/service-admin/user'
 import role from '@/api/service-admin/role'
 import config from '@/config'
@@ -194,6 +196,7 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission,
     init() {
       role.list().then(res => {
         this.roleData = res.data
@@ -254,9 +257,9 @@ export default {
       this.$refs.pwdForm.resetFields()
     },
     handleRole(row) {
+      this.roleVisible = true
+      this.selectId = row.id
       user.getRole(row.id).then(res => {
-        this.roleVisible = true
-        this.selectId = row.id
         this.$refs.tree.setCheckedKeys(res.data)
       })
     },

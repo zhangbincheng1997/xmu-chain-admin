@@ -1,18 +1,15 @@
 import { login, logout } from '@/api/oauth'
 import { getInfo } from '@/api/service-admin/me'
-import { getToken, setToken, removeToken, setRefreshToken, removeRefreshToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
-
-const SUPER_ADMIN = 1
-const COMPANY_ADMIN = 2
-const COMPANY_MEMBER = 3
+import { getToken, setToken, removeToken, setRefreshToken, removeRefreshToken, setRole, removeRole } from '@/utils/auth'
+import router, { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    role: ''
   }
 }
 
@@ -33,6 +30,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
   }
 }
 
@@ -82,7 +82,7 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo().then(response => {
         const { data } = response
 
         if (!data) {
@@ -104,7 +104,7 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout().then(() => {
         removeToken() // must remove  token  first
         removeRefreshToken()
         resetRouter()
@@ -121,9 +121,25 @@ const actions = {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       removeRefreshToken()
+      removeRole()
       commit('RESET_STATE')
       resolve()
     })
+  },
+
+  // dynamically modify permissions
+  async changeRole({ commit, dispatch }, role) {
+    console.log('changeRole: ' + role)
+    commit('SET_ROLE', role)
+    setRole(role)
+
+    resetRouter()
+
+    // generate accessible routes map based on roles
+    const accessRoutes = await dispatch('permission/generateRoutes', role, { root: true })
+    console.log(accessRoutes)
+    // dynamically add accessible routes
+    router.addRoutes(accessRoutes)
   }
 }
 

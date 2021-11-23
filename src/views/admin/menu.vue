@@ -10,13 +10,16 @@
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
         <el-table-column label="菜单名字" prop="name" align="center" />
-        <el-table-column label="菜单路径" prop="url" align="center" />
+        <el-table-column label="路由路径" prop="path" align="center" />
+        <el-table-column label="组件路径" prop="component" align="center" />
         <el-table-column label="菜单图标" prop="icon" align="center">
           <template slot-scope="scope"><i :class="scope.row.icon" /></template>
         </el-table-column>
         <el-table-column label="菜单排序" prop="sort" align="center" />
         <!--<el-table-column label="菜单父节点PID" prop="pid" align="center" />-->
-        <el-table-column label="菜单是否隐藏" prop="hidden" align="center" />
+        <el-table-column label="菜单是否隐藏" prop="hidden" align="center">
+          <template slot-scope="scope"><i :class="scope.row.hidden ? 'el-icon-check' : 'el-icon-close'" /></template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" width="120" align="center" fixed="right">
@@ -40,8 +43,11 @@
         <el-form-item label="菜单名字" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="菜单路径" prop="url" required>
-          <el-input v-model="form.url" />
+        <el-form-item label="路由路径" prop="path" required>
+          <el-input v-model="form.path" />
+        </el-form-item>
+        <el-form-item label="组件路径" prop="component" required>
+          <el-input v-model="form.component" />
         </el-form-item>
         <el-form-item label="菜单图标" prop="icon">
           <el-input v-model="form.icon" />
@@ -97,7 +103,8 @@ export default {
       visible: false,
       form: {
         name: undefined,
-        url: undefined,
+        path: undefined,
+        component: undefined,
         icon: undefined,
         sort: undefined,
         pid: undefined,

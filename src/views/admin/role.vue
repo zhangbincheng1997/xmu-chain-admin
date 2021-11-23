@@ -59,6 +59,7 @@
         ref="tree"
         :data="roleData"
         show-checkbox
+        check-strictly
         default-expand-all
         node-key="id"
         :props="{ label: 'name' }"

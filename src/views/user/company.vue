@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-container>
-        <div v-if="true">
+        <div v-if="checkPermission(['SUPER_ADMIN', 'COMPANY_ADMIN'])">
           <el-form ref="form" :model="form" label-width="100px">
             <el-form-item label="标志" prop="logo" required>
               <AvatarUpload :avatar.sync="form.logo" />
@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import checkPermission from '@/utils/permission'
 import { getCompanyInfo, updateCompanyInfo } from '@/api/service-admin/me'
 import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
@@ -125,6 +126,7 @@ export default {
     })
   },
   methods: {
+    checkPermission,
     submitForm() {
       updateCompanyInfo(this.form).then(() => {})
     },
