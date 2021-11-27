@@ -1,27 +1,14 @@
 export default {
-  dialogType: {
-    DETAIL: 'detail',
-    ADD: 'add',
-    EDIT: 'edit',
-    ROLE: 'role',
-    MENU: 'menu',
-    PERMISSION: 'permission',
-    PWD: 'pwd',
-    QRCODE: 'qrCode',
-    GENERATE: 'generate'
-  },
   dialogTitle: {
-    detail: '详细信息',
-    add: '添加',
-    edit: '编辑',
-    role: '设置角色',
-    menu: '设置菜单',
-    permission: '设置权限',
-    addAdmin: '添加管理员',
-    addMember: '添加员工',
-    pwd: '重置密码',
-    qrCode: '二维码',
-    generate: '生成防伪码'
+    DETAIL: '详细信息',
+    ADD: '添加',
+    UPDATE: '更新',
+    ROLE: '设置角色',
+    MENU: '设置菜单',
+    PERMISSION: '设置权限',
+    PWD: '重置密码',
+    QRCODE: '二维码',
+    GENERATE: '生成防伪码'
   },
   genderOptions: [
     { label: 0, value: '未知' },

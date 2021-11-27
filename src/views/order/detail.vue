@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { linkTrace } from '@/utils/link'
+import { linkTrace } from '@/utils/utils'
 import order from '@/api/service-trace/order'
 import config from '@/config'
 

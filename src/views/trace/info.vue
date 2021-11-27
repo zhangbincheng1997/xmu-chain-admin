@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import { linkTransaction } from '@/utils/link'
+import { linkTransaction } from '@/utils/utils'
 import company from '@/api/service-admin/company'
 import corp from '@/api/service-trace/template/corp'
 import product from '@/api/service-trace/template/product'

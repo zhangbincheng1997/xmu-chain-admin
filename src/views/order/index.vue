@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { linkTrace, linkDetail } from '@/utils/link'
+import { linkTrace, linkDetail } from '@/utils/utils'
 import order from '@/api/service-trace/order'
 import config from '@/config'
 import Pagination from '@/components/Pagination'

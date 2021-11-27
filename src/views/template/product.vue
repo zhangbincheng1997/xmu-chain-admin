@@ -5,10 +5,7 @@
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
-      <el-table
-        v-loading="loading"
-        :data="list"
-      >
+      <el-table v-loading="loading" :data="list">
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="作物" prop="product" align="center">
           <template slot-scope="scope">
@@ -23,11 +20,10 @@
         <el-table-column label="操作用户ID" prop="userId" align="center" />
         <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
+            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
             <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
@@ -38,23 +34,18 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
     </el-card>
 
-    <el-dialog
-      :title="DialogTitle[dialogType]"
-      :visible.sync="visible"
-      center
-      @close="resetForm"
-    >
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="作物模板" prop="corpId" required>
           <el-select v-model="form.corpId" placeholder="请选择">
             <el-option v-for="item in corpTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="名称" prop="name" required>
-          <el-input v-model="form.name" />
-        </el-form-item>
         <el-form-item label="图片" prop="image" required>
           <ImageUpload :image.sync="form.image" />
+        </el-form-item>
+        <el-form-item label="名称" prop="name" required>
+          <el-input v-model="form.name" />
         </el-form-item>
         <el-form-item label="介绍" prop="content">
           <el-input v-model="form.content" type="textarea" />
@@ -76,46 +67,40 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item v-if="form.id">
+          <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>
+          <el-tag type="warning">更新时间：{{ form.updateTime }}</el-tag>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="resetForm">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { linkTemplate, linkTransaction } from '@/utils/link'
-import corp from '@/api/service-trace/template/corp'
-import product from '@/api/service-trace/template/product'
-import config from '@/config'
-import ImageUpload from '@/components/Upload/Image'
-import Pagination from '@/components/Pagination'
-
-// 查询
-const defaultQuery = {
-  page: 1,
-  limit: 10,
-  keyword: undefined
-}
+import { list, add, update, del } from '@/api/service-trace/template/product'
+import { allCorp } from '@/api/service-trace/template/corp'
 
 export default {
-  components: {
-    ImageUpload,
-    Pagination
-  },
   data() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
-
-      selectId: undefined,
-      dialogType: undefined,
-      visible: false,
+      query: {
+        page: 1,
+        limit: 10,
+        keyword: undefined
+      },
+      dialog: {
+        title: undefined,
+        visible: false
+      },
       form: {
+        id: undefined,
         corpId: undefined,
         name: undefined,
         image: undefined,
@@ -124,12 +109,11 @@ export default {
         weight: undefined,
         exp: undefined,
         userId: undefined,
-        transHash: undefined
+        transHash: undefined,
+        createTime: undefined,
+        updateTime: undefined
       },
-      corpTemplateList: [],
-
-      DialogType: config.dialogType,
-      DialogTitle: config.dialogTitle
+      corpTemplateList: []
     }
   },
   mounted() {
@@ -139,13 +123,11 @@ export default {
     this.getList()
   },
   methods: {
-    linkTemplate,
-    linkTransaction,
     getList() {
       this.loading = true
-      corp.all().then(res => {
+      allCorp().then(res => {
         this.corpTemplateList = res.data
-        product.list(this.query).then(res => {
+        list(this.query).then(res => {
           this.loading = false
           this.list = res.data.list
           this.total = res.data.total
@@ -153,39 +135,50 @@ export default {
       })
     },
     handleAdd() {
-      this.dialogType = this.DialogType.ADD
-      this.visible = true
+      this.resetForm()
+      this.dialog = {
+        title: '新增',
+        visible: true
+      }
     },
     handleEdit(row) {
-      this.dialogType = this.DialogType.EDIT
-      this.visible = true
-      this.selectId = row.id
-      this.$nextTick(() => {
-        this.form = JSON.parse(JSON.stringify(row))
-      }) // mounted
+      this.resetForm()
+      this.dialog = {
+        title: '修改',
+        visible: true
+      }
+      this.form = JSON.parse(JSON.stringify(row))
     },
-    submitForm() {
-      if (this.dialogType === this.DialogType.ADD) {
-        product.add(this.form).then(() => {
-          this.resetForm()
+    handleSubmit() {
+      const id = this.form.id
+      if (id === undefined) {
+        add(this.form).then(() => {
+          this.closeDialog()
           this.getList()
         })
-      } else if (this.dialogType === this.DialogType.EDIT) {
-        product.edit(this.selectId, this.form).then(() => {
-          this.resetForm()
+      } else {
+        update(id, this.form).then(() => {
+          this.closeDialog()
           this.getList()
         })
       }
     },
-    resetForm() {
-      this.visible = false
-      this.$refs.form.resetFields()
+    closeDialog() {
+      this.resetForm()
+      this.dialog = {
+        title: undefined,
+        visible: false
+      }
     },
-    handleRemove(row) {
+    resetForm() {
+      this.form = {}
+      if (this.$refs.form) this.$refs.form.resetFields()
+    },
+    handleDelete(row) {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        product.remove(row.id).then(() => {
+        del(row.id).then(() => {
           this.getList()
         })
       })
@@ -197,9 +190,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

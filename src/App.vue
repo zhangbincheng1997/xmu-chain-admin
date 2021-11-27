@@ -9,3 +9,10 @@ export default {
   name: 'App'
 }
 </script>
+
+<style>
+.link {
+  color: #0db1c1;
+  cursor: pointer;
+}
+</style>

@@ -44,7 +44,6 @@ service.interceptors.response.use(
         if (!refreshing) {
           // token续期
           refreshing = true
-          console.log(getRefreshToken())
           return store.dispatch('user/refreshToken', getRefreshToken()).then((token) => {
             // token续期成功
             config.headers['Authorization'] = token

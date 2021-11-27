@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/trace/admin'
 
-function getByCode(code) {
+export function getByCode(code) {
   return request({
     url: API + '/' + code,
     method: 'get'
   })
 }
 
-function list(data) {
+export function list(data) {
   return request({
     url: API + '/list',
     method: 'get',
@@ -17,7 +17,7 @@ function list(data) {
   })
 }
 
-function add(data) {
+export function add(data) {
   return request({
     url: API,
     method: 'post',
@@ -25,7 +25,7 @@ function add(data) {
   })
 }
 
-function edit(code, data) {
+export function update(code, data) {
   return request({
     url: API + '/' + code,
     method: 'put',
@@ -33,17 +33,9 @@ function edit(code, data) {
   })
 }
 
-function remove(code) {
+export function del(code) {
   return request({
     url: API + '/' + code,
     method: 'delete'
   })
-}
-
-export default {
-  getByCode,
-  list,
-  add,
-  edit,
-  remove
 }
