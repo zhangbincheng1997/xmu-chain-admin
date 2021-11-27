@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import { linkTrace } from '@/utils/link'
 import order from '@/api/service-trace/order'
 import config from '@/config'
 
@@ -140,6 +141,7 @@ export default {
     this.init()
   },
   methods: {
+    linkTrace,
     init() {
       if (!this.selectId) return
       order.getOrderStatus(this.selectId).then((res) => {
@@ -199,14 +201,6 @@ export default {
         type: 'warning'
       }).then(() => {
         order.close(this.selectId).then(() => { this.$router.go(0) })
-      })
-    },
-    linkTrace: function(val) {
-      this.$router.push({
-        path: '/trace/info',
-        query: {
-          code: val
-        }
       })
     }
   }

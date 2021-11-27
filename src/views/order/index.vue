@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { linkTrace, linkDetail } from '@/utils/link'
 import order from '@/api/service-trace/order'
 import config from '@/config'
 import Pagination from '@/components/Pagination'
@@ -98,22 +99,6 @@ export default {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
-      })
-    },
-    linkTrace: function(val) {
-      this.$router.push({
-        path: '/trace/info',
-        query: {
-          code: val
-        }
-      })
-    },
-    linkDetail: function(val) {
-      this.$router.push({
-        path: '/order/detail',
-        query: {
-          id: val
-        }
       })
     }
   }

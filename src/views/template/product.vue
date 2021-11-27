@@ -12,7 +12,7 @@
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="作物" prop="product" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="link(scope.row.corpId)">{{ getCorpById(scope.row.corpId) }}</span>
+            <span class="link" @click="linkTemplate('corp', scope.row.corpId)">{{ getCorpById(scope.row.corpId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
@@ -20,6 +20,12 @@
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
         <el-table-column label="介绍" prop="content" width="200" align="center" show-overflow-tooltip />
+        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
@@ -80,6 +86,7 @@
 </template>
 
 <script>
+import { linkTemplate, linkTransaction } from '@/utils/link'
 import corp from '@/api/service-trace/template/corp'
 import product from '@/api/service-trace/template/product'
 import config from '@/config'
@@ -115,7 +122,9 @@ export default {
         content: undefined,
         price: undefined,
         weight: undefined,
-        exp: undefined
+        exp: undefined,
+        userId: undefined,
+        transHash: undefined
       },
       corpTemplateList: [],
 
@@ -130,6 +139,8 @@ export default {
     this.getList()
   },
   methods: {
+    linkTemplate,
+    linkTransaction,
     getList() {
       this.loading = true
       corp.all().then(res => {
@@ -177,14 +188,6 @@ export default {
         product.remove(row.id).then(() => {
           this.getList()
         })
-      })
-    },
-    link: function(val) {
-      this.$router.push({
-        path: '/template/corp',
-        query: {
-          id: val
-        }
       })
     },
     getCorpById(id) {

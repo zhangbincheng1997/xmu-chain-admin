@@ -6,8 +6,6 @@ export default {
     ROLE: 'role',
     MENU: 'menu',
     PERMISSION: 'permission',
-    ADD_ADMIN: 'addAdmin',
-    ADD_MEMBER: 'addMember',
     PWD: 'pwd',
     QRCODE: 'qrCode',
     GENERATE: 'generate'

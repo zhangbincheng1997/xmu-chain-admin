@@ -14,6 +14,12 @@
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
+        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
@@ -73,6 +79,7 @@
 </template>
 
 <script>
+import { linkTransaction } from '@/utils/link'
 import corp from '@/api/service-trace/template/corp'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
@@ -106,7 +113,9 @@ export default {
         guangai: undefined,
         shifei: undefined,
         chucao: undefined,
-        chuchong: undefined
+        chuchong: undefined,
+        userId: undefined,
+        transHash: undefined
       },
 
       DialogType: config.dialogType,
@@ -120,6 +129,7 @@ export default {
     this.getList()
   },
   methods: {
+    linkTransaction,
     getList() {
       this.loading = true
       corp.list(this.query).then(res => {

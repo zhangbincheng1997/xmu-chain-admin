@@ -33,7 +33,7 @@
           {{ role }}<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(role, i) in roles" :key="i" :command="role">{{ role }}</el-dropdown-item>
+          <el-dropdown-item v-for="(item, i) in roles" :key="i" :command="item">{{ item }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -42,6 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { change } from '@/api/oauth'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
@@ -71,8 +72,12 @@ export default {
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
     handleChangeRole(role) {
-      this.$store.dispatch('user/changeRole', role).then(() => {
-        // this.$router.push('/')
+      // Token换取Key
+      change(role).then((res) => {
+        // Key换取Token
+        this.$store.dispatch('user/exchange', res.data).then(() => {
+          location.reload()
+        })
       })
     }
   }

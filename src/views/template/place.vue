@@ -15,6 +15,12 @@
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
         <el-table-column label="地址" prop="address" width="200" align="center" show-overflow-tooltip />
+        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
@@ -68,6 +74,7 @@
 </template>
 
 <script>
+import { linkTransaction } from '@/utils/link'
 import place from '@/api/service-trace/template/place'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
@@ -101,7 +108,9 @@ export default {
         address: undefined,
         content: undefined,
         area: undefined,
-        altitude: undefined
+        altitude: undefined,
+        userId: undefined,
+        transHash: undefined
       },
 
       DialogType: config.dialogType,
@@ -115,6 +124,7 @@ export default {
     this.getList()
   },
   methods: {
+    linkTransaction,
     getList() {
       this.loading = true
       place.list(this.query).then(res => {

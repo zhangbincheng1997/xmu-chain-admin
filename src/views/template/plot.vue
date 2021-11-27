@@ -12,12 +12,18 @@
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="产地" prop="place" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="link(scope.row.placeId)">{{ getPlaceById(scope.row.placeId) }}</span>
+            <span class="link" @click="linkTemplate('place', scope.row.placeId)">{{ getPlaceById(scope.row.placeId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
+        </el-table-column>
+        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="更新时间" prop="updateTime" align="center" />
@@ -71,6 +77,7 @@
 </template>
 
 <script>
+import { linkTemplate, linkTransaction } from '@/utils/link'
 import place from '@/api/service-trace/template/place'
 import plot from '@/api/service-trace/template/plot'
 import config from '@/config'
@@ -104,7 +111,9 @@ export default {
         name: undefined,
         image: undefined,
         soilType: undefined,
-        soilPh: undefined
+        soilPh: undefined,
+        userId: undefined,
+        transHash: undefined
       },
       placeTemplateList: [],
 
@@ -119,6 +128,8 @@ export default {
     this.getList()
   },
   methods: {
+    linkTemplate,
+    linkTransaction,
     getList() {
       this.loading = true
       place.all().then(res => {
@@ -166,14 +177,6 @@ export default {
         plot.remove(row.id).then(() => {
           this.getList()
         })
-      })
-    },
-    link: function(val) {
-      this.$router.push({
-        path: '/template/place',
-        query: {
-          id: val
-        }
       })
     },
     getPlaceById(id) {

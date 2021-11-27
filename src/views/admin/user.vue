@@ -1,21 +1,19 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-if="checkPermission(['SUPER_ADMIN'])" v-model="query.companyId" placeholder="企业ID" style="width: 200px;" clearable />
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-button v-if="checkPermission(['COMPANY_ADMIN'])" type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
       <el-table
         v-loading="loading"
         :data="list"
         @sort-change="handleSortChange"
       >
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column v-if="checkPermission(['SUPER_ADMIN'])" label="企业ID" prop="companyId" align="center" />
         <el-table-column label="头像" prop="avatar" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" fit="fill" /></template>
         </el-table-column>
@@ -215,7 +213,7 @@ export default {
       this.getList()
     },
     handleAdd() {
-      this.dialogType = this.DialogType.ADD_MEMBER
+      this.dialogType = this.DialogType.ADD
       this.visible = true
     },
     handleEdit(row) {
@@ -227,8 +225,8 @@ export default {
       }) // mounted
     },
     submitForm() {
-      if (this.dialogType === this.DialogType.ADD_MEMBER) {
-        user.saveCompanyMember(this.form).then(() => {
+      if (this.dialogType === this.DialogType.ADD) {
+        user.save(this.form).then(() => {
           this.resetForm()
           this.getList()
         })

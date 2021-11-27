@@ -17,22 +17,28 @@
         <el-table-column label="批次编号" prop="batch" align="center" />
         <el-table-column label="商品" prop="productId" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="link('product', scope.row.productId)">{{ getById(productTemplateList, scope.row.productId) }}</span>
+            <span class="link" @click="linkTemplate('product', scope.row.productId)">{{ getById(productTemplateList, scope.row.productId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="作物" prop="corpId" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="link('corp', scope.row.corpId)">{{ getById(corpTemplateList, scope.row.corpId) }}</span>
+            <span class="link" @click="linkTemplate('corp', scope.row.corpId)">{{ getById(corpTemplateList, scope.row.corpId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="产地" prop="placeId" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="link('place', scope.row.placeId)">{{ getById(placeTemplateList, scope.row.placeId) }}</span>
+            <span class="link" @click="linkTemplate('place', scope.row.placeId)">{{ getById(placeTemplateList, scope.row.placeId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="地块" prop="plotId" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="link('plot', scope.row.plotId)">{{ getById(plotTemplateList, scope.row.plotId) }}</span>
+            <span class="link" @click="linkTemplate('plot', scope.row.plotId)">{{ getById(plotTemplateList, scope.row.plotId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right">
@@ -117,6 +123,7 @@
 </template>
 
 <script>
+import { linkTemplate, linkTrace, linkTransaction } from '@/utils/link'
 import corp from '@/api/service-trace/template/corp'
 import product from '@/api/service-trace/template/product'
 import place from '@/api/service-trace/template/place'
@@ -153,7 +160,9 @@ export default {
         corpId: undefined,
         productId: undefined,
         placeId: undefined,
-        plotId: undefined
+        plotId: undefined,
+        userId: undefined,
+        transHash: undefined
       },
       corpTemplateList: [],
       productTemplateList: [],
@@ -175,6 +184,9 @@ export default {
     this.getList()
   },
   methods: {
+    linkTemplate,
+    linkTrace,
+    linkTransaction,
     getList() {
       this.loading = true
       Promise.all([
@@ -222,22 +234,6 @@ export default {
     getQRCode(code) {
       this.qrCodeVisible = true
       scan.getQRCode(code).then((res) => { this.qrCode = res.data })
-    },
-    link: function(type, val) {
-      this.$router.push({
-        path: '/template/' + type,
-        query: {
-          id: val
-        }
-      })
-    },
-    linkTrace: function(val) {
-      this.$router.push({
-        path: '/trace/info',
-        query: {
-          code: val
-        }
-      })
     },
     getById(list, id) {
       const template = list.find(obj => obj.id === id)

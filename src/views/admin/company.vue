@@ -21,7 +21,7 @@
         <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleAddAdmin(scope.row)">添加管理员</el-button>
+            <el-button type="text" @click="handleGM(scope.row)">进入后台</el-button>
             <br>
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
@@ -104,38 +104,11 @@
         <el-button @click="resetForm">取 消</el-button>
       </div>
     </el-dialog>
-
-    <el-dialog
-      :title="DialogTitle[DialogType.ADD_ADMIN]"
-      :visible.sync="addVisible"
-      width="30%"
-      center
-      @close="resetAddDialog"
-    >
-      <el-form ref="pwdForm" :model="addForm" label-width="100px">
-        <el-form-item label="企业ID" prop="companyId" hidden>
-          <el-input v-model="addForm.companyId" />
-        </el-form-item>
-        <el-form-item label="企业名字" prop="companyName">
-          <el-input v-model="addForm.companyName" disabled />
-        </el-form-item>
-        <el-form-item label="账号" prop="username" required>
-          <el-input v-model="addForm.username" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="密码" prop="password" required>
-          <el-input v-model="addForm.password" type="password" autocomplete="off" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitAddDialog">确 定</el-button>
-        <el-button @click="resetAddDialog">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import user from '@/api/service-admin/user'
+import { gm } from '@/api/oauth'
 import company from '@/api/service-admin/company'
 import config from '@/config'
 import AvatarUpload from '@/components/Upload/Avatar'
@@ -240,19 +213,14 @@ export default {
       this.visible = false
       this.$refs.form.resetFields()
     },
-    handleAddAdmin(row) {
-      this.addVisible = true
-      this.addForm.companyId = row.id
-      this.addForm.companyName = row.name
-    },
-    submitAddDialog() {
-      user.saveCompanyAdmin(this.addForm).then(() => {
-        this.resetAddDialog()
+    handleGM(row) {
+      // Token换取Key
+      gm(row.id).then((res) => {
+        // Key换取Token
+        this.$store.dispatch('user/exchange', res.data).then(() => {
+          this.$router.push('/')
+        })
       })
-    },
-    resetAddDialog() {
-      this.addVisible = false
-      this.$refs.pwdForm.resetFields()
     },
     handleRemove(row) {
       this.$confirm('是否删除？', '提示', {

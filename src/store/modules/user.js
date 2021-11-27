@@ -1,7 +1,7 @@
-import { login, logout } from '@/api/oauth'
+import { token, logout } from '@/api/oauth'
 import { getInfo } from '@/api/service-admin/me'
 import { getToken, setToken, removeToken, setRefreshToken, removeRefreshToken, setRole, removeRole } from '@/utils/auth'
-import router, { resetRouter } from '@/router'
+import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
@@ -41,7 +41,7 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password, key, code } = userInfo
     return new Promise((resolve, reject) => {
-      login({
+      token({
         grant_type: 'password', // captcha
         username: username.trim(),
         password: password,
@@ -63,7 +63,7 @@ const actions = {
   refreshToken({ commit }, refreshToken) {
     commit('SET_TOKEN', undefined)
     return new Promise((resolve, reject) => {
-      login({
+      token({
         grant_type: 'refresh_token',
         refresh_token: refreshToken
       }).then(response => {
@@ -80,7 +80,7 @@ const actions = {
   },
 
   // get user info
-  getInfo({ commit, state }) {
+  getInfo({ commit }) {
     return new Promise((resolve, reject) => {
       getInfo().then(response => {
         const { data } = response
@@ -89,11 +89,13 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, roles } = data
+        const { name, avatar, roles, role } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
+        commit('SET_ROLE', role)
+        setRole(role)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -102,7 +104,7 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit }) {
     return new Promise((resolve, reject) => {
       logout().then(() => {
         removeToken() // must remove  token  first
@@ -127,19 +129,27 @@ const actions = {
     })
   },
 
-  // dynamically modify permissions
-  async changeRole({ commit, dispatch }, role) {
-    console.log('changeRole: ' + role)
-    commit('SET_ROLE', role)
-    setRole(role)
-
-    resetRouter()
-
-    // generate accessible routes map based on roles
-    const accessRoutes = await dispatch('permission/generateRoutes', role, { root: true })
-    console.log(accessRoutes)
-    // dynamically add accessible routes
-    router.addRoutes(accessRoutes)
+  // exchange
+  exchange({ commit }, key) {
+    removeToken() // must remove  token  first
+    removeRefreshToken()
+    removeRole()
+    commit('RESET_STATE')
+    return new Promise((resolve, reject) => {
+      token({
+        grant_type: 'exchange',
+        key: key
+      }).then(response => {
+        const { access_token, refresh_token, token_type } = response.data
+        const token = token_type + ' ' + access_token
+        commit('SET_TOKEN', token)
+        setToken(token)
+        setRefreshToken(refresh_token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
 }
 

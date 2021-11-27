@@ -34,6 +34,8 @@
               <el-form-item label="价格"><span>{{ productTemplate.price }}</span></el-form-item>
               <el-form-item label="重量"><span>{{ productTemplate.weight }}</span></el-form-item>
               <el-form-item label="过期时间"><span>{{ productTemplate.exp }}</span></el-form-item>
+              <el-form-item label="操作用户ID"><span>{{ productTemplate.userId }}</span></el-form-item>
+              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(productTemplate.transHash)">{{ productTemplate.transHash }}</span></el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="作物信息">
@@ -44,6 +46,8 @@
               <el-form-item label="施肥周期"><span>{{ corpTemplate.shifei }}</span></el-form-item>
               <el-form-item label="除草周期"><span>{{ corpTemplate.chucao }}</span></el-form-item>
               <el-form-item label="除虫周期"><span>{{ corpTemplate.chuchong }}</span></el-form-item>
+              <el-form-item label="操作用户ID"><span>{{ corpTemplate.userId }}</span></el-form-item>
+              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(corpTemplate.transHash)">{{ corpTemplate.transHash }}</span></el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="产地信息">
@@ -54,6 +58,8 @@
               <el-form-item label="介绍"><span>{{ placeTemplate.content }}</span></el-form-item>
               <el-form-item label="面积"><span>{{ placeTemplate.area }}</span></el-form-item>
               <el-form-item label="海拔"><span>{{ placeTemplate.altitude }}</span></el-form-item>
+              <el-form-item label="操作用户ID"><span>{{ placeTemplate.userId }}</span></el-form-item>
+              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(placeTemplate.transHash)">{{ placeTemplate.transHash }}</span></el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="地块信息">
@@ -62,6 +68,8 @@
               <el-form-item label="名称"><span>{{ plotTemplate.name }}</span></el-form-item>
               <el-form-item label="土壤类型"><span>{{ plotTemplate.soilType }}</span></el-form-item>
               <el-form-item label="土壤酸碱度"><span>{{ plotTemplate.soilPh }}</span></el-form-item>
+              <el-form-item label="操作用户ID"><span>{{ plotTemplate.userId }}</span></el-form-item>
+              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(plotTemplate.transHash)">{{ plotTemplate.transHash }}</span></el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="生长情况">
@@ -71,6 +79,8 @@
                 <el-descriptions-item label="湿度">{{ item.humidity }}</el-descriptions-item>
                 <el-descriptions-item label="光照">{{ item.light }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
+                <el-form-item label="操作用户ID"><span>{{ item.userId }}</span></el-form-item>
+                <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span></el-form-item>
               </el-descriptions>
               <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
             </div>
@@ -80,6 +90,8 @@
               <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
                 <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
+                <el-form-item label="操作用户ID"><span>{{ item.userId }}</span></el-form-item>
+                <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span></el-form-item>
               </el-descriptions>
               <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
             </div>
@@ -89,6 +101,8 @@
               <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
                 <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
+                <el-form-item label="操作用户ID"><span>{{ item.userId }}</span></el-form-item>
+                <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span></el-form-item>
               </el-descriptions>
               <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
             </div>
@@ -114,6 +128,7 @@
 </template>
 
 <script>
+import { linkTransaction } from '@/utils/link'
 import company from '@/api/service-admin/company'
 import corp from '@/api/service-trace/template/corp'
 import product from '@/api/service-trace/template/product'
@@ -147,6 +162,7 @@ export default {
     this.render()
   },
   methods: {
+    linkTransaction,
     render() {
       console.log(this.code)
       if (!this.code) return

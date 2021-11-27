@@ -10,17 +10,9 @@ function list(data) {
   })
 }
 
-function saveCompanyAdmin(data) {
+function save(data) {
   return request({
-    url: API + '/create/admin',
-    method: 'post',
-    data: data
-  })
-}
-
-function saveCompanyMember(data) {
-  return request({
-    url: API + '/create/member',
+    url: API + '/create',
     method: 'post',
     data: data
   })
@@ -68,8 +60,7 @@ function setRole(id, roleIds) {
 
 export default {
   list,
-  saveCompanyAdmin,
-  saveCompanyMember,
+  save,
   edit,
   remove,
   updatePassword,

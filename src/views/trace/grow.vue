@@ -21,6 +21,12 @@
         <el-table-column label="温度" prop="temperature" align="center" />
         <el-table-column label="湿度" prop="humidity" align="center" />
         <el-table-column label="光照" prop="light" align="center" />
+        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
@@ -73,6 +79,8 @@
           <el-descriptions-item label="湿度">{{ form.humidity }}</el-descriptions-item>
           <el-descriptions-item label="光照">{{ form.light }}</el-descriptions-item>
           <el-descriptions-item label="备注">{{ form.remark }}</el-descriptions-item>
+          <el-descriptions-item label="操作用户ID">{{ form.userId }}</el-descriptions-item>
+          <el-descriptions-item label="交易Hash">{{ form.transHash }}</el-descriptions-item>
         </el-descriptions>
         <el-image :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" />
       </div>
@@ -85,6 +93,7 @@
 </template>
 
 <script>
+import { linkTrace, linkTransaction } from '@/utils/link'
 import grow from '@/api/service-trace/trace/grow'
 import config from '@/config'
 import ImageUpload from '@/components/Upload/Image'
@@ -118,7 +127,9 @@ export default {
         temperature: undefined,
         humidity: undefined,
         light: undefined,
-        remark: undefined
+        remark: undefined,
+        userId: undefined,
+        transHash: undefined
       },
 
       DialogType: config.dialogType,
@@ -132,6 +143,8 @@ export default {
     this.getList()
   },
   methods: {
+    linkTrace,
+    linkTransaction,
     getList() {
       this.loading = true
       grow.list(this.query).then(res => {
@@ -163,14 +176,6 @@ export default {
     resetForm() {
       this.visible = false
       this.$refs.form.resetFields()
-    },
-    linkTrace: function(val) {
-      this.$router.push({
-        path: '/trace/info',
-        query: {
-          code: val
-        }
-      })
     }
   }
 }
