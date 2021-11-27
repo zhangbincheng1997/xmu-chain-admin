@@ -57,19 +57,19 @@
           <el-input v-model="form.code" disabled />
         </el-form-item>
         <el-form-item label="批次编号" prop="batch" required>
-          <el-input v-model="form.batch" :disabled="form.code" />
+          <el-input v-model="form.batch" />
         </el-form-item>
         <el-row>
           <el-col :span="12">
             <el-form-item label="作物模板" prop="corpId" required>
-              <el-select v-model="form.corpId" placeholder="请选择" :disabled="form.code" @change="handleCorpChange">
+              <el-select v-model="form.corpId" placeholder="请选择" @change="handleCorpChange">
                 <el-option v-for="item in corpTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.corpId" label="商品模板" prop="productId" required><!-- 需要先选作物 -->
-              <el-select v-model="form.productId" placeholder="请选择">
+              <el-select v-model="form.productId" placeholder="请选择" @change="$forceUpdate()"><!-- 强制刷新 -->
                 <el-option v-for="item in productSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
@@ -78,14 +78,14 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="产地模板" prop="placeId" required>
-              <el-select v-model="form.placeId" placeholder="请选择" :disabled="form.code" @change="handlePlaceChange">
+              <el-select v-model="form.placeId" placeholder="请选择" @change="handlePlaceChange">
                 <el-option v-for="item in placeTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.placeId" label="地块模板" prop="plotId" required><!-- 需要先选产地 -->
-              <el-select v-model="form.plotId" placeholder="请选择">
+              <el-select v-model="form.plotId" placeholder="请选择" @change="$forceUpdate()"><!-- 强制刷新 -->
                 <el-option v-for="item in plotSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
@@ -192,6 +192,8 @@ export default {
         title: '修改',
         visible: true
       }
+      this.handleCorpChange(row.corpId) // 作物模板限制商品模板
+      this.handlePlaceChange(row.placeId) // 产地模板限制地块模板
       this.form = JSON.parse(JSON.stringify(row))
     },
     handleSubmit() {
@@ -242,11 +244,11 @@ export default {
     },
     handleCorpChange(val) {
       this.form.productId = undefined
-      this.productSelectList = this.productTemplateList.filter(obj => obj.corpId === val)
+      this.productSelectList = this.productTemplateList.filter(obj => obj.id === val)
     },
     handlePlaceChange(val) {
       this.form.plotId = undefined
-      this.plotSelectList = this.plotTemplateList.filter(obj => obj.placeId === val)
+      this.plotSelectList = this.plotTemplateList.filter(obj => obj.id === val)
     }
   }
 }

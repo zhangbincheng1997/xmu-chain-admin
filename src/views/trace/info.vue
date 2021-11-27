@@ -35,7 +35,10 @@
               <el-form-item label="重量"><span>{{ productTemplate.weight }}</span></el-form-item>
               <el-form-item label="过期时间"><span>{{ productTemplate.exp }}</span></el-form-item>
               <el-form-item label="操作用户ID"><span>{{ productTemplate.userId }}</span></el-form-item>
-              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(productTemplate.transHash)">{{ productTemplate.transHash }}</span></el-form-item>
+              <el-form-item label="交易Hash">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(productTemplate.transHash)" />
+                <span class="link" @click="linkTransaction(productTemplate.transHash)">{{ productTemplate.transHash }}</span>
+              </el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="作物信息">
@@ -47,7 +50,10 @@
               <el-form-item label="除草周期"><span>{{ corpTemplate.chucao }}</span></el-form-item>
               <el-form-item label="除虫周期"><span>{{ corpTemplate.chuchong }}</span></el-form-item>
               <el-form-item label="操作用户ID"><span>{{ corpTemplate.userId }}</span></el-form-item>
-              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(corpTemplate.transHash)">{{ corpTemplate.transHash }}</span></el-form-item>
+              <el-form-item label="交易Hash">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(corpTemplate.transHash)" />
+                <span class="link" @click="linkTransaction(corpTemplate.transHash)">{{ corpTemplate.transHash }}</span>
+              </el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="产地信息">
@@ -59,7 +65,10 @@
               <el-form-item label="面积"><span>{{ placeTemplate.area }}</span></el-form-item>
               <el-form-item label="海拔"><span>{{ placeTemplate.altitude }}</span></el-form-item>
               <el-form-item label="操作用户ID"><span>{{ placeTemplate.userId }}</span></el-form-item>
-              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(placeTemplate.transHash)">{{ placeTemplate.transHash }}</span></el-form-item>
+              <el-form-item label="交易Hash">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.transHash)" />
+                <span class="link" @click="linkTransaction(placeTemplate.transHash)">{{ placeTemplate.transHash }}</span>
+              </el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="地块信息">
@@ -69,40 +78,52 @@
               <el-form-item label="土壤类型"><span>{{ plotTemplate.soilType }}</span></el-form-item>
               <el-form-item label="土壤酸碱度"><span>{{ plotTemplate.soilPh }}</span></el-form-item>
               <el-form-item label="操作用户ID"><span>{{ plotTemplate.userId }}</span></el-form-item>
-              <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(plotTemplate.transHash)">{{ plotTemplate.transHash }}</span></el-form-item>
+              <el-form-item label="交易Hash">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.transHash)" />
+                <span class="link" @click="linkTransaction(plotTemplate.transHash)">{{ plotTemplate.transHash }}</span>
+              </el-form-item>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="生长情况">
-            <div v-for="item in growList" :key="item.id">
-              <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
+            <div v-for="(item, i) in growList" :key="item.id">
+              <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                 <el-descriptions-item label="温度">{{ item.temperature }}</el-descriptions-item>
                 <el-descriptions-item label="湿度">{{ item.humidity }}</el-descriptions-item>
                 <el-descriptions-item label="光照">{{ item.light }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                <el-form-item label="操作用户ID"><span>{{ item.userId }}</span></el-form-item>
-                <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span></el-form-item>
+                <el-descriptions-item label="操作用户ID">{{ item.userId }}</el-descriptions-item>
+                <el-descriptions-item label="交易Hash">
+                  <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
+                  <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
+                </el-descriptions-item>
               </el-descriptions>
               <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
             </div>
           </el-tab-pane>
           <el-tab-pane label="农事情况">
-            <div v-for="item in farmList" :key="item.id">
-              <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
+            <div v-for="(item, i) in farmList" :key="item.id">
+              <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                 <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                <el-form-item label="操作用户ID"><span>{{ item.userId }}</span></el-form-item>
-                <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span></el-form-item>
+                <el-descriptions-item label="操作用户ID">{{ item.userId }}</el-descriptions-item>
+                <el-descriptions-item label="交易Hash">
+                  <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
+                  <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
+                </el-descriptions-item>
               </el-descriptions>
               <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
             </div>
           </el-tab-pane>
           <el-tab-pane label="加工情况">
-            <div v-for="item in processList" :key="item.id">
-              <el-descriptions :title="'# ' + item.id + ' - ' + item.createTime">
+            <div v-for="(item, i) in processList" :key="item.id">
+              <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                 <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                <el-form-item label="操作用户ID"><span>{{ item.userId }}</span></el-form-item>
-                <el-form-item label="交易Hash"><span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span></el-form-item>
+                <el-descriptions-item label="操作用户ID">{{ item.userId }}</el-descriptions-item>
+                <el-descriptions-item label="交易Hash">
+                  <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
+                  <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
+                </el-descriptions-item>
               </el-descriptions>
               <el-image :src="item.image" :preview-src-list="[item.image]" style="width: 100px; height: 100px" fit="contain" />
             </div>
@@ -128,16 +149,15 @@
 </template>
 
 <script>
-import { linkTransaction } from '@/utils/utils'
 import company from '@/api/service-admin/company'
-import corp from '@/api/service-trace/template/corp'
-import product from '@/api/service-trace/template/product'
-import place from '@/api/service-trace/template/place'
-import plot from '@/api/service-trace/template/plot'
-import admin from '@/api/service-trace/trace/admin'
-import grow from '@/api/service-trace/trace/grow'
-import farm from '@/api/service-trace/trace/farm'
-import process from '@/api/service-trace/trace/process'
+import { getCorpById } from '@/api/service-trace/template/corp'
+import { getProductById } from '@/api/service-trace/template/product'
+import { getPlaceById } from '@/api/service-trace/template/place'
+import { getPlotById } from '@/api/service-trace/template/plot'
+import { getTraceByCode } from '@/api/service-trace/trace/admin'
+import { listGrowByCode } from '@/api/service-trace/trace/grow'
+import { listFarmByCode } from '@/api/service-trace/trace/farm'
+import { listProcessByCode } from '@/api/service-trace/trace/process'
 
 export default {
   data() {
@@ -162,24 +182,23 @@ export default {
     this.render()
   },
   methods: {
-    linkTransaction,
     render() {
       console.log(this.code)
       if (!this.code) return
-      admin.getByCode(this.code).then(res => {
+      getTraceByCode(this.code).then(res => {
         this.template = res.data
         console.log(this.template)
         if (!this.template) return
         // template 模板
         company.getById(this.template.companyId).then(res => { this.companyInfo = res.data })
-        corp.getById(this.template.corpId).then(res => { this.corpTemplate = res.data })
-        product.getById(this.template.productId).then(res => { this.productTemplate = res.data })
-        place.getById(this.template.placeId).then(res => { this.placeTemplate = res.data })
-        plot.getById(this.template.plotId).then(res => { this.plotTemplate = res.data })
-        // service-trace 溯源
-        grow.listByCode(this.code).then(res => { this.growList = res.data })
-        farm.listByCode(this.code).then(res => { this.farmList = res.data })
-        process.listByCode(this.code).then(res => { this.processList = res.data })
+        getCorpById(this.template.corpId).then(res => { this.corpTemplate = res.data })
+        getProductById(this.template.productId).then(res => { this.productTemplate = res.data })
+        getPlaceById(this.template.placeId).then(res => { this.placeTemplate = res.data })
+        getPlotById(this.template.plotId).then(res => { this.plotTemplate = res.data })
+        // trace 溯源
+        listGrowByCode(this.code).then(res => { this.growList = res.data })
+        listFarmByCode(this.code).then(res => { this.farmList = res.data })
+        listProcessByCode(this.code).then(res => { this.processList = res.data })
       })
     },
     handleCheck() {
@@ -188,8 +207,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-span {
-  color: #727476;
-}
-</style>

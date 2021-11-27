@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/template/place'
 
-export function getById(id) {
+export function getPlaceById(id) {
   return request({
     url: API + '/' + id,
     method: 'get'

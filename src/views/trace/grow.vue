@@ -38,7 +38,7 @@
       <div v-if="!form.id">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="溯源码" prop="code" required>
-            <el-input v-model="form.code" />
+            <el-autocomplete v-model="form.code" placeholder="请输入溯源码" :fetch-suggestions="querySearchAsync" />
           </el-form-item>
           <el-form-item label="图片" prop="image">
             <ImageUpload :image.sync="form.image" />
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import { allTrace } from '@/api/service-trace/trace/admin'
 import { add, list } from '@/api/service-trace/trace/grow'
 
 export default {
@@ -114,7 +115,8 @@ export default {
         transHash: undefined,
         createTime: undefined,
         updateTime: undefined
-      }
+      },
+      codeList: []
     }
   },
   mounted() {
@@ -130,6 +132,9 @@ export default {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
+      })
+      allTrace().then(res => {
+        res.data.forEach(item => this.codeList.push({ value: item.code }))
       })
     },
     handleAdd() {
@@ -166,6 +171,15 @@ export default {
     resetForm() {
       this.form = {}
       if (this.$refs.form) this.$refs.form.resetFields()
+    },
+    querySearchAsync(queryString, cb) {
+      const results = queryString ? this.codeList.filter(this.searchFilter(queryString)) : this.codeList
+      cb(results)
+    },
+    searchFilter(queryString) {
+      return (item) => {
+        return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
     }
   }
 }

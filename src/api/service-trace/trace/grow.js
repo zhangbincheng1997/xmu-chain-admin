@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/trace/grow'
 
-export function listByCode(code) {
+export function listGrowByCode(code) {
   return request({
     url: API + '/list/' + code,
     method: 'get'

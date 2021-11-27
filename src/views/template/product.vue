@@ -27,7 +27,7 @@
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
+            <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/template/product'
 
-export function getById(id) {
+export function getProductById(id) {
   return request({
     url: API + '/' + id,
     method: 'get'

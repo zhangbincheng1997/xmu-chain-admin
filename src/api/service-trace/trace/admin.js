@@ -2,9 +2,16 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/trace/admin'
 
-export function getByCode(code) {
+export function getTraceByCode(code) {
   return request({
     url: API + '/' + code,
+    method: 'get'
+  })
+}
+
+export function allTrace() {
+  return request({
+    url: API + '/all',
     method: 'get'
   })
 }
