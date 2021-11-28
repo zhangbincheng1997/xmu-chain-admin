@@ -8,6 +8,15 @@ export function copyText(val) {
   })
 }
 
+export function linkUser(val) {
+  this.$router.push({
+    path: '/admin/user',
+    query: {
+      keyword: val
+    }
+  })
+}
+
 export function linkTransaction(val) {
   this.$router.push({
     path: '/browser/transactionInfo',

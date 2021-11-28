@@ -34,7 +34,10 @@
               <el-form-item label="价格"><span>{{ productTemplate.price }}</span></el-form-item>
               <el-form-item label="重量"><span>{{ productTemplate.weight }}</span></el-form-item>
               <el-form-item label="过期时间"><span>{{ productTemplate.exp }}</span></el-form-item>
-              <el-form-item label="操作用户ID"><span>{{ productTemplate.userId }}</span></el-form-item>
+              <el-form-item label="用户地址">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(productTemplate.fromAddr)" />
+                <span class="link" @click="linkUser(productTemplate.fromAddr)">{{ productTemplate.fromAddr }}</span>
+              </el-form-item>
               <el-form-item label="交易Hash">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(productTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(productTemplate.transHash)">{{ productTemplate.transHash }}</span>
@@ -49,7 +52,10 @@
               <el-form-item label="施肥周期"><span>{{ corpTemplate.shifei }}</span></el-form-item>
               <el-form-item label="除草周期"><span>{{ corpTemplate.chucao }}</span></el-form-item>
               <el-form-item label="除虫周期"><span>{{ corpTemplate.chuchong }}</span></el-form-item>
-              <el-form-item label="操作用户ID"><span>{{ corpTemplate.userId }}</span></el-form-item>
+              <el-form-item label="用户地址">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(corpTemplate.fromAddr)" />
+                <span class="link" @click="linkUser(corpTemplate.fromAddr)">{{ corpTemplate.fromAddr }}</span>
+              </el-form-item>
               <el-form-item label="交易Hash">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(corpTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(corpTemplate.transHash)">{{ corpTemplate.transHash }}</span>
@@ -64,9 +70,12 @@
               <el-form-item label="介绍"><span>{{ placeTemplate.content }}</span></el-form-item>
               <el-form-item label="面积"><span>{{ placeTemplate.area }}</span></el-form-item>
               <el-form-item label="海拔"><span>{{ placeTemplate.altitude }}</span></el-form-item>
-              <el-form-item label="操作用户ID"><span>{{ placeTemplate.userId }}</span></el-form-item>
+              <el-form-item label="用户地址">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(placeTemplate.fromAddr)" />
+                <span class="link" @click="linkUser(placeTemplate.fromAddr)">{{ placeTemplate.fromAddr }}</span>
+              </el-form-item>
               <el-form-item label="交易Hash">
-                <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.transHash)" />
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(placeTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(placeTemplate.transHash)">{{ placeTemplate.transHash }}</span>
               </el-form-item>
             </el-form>
@@ -77,7 +86,10 @@
               <el-form-item label="名称"><span>{{ plotTemplate.name }}</span></el-form-item>
               <el-form-item label="土壤类型"><span>{{ plotTemplate.soilType }}</span></el-form-item>
               <el-form-item label="土壤酸碱度"><span>{{ plotTemplate.soilPh }}</span></el-form-item>
-              <el-form-item label="操作用户ID"><span>{{ plotTemplate.userId }}</span></el-form-item>
+              <el-form-item label="用户地址">
+                <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.fromAddr)" />
+                <span class="link" @click="linkUser(plotTemplate.fromAddr)">{{ plotTemplate.fromAddr }}</span>
+              </el-form-item>
               <el-form-item label="交易Hash">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(plotTemplate.transHash)">{{ plotTemplate.transHash }}</span>
@@ -91,7 +103,10 @@
                 <el-descriptions-item label="湿度">{{ item.humidity }}</el-descriptions-item>
                 <el-descriptions-item label="光照">{{ item.light }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                <el-descriptions-item label="操作用户ID">{{ item.userId }}</el-descriptions-item>
+                <el-form-item label="用户地址">
+                  <i class="el-icon-copy-document" title="copyText" @click="copyText(item.fromAddr)" />
+                  <span class="link" @click="linkUser(item.fromAddr)">{{ item.fromAddr }}</span>
+                </el-form-item>
                 <el-descriptions-item label="交易Hash">
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
                   <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
@@ -105,7 +120,10 @@
               <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                 <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                <el-descriptions-item label="操作用户ID">{{ item.userId }}</el-descriptions-item>
+                <el-form-item label="用户地址">
+                  <i class="el-icon-copy-document" title="copyText" @click="copyText(item.fromAddr)" />
+                  <span class="link" @click="linkUser(item.fromAddr)">{{ item.fromAddr }}</span>
+                </el-form-item>
                 <el-descriptions-item label="交易Hash">
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
                   <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
@@ -119,7 +137,10 @@
               <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                 <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
                 <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                <el-descriptions-item label="操作用户ID">{{ item.userId }}</el-descriptions-item>
+                <el-form-item label="用户地址">
+                  <i class="el-icon-copy-document" title="copyText" @click="copyText(item.fromAddr)" />
+                  <span class="link" @click="linkUser(item.fromAddr)">{{ item.fromAddr }}</span>
+                </el-form-item>
                 <el-descriptions-item label="交易Hash">
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
                   <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>

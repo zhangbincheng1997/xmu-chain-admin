@@ -134,7 +134,6 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
 import user from '@/api/service-admin/user'
 import role from '@/api/service-admin/role'
 import config from '@/config'
@@ -190,11 +189,13 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.query.keyword) {
+      this.query.keyword = this.$route.query.keyword
+    }
     this.init()
     this.getList()
   },
   methods: {
-    checkPermission,
     init() {
       role.list().then(res => {
         this.roleData = res.data

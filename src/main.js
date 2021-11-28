@@ -46,8 +46,9 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
 // 全局方法挂载
-import { copyText, linkTransaction, linkTemplate, linkTrace, linkDetail } from '@/utils/utils'
+import { copyText, linkUser, linkTransaction, linkTemplate, linkTrace, linkDetail } from '@/utils/utils'
 Vue.prototype.copyText = copyText
+Vue.prototype.linkUser = linkUser
 Vue.prototype.linkTransaction = linkTransaction
 Vue.prototype.linkTemplate = linkTemplate
 Vue.prototype.linkTrace = linkTrace

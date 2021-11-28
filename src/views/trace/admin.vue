@@ -32,7 +32,12 @@
             <span class="link" @click="linkTemplate('plot', scope.row.plotId)">{{ getById(plotTemplateList, scope.row.plotId) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.fromAddr)" />
+            <span class="link" @click="linkUser(scope.row.fromAddr)">{{ scope.row.fromAddr }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
@@ -138,7 +143,7 @@ export default {
         productId: undefined,
         placeId: undefined,
         plotId: undefined,
-        userId: undefined,
+        fromAddr: undefined,
         transHash: undefined,
         createTime: undefined,
         updateTime: undefined
@@ -244,11 +249,12 @@ export default {
     },
     handleCorpChange(val) {
       this.form.productId = undefined
-      this.productSelectList = this.productTemplateList.filter(obj => obj.id === val)
+      this.productSelectList = this.productTemplateList.filter(obj => obj.corpId === val)
     },
     handlePlaceChange(val) {
       this.form.plotId = undefined
-      this.plotSelectList = this.plotTemplateList.filter(obj => obj.id === val)
+      this.plotSelectList = this.plotTemplateList.filter(obj => obj.placeId === val)
+      console.log(this.plotSelectList)
     }
   }
 }

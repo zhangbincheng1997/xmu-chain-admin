@@ -17,7 +17,12 @@
           <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
         </el-table-column>
         <el-table-column label="介绍" prop="content" width="200" align="center" show-overflow-tooltip />
-        <el-table-column label="操作用户ID" prop="userId" align="center" />
+        <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.fromAddr)" />
+            <span class="link" @click="linkUser(scope.row.fromAddr)">{{ scope.row.fromAddr }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
@@ -108,7 +113,7 @@ export default {
         price: undefined,
         weight: undefined,
         exp: undefined,
-        userId: undefined,
+        fromAddr: undefined,
         transHash: undefined,
         createTime: undefined,
         updateTime: undefined
