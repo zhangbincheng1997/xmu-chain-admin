@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-container>
-        <div v-if="checkPermission(['SUPER_ADMIN', 'COMPANY_ADMIN'])">
+        <div v-if="checkPermission([SUPER_ADMIN, COMPANY_ADMIN])">
           <el-form ref="form" :model="form" label-width="100px">
             <el-form-item label="标志" prop="logo" required>
               <AvatarUpload :avatar.sync="form.logo" />

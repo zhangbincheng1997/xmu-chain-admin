@@ -33,28 +33,36 @@ if (process.env.NODE_ENV === 'production') {
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 
+// 剪贴板功能
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
 // 全局组件挂载
 import Pagination from '@/components/Pagination'
 import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
+import CodeComplete from '@/components/CodeComplete'
 Vue.component('Pagination', Pagination)
 Vue.component('AvatarUpload', AvatarUpload)
 Vue.component('ImageUpload', ImageUpload)
+Vue.component('CodeComplete', CodeComplete)
 
-// 全局指令挂载
-import VueClipboard from 'vue-clipboard2'
-Vue.use(VueClipboard)
+// 全局指令注册
+import permission from '@/directive/permission'
+Vue.use(permission)
 
-// 全局方法挂载
+import global from '@/utils/global'
+Vue.use(global)
+
+// 全局方法注册
 import checkPermission from '@/utils/permission'
-import { copyText, linkUser, linkTransaction, linkTemplate, linkTrace, linkDetail } from '@/utils/utils'
 Vue.prototype.checkPermission = checkPermission
-Vue.prototype.copyText = copyText
-Vue.prototype.linkUser = linkUser
-Vue.prototype.linkTransaction = linkTransaction
-Vue.prototype.linkTemplate = linkTemplate
-Vue.prototype.linkTrace = linkTrace
-Vue.prototype.linkDetail = linkDetail
+
+import * as utils from '@/utils/utils'
+Object.keys(utils).forEach(key => {
+  console.log(key)
+  Vue.prototype[key] = utils[key]
+})
 
 Vue.config.productionTip = false
 

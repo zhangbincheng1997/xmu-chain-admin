@@ -52,3 +52,12 @@ export function linkDetail(val) {
     }
   })
 }
+
+export function linkTag(val) {
+  this.$router.push({
+    path: '/tag/index',
+    query: {
+      id: val
+    }
+  })
+}

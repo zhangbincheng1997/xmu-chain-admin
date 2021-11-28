@@ -31,7 +31,7 @@ let waitQueue = []
 service.interceptors.response.use(
   response => {
     const res = response.data
-    if (res && res.code !== 0) {
+    if (res.code !== 0) {
       Message({
         message: res.message || 'Error',
         type: 'error',
@@ -88,7 +88,7 @@ service.interceptors.response.use(
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       Message({
-        message: res.data,
+        message: res,
         type: 'success',
         duration: 2 * 1000
       })

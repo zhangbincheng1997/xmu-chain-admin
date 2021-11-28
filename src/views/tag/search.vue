@@ -2,20 +2,16 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-input v-model="query.tagId" placeholder="标签编号" style="width: 200px;" clearable />
-      <el-input v-model="query.keyword" placeholder="关键词（用户/IP/地点）" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="关键词（IP/地点）" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-table
-        v-loading="loading"
-        :data="list"
-      >
-        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
+      <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
+        <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="标签编号" prop="tagId" width="100" align="center" fixed="left">
           <template slot-scope="scope">
             <span class="link" @click="linkTag(scope.row.tagId)">{{ scope.row.tagId }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="用户" prop="username" align="center" />
         <el-table-column label="IP" prop="ip" align="center" />
         <el-table-column label="地点" prop="location" align="center" />
         <el-table-column label="经度" prop="longitude" align="center" />
@@ -30,13 +26,8 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
     </el-card>
 
-    <el-dialog
-      :title="DialogTitle[DialogType.DETAIL]"
-      :visible.sync="visible"
-      center
-      @close="visible=false"
-    >
-      <el-descriptions :title="'# ' + form.id + ' - ' + form.createTime">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+      <el-descriptions :title="'# ' + form.id + ': ' + form.createTime">
         <el-descriptions-item label="标签编号">{{ form.tagId }}</el-descriptions-item>
         <el-descriptions-item label="用户">{{ form.username }}</el-descriptions-item>
         <el-descriptions-item label="IP">{{ form.ip }}</el-descriptions-item>
@@ -49,32 +40,25 @@
 </template>
 
 <script>
-import tag from '@/api/service-trace/tag'
-import config from '@/config'
-import Pagination from '@/components/Pagination'
-
-// 查询
-const defaultQuery = {
-  page: 1,
-  limit: 10,
-  tagId: undefined,
-  keyword: undefined
-}
+import { listSearch } from '@/api/service-trace/tag'
 
 export default {
-  components: {
-    Pagination
-  },
   data() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
-
-      selectId: undefined,
-      dialogType: undefined,
-      visible: false,
+      query: {
+        page: 1,
+        limit: 10,
+        sort: true,
+        keyword: undefined,
+        tagId: undefined
+      },
+      dialog: {
+        title: '查询记录',
+        visible: false
+      },
       form: {
         tagId: undefined,
         username: undefined,
@@ -82,10 +66,7 @@ export default {
         location: undefined,
         longitude: undefined,
         latitude: undefined
-      },
-
-      DialogType: config.dialogType,
-      DialogTitle: config.dialogTitle
+      }
     }
   },
   mounted() {
@@ -97,30 +78,20 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      tag.listSearch(this.query).then(res => {
+      listSearch(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
       })
     },
-    handleDetail(row) {
-      this.visible = true
-      this.form = JSON.parse(JSON.stringify(row))
+    handleSortChange({ column, prop, order }) {
+      this.query.sort = order === 'descending' // default ascending
+      this.getList()
     },
-    linkTag: function(val) {
-      this.$router.push({
-        path: '/tag/index',
-        query: {
-          id: val
-        }
-      })
+    handleDetail(row) {
+      this.dialog.visible = true
+      this.form = JSON.parse(JSON.stringify(row))
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

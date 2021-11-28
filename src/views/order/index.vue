@@ -7,10 +7,7 @@
       <el-input v-model="query.id" placeholder="订单编号" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-table
-        v-loading="loading"
-        :data="list"
-      >
+      <el-table v-loading="loading" :data="list">
         <el-table-column label="订单编号" prop="id" align="center" fixed="left" />
         <el-table-column label="溯源码" prop="code" align="center" fixed="left">
           <template slot-scope="scope">
@@ -43,31 +40,21 @@
 </template>
 
 <script>
-import { linkTrace, linkDetail } from '@/utils/utils'
-import order from '@/api/service-trace/order'
+import { listOrder } from '@/api/service-trace/order'
 import config from '@/config'
-import Pagination from '@/components/Pagination'
-
-// 查询
-const defaultQuery = {
-  page: 1,
-  limit: 10,
-  id: undefined,
-  status: undefined
-}
 
 export default {
-  components: {
-    Pagination
-  },
   data() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
-
-      visible: false,
+      query: {
+        page: 1,
+        limit: 10,
+        id: undefined,
+        status: undefined
+      },
       form: {
         id: undefined,
         code: undefined,
@@ -95,7 +82,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      order.list(this.query).then(res => {
+      listOrder(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -104,9 +91,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

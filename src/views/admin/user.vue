@@ -125,10 +125,9 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        roleId: undefined,
-        companyId: undefined,
+        sort: true,
         keyword: undefined,
-        sort: undefined
+        roleId: undefined
       },
       dialog: {
         title: undefined,

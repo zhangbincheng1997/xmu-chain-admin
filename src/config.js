@@ -1,15 +1,4 @@
 export default {
-  dialogTitle: {
-    DETAIL: '详细信息',
-    ADD: '添加',
-    UPDATE: '更新',
-    ROLE: '设置角色',
-    MENU: '设置菜单',
-    PERMISSION: '设置权限',
-    PWD: '重置密码',
-    QRCODE: '二维码',
-    GENERATE: '生成防伪码'
-  },
   genderOptions: [
     { label: 0, value: '未知' },
     { label: 1, value: '男' },

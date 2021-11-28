@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/order'
 
-function list(data) {
+export function listOrder(data) {
   return request({
     url: API + '/list',
     method: 'get',
@@ -10,28 +10,28 @@ function list(data) {
   })
 }
 
-function getOrderInfo(id) {
+export function getOrderInfo(id) {
   return request({
     url: API + '/info/' + id,
     method: 'get'
   })
 }
 
-function getOrderExpress(id) {
+export function getOrderExpress(id) {
   return request({
     url: API + '/express/' + id,
     method: 'get'
   })
 }
 
-function getOrderStatus(id) {
+export function getOrderStatus(id) {
   return request({
     url: API + '/status/' + id,
     method: 'get'
   })
 }
 
-function saveOrder(data) {
+export function saveOrderInfo(data) {
   return request({
     url: API,
     method: 'post',
@@ -39,7 +39,7 @@ function saveOrder(data) {
   })
 }
 
-function updateOrder(id, data) {
+export function updateOrderInfo(id, data) {
   return request({
     url: API + '/' + id,
     method: 'put',
@@ -47,7 +47,7 @@ function updateOrder(id, data) {
   })
 }
 
-function saveOrUpdateOrderExpress(data) {
+export function saveOrUpdateOrderExpress(data) {
   return request({
     url: API + '/express',
     method: 'post',
@@ -55,44 +55,30 @@ function saveOrUpdateOrderExpress(data) {
   })
 }
 
-function take(id) {
+export function take(id) {
   return request({
     url: API + '/take/' + id,
     method: 'post'
   })
 }
 
-function send(id) {
+export function send(id) {
   return request({
     url: API + '/send/' + id,
     method: 'post'
   })
 }
 
-function receive(id) {
+export function receive(id) {
   return request({
     url: API + '/receive/' + id,
     method: 'post'
   })
 }
 
-function close(id) {
+export function close(id) {
   return request({
     url: API + '/close/' + id,
     method: 'post'
   })
-}
-
-export default {
-  list,
-  getOrderInfo,
-  getOrderExpress,
-  getOrderStatus,
-  saveOrder,
-  updateOrder,
-  saveOrUpdateOrderExpress,
-  take,
-  send,
-  receive,
-  close
 }

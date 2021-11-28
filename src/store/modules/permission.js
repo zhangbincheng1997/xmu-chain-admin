@@ -8,7 +8,6 @@ import { getMenuRouteList } from '@/api/service-admin/menu'
  * @param route
  */
 function hasPermission(role, route) {
-  // 超级管理员放行
   if (role === 'SUPER_ADMIN') {
     return true
   }

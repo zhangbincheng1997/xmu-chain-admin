@@ -103,14 +103,17 @@
 </template>
 
 <script>
-import { linkTrace } from '@/utils/utils'
-import order from '@/api/service-trace/order'
+import { getOrderInfo, getOrderExpress, getOrderStatus, updateOrderInfo, saveOrUpdateOrderExpress, take, send, receive, close } from '@/api/service-trace/order'
 import config from '@/config'
 
 export default {
   data() {
     return {
       selectId: undefined,
+      orderStatus: [], // status is list
+
+      // 订单信息
+      isEditOrderInfo: false,
       orderInfo: {
         code: undefined,
         count: undefined,
@@ -120,14 +123,14 @@ export default {
         status: undefined
       },
       orderInfoForm: {},
+
+      // 物流信息
+      isEditOrderExpress: false,
       orderExpress: {
         express: undefined,
         number: undefined
       },
       orderExpressForm: {},
-      orderStatus: [], // status is list
-      isEditOrderInfo: false,
-      isEditOrderExpress: false,
 
       OrderStatusOptions: config.orderStatusOptions,
       OrderStatusMap: config.orderStatusMap,
@@ -141,13 +144,12 @@ export default {
     this.init()
   },
   methods: {
-    linkTrace,
     init() {
       if (!this.selectId) return
-      order.getOrderStatus(this.selectId).then((res) => {
-        this.orderStatus = res.data
-        order.getOrderInfo(this.selectId).then((res) => { this.orderInfo = res.data })
-        order.getOrderExpress(this.selectId).then((res) => { this.orderExpress = res.data })
+      getOrderInfo(this.selectId).then((res) => {
+        this.orderInfo = res.data
+        getOrderStatus(this.selectId).then((res) => { this.orderStatus = res.data })
+        getOrderExpress(this.selectId).then((res) => { if (res.data) this.orderExpress = res.data }) // 可能已经创建也可能没有...
       })
     },
     handleUpdateOrderInfo() {
@@ -156,7 +158,7 @@ export default {
     },
     submitOrderInfo() {
       this.isEditOrderInfo = false
-      order.updateOrder(this.selectId, this.orderInfoForm).then(() => { this.$router.go(0) })
+      updateOrderInfo(this.selectId, this.orderInfoForm).then(() => { this.$router.go(0) })
     },
     handleUpdateOrderExpress() {
       this.isEditOrderExpress = true
@@ -165,7 +167,7 @@ export default {
     submitOrderExpress() {
       this.isEditOrderExpress = false
       this.orderExpressForm.id = this.selectId
-      order.saveOrUpdateOrderExpress(this.orderExpressForm).then(() => { this.$router.go(0) })
+      saveOrUpdateOrderExpress(this.orderExpressForm).then(() => { this.$router.go(0) })
     },
     handleTake() {
       this.$confirm('是否接收订单？', '提示', {
@@ -173,7 +175,7 @@ export default {
         cancelButtonText: '没呢！',
         type: 'warning'
       }).then(() => {
-        order.take(this.selectId).then(() => { this.$router.go(0) })
+        take(this.selectId).then(() => { this.$router.go(0) })
       })
     },
     handleSend() {
@@ -182,7 +184,7 @@ export default {
         cancelButtonText: '没呢！',
         type: 'warning'
       }).then(() => {
-        order.send(this.selectId).then(() => { this.$router.go(0) })
+        send(this.selectId).then(() => { this.$router.go(0) })
       })
     },
     handleReceive() {
@@ -191,24 +193,18 @@ export default {
         cancelButtonText: '没呢！',
         type: 'warning'
       }).then(() => {
-        order.receive(this.selectId).then(() => { this.$router.go(0) })
+        receive(this.selectId).then(() => { this.$router.go(0) })
       })
     },
     handleClose() {
       this.$confirm('是否关闭订单？', '提示', {
-        confirmButtonText: '是的！',
-        cancelButtonText: '没呢！',
+        confirmButtonText: '好呀！',
+        cancelButtonText: '不要！',
         type: 'warning'
       }).then(() => {
-        order.close(this.selectId).then(() => { this.$router.go(0) })
+        close(this.selectId).then(() => { this.$router.go(0) })
       })
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

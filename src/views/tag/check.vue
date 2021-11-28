@@ -21,7 +21,6 @@
                 <span class="link" @click="linkTag(scope.row.tagId)">{{ scope.row.tagId }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="用户" prop="username" align="center" />
             <el-table-column label="IP" prop="ip" align="center" />
             <el-table-column label="地点" prop="location" align="center" />
             <el-table-column label="经度" prop="longitude" align="center" />
@@ -39,7 +38,7 @@
 </template>
 
 <script>
-import tag from '@/api/service-trace/tag'
+import { check } from '@/api/service-trace/tag'
 
 export default {
   data() {
@@ -56,25 +55,11 @@ export default {
       this.isOk = undefined
       if (!this.code) return
       if (!this.securityCode) return
-      tag.check(this.code, this.securityCode).then(res => {
+      check(this.code, this.securityCode).then(res => {
         this.isOk = res.data.ok
         this.list = res.data.search
-      })
-    },
-    linkTag: function(val) {
-      this.$router.push({
-        path: '/tag/index',
-        query: {
-          id: val
-        }
       })
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/tag'
 
-function check(code, securityCode) {
+export function check(code, securityCode) {
   return request({
     url: API + '/check',
     method: 'post',
@@ -13,7 +13,7 @@ function check(code, securityCode) {
   })
 }
 
-function generate(code, count) {
+export function generate(code, count) {
   return request({
     url: API + '/generate',
     method: 'post',
@@ -24,7 +24,7 @@ function generate(code, count) {
   })
 }
 
-function status(ids, status) {
+export function status(ids, status) {
   return request({
     url: API + '/status',
     method: 'post',
@@ -35,7 +35,7 @@ function status(ids, status) {
   })
 }
 
-function list(data) {
+export function list(data) {
   return request({
     url: API + '/list',
     method: 'get',
@@ -43,18 +43,10 @@ function list(data) {
   })
 }
 
-function listSearch(data) {
+export function listSearch(data) {
   return request({
     url: API + '/search/list',
     method: 'get',
     params: data
   })
-}
-
-export default {
-  check,
-  generate,
-  status,
-  list,
-  listSearch
 }

@@ -10,7 +10,7 @@
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成防伪码</el-button>
+      <el-button v-permission="[SUPER_ADMIN]" type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成防伪码</el-button>
       <br>
       <span v-if="selectIds.length > 0">
         <el-select v-model="selectStatus" placeholder="标签状态" clearable>
@@ -18,11 +18,7 @@
         </el-select>
         <el-button icon="el-icon-edit" @click="handleStatus">修改状态</el-button>
       </span>
-      <el-table
-        v-loading="loading"
-        :data="list"
-        @selection-change="handleSelectionChange"
-      >
+      <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" />
         <el-table-column label="标签编号" prop="id" align="center" fixed="left" />
         <el-table-column label="溯源码" prop="code" align="center">
@@ -44,66 +40,48 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
     </el-card>
 
-    <el-dialog
-      :title="DialogTitle[DialogType.GENERATE]"
-      :visible.sync="genVisible"
-      center
-      @close="resetForm"
-    >
-      <el-form ref="genData" :model="genData" label-width="100px">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+      <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="溯源码" prop="code" required>
-          <el-input v-model="genData.code" />
+          <code-complete :code.sync="form.code" />
         </el-form-item>
         <el-form-item label="数量" prop="count" required>
-          <el-input v-model="genData.count" />
+          <el-input v-model="form.count" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="resetForm">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import tag from '@/api/service-trace/tag'
+import { generate, status, list } from '@/api/service-trace/tag'
 import config from '@/config'
-import Pagination from '@/components/Pagination'
-
-// 查询
-const defaultQuery = {
-  page: 1,
-  limit: 10,
-  id: undefined,
-  code: undefined,
-  from: undefined,
-  to: undefined,
-  status: undefined
-}
 
 export default {
-  components: {
-    Pagination
-  },
   data() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
-
-      dialogType: undefined,
-      visible: false,
-      form: {
+      query: {
+        page: 1,
+        limit: 10,
         id: undefined,
         code: undefined,
-        securityCode: undefined,
-        number: undefined
+        from: undefined,
+        to: undefined,
+        status: undefined
       },
 
-      genVisible: false,
-      genData: {
+      dialog: {
+        title: '生成防伪码',
+        visible: false
+      },
+      form: {
         code: undefined,
         count: undefined
       },
@@ -111,8 +89,6 @@ export default {
       selectIds: [],
       selectStatus: undefined,
 
-      DialogType: config.dialogType,
-      DialogTitle: config.dialogTitle,
       TagStatusOptions: config.tagStatusOptions,
       TagStatusMap: config.tagStatusMap,
       TagStatusType: config.tagStatusType
@@ -127,7 +103,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      tag.list(this.query).then(res => {
+      list(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -140,7 +116,7 @@ export default {
       this.$confirm('是否修改状态？', '提示', {
         type: 'warning'
       }).then(() => {
-        tag.status(this.selectIds, this.selectStatus).then(() => {
+        status(this.selectIds, this.selectStatus).then(() => {
           this.selectIds = []
           this.selectStatus = undefined
           this.getList()
@@ -148,32 +124,18 @@ export default {
       })
     },
     handleGenerate() {
-      this.genVisible = true
+      this.dialog.visible = true
     },
-    submitForm() {
-      tag.generate(this.genData.code, this.genData.count).then(() => {
-        this.resetForm()
+    handleSubmit() {
+      generate(this.form.code, this.form.count).then(() => {
+        this.closeDialog()
         this.getList()
       })
     },
-    resetForm() {
-      this.genVisible = false
-      this.$refs.genData.resetFields()
-    },
-    linkTrace: function(val) {
-      this.$router.push({
-        path: '/trace/info',
-        query: {
-          code: val
-        }
-      })
+    closeDialog() {
+      this.dialog.visible = false
+      this.$refs.form.resetFields()
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

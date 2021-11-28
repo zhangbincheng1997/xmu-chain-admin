@@ -11,7 +11,7 @@
         <div style="width: 500px; margin:0 auto; padding-top: 50px;">
           <el-form ref="form" :model="form" label-width="100px">
             <el-form-item label="溯源码" prop="code" required>
-              <el-input v-model="form.code" />
+              <code-complete :code.sync="form.code" />
             </el-form-item>
             <el-form-item label="申请数量" prop="count" required>
               <el-input v-model="form.count" />
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import order from '@/api/service-trace/order'
+import { saveOrderInfo } from '@/api/service-trace/order'
 
 export default {
   data() {
@@ -48,20 +48,14 @@ export default {
         name: undefined,
         phone: undefined,
         address: undefined
-      }
+      },
+      codeList: []
     }
-  },
-  mounted() {
   },
   methods: {
     submitForm() {
-      order.saveOrder(this.form).then((res) => {
-        this.$router.push({
-          path: '/order/detail',
-          query: {
-            id: res.data
-          }
-        })
+      saveOrderInfo(this.form).then((res) => {
+        this.linkDetail(res.data)
       })
     },
     resetForm() {
