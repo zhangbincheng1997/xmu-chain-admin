@@ -8,21 +8,21 @@
         <el-button slot="append" icon="el-icon-search" @click="getList" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
-      <el-table
-        v-loading="loading"
-        :data="list"
-        @sort-change="handleSortChange"
-      >
+      <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="头像" prop="avatar" width="100" align="center">
           <template slot-scope="scope"><el-image :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" fit="fill" /></template>
         </el-table-column>
         <el-table-column label="账号" prop="username" align="center" />
         <el-table-column label="姓名" prop="name" align="center" />
+        <el-table-column label="地址" prop="address" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.address)" />
+            <span class="link" @click="linkUser(scope.row.address)">{{ scope.row.address }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="手机" prop="phone" align="center" />
         <el-table-column label="邮箱" prop="email" align="center" />
-        <el-table-column label="创建时间" prop="createTime" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" align="center" />
         <el-table-column label="设置" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handlePwd(scope.row)">密码</el-button>
@@ -32,24 +32,22 @@
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
+            <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
     </el-card>
 
-    <el-dialog
-      :title="DialogTitle[dialogType]"
-      :visible.sync="visible"
-      center
-      @close="resetForm"
-    >
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="账号" prop="username" required>
-          <el-input v-model="form.username" autocomplete="off" :disabled="dialogType === DialogType.EDIT" />
+          <el-input v-model="form.username" autocomplete="off" :disabled="form.id !== undefined" />
         </el-form-item>
-        <el-form-item v-if="dialogType === DialogType.ADD_MEMBER" label="密码" prop="password" required>
+        <el-form-item label="地址" prop="address" required>
+          <el-input v-model="form.address" autocomplete="off" :disabled="form.id !== undefined" />
+        </el-form-item>
+        <el-form-item v-if="!form.id" label="密码" prop="password" required>
           <el-input v-model="form.password" type="password" autocomplete="off" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar" required>
@@ -84,38 +82,18 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="resetForm">取 消</el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      :title="DialogTitle[DialogType.PWD]"
-      :visible.sync="pwdVisible"
-      width="30%"
-      center
-      @close="resetPwdDialog"
-    >
-      <el-form ref="pwdForm" :model="pwdForm" label-width="100px">
-        <el-form-item label="密码" prop="password" required>
-          <el-input v-model="pwdForm.password" type="password" autocomplete="off" />
+        <el-form-item v-if="form.id">
+          <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>
+          <el-tag type="warning">更新时间：{{ form.updateTime }}</el-tag>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitPwdDialog">确 定</el-button>
-        <el-button @click="resetPwdDialog">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog
-      :title="DialogTitle[DialogType.ROLE]"
-      :visible.sync="roleVisible"
-      width="30%"
-      center
-      @close="resetRoleDialog"
-    >
+    <el-dialog :title="roleDialog.title" :visible.sync="roleDialog.visible">
       <el-tree
         ref="tree"
         :data="roleData"
@@ -126,65 +104,54 @@
         :props="{ label: 'name' }"
       />
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitRoleDialog">确 定</el-button>
-        <el-button @click="resetRoleDialog">取 消</el-button>
+        <el-button type="primary" @click="handleRoleSubmit">确 定</el-button>
+        <el-button @click="closeRoleDialog">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import user from '@/api/service-admin/user'
-import role from '@/api/service-admin/role'
+import { list, add, update, del, updatePassword, getRole, setRole } from '@/api/service-admin/user'
+import { listRole } from '@/api/service-admin/role'
 import config from '@/config'
-import AvatarUpload from '@/components/Upload/Avatar'
-import Pagination from '@/components/Pagination'
-
-// 查询
-const defaultQuery = {
-  page: 1,
-  limit: 10,
-  roleId: undefined,
-  companyId: undefined,
-  keyword: undefined,
-  sort: undefined
-}
 
 export default {
-  components: {
-    AvatarUpload,
-    Pagination
-  },
   data() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
-
-      selectId: undefined,
-      dialogType: undefined,
-      visible: false,
+      query: {
+        page: 1,
+        limit: 10,
+        roleId: undefined,
+        companyId: undefined,
+        keyword: undefined,
+        sort: undefined
+      },
+      dialog: {
+        title: undefined,
+        visible: false
+      },
       form: {
+        id: undefined,
         username: undefined,
         avatar: undefined,
         name: undefined,
+        address: undefined,
         phone: undefined,
         email: undefined,
         gender: undefined,
         birthday: undefined
       },
 
-      pwdVisible: false,
-      pwdForm: {
-        password: undefined
+      roleDialog: {
+        title: '设置角色',
+        visible: false
       },
-
-      roleVisible: false,
       roleData: undefined,
 
-      DialogType: config.dialogType,
-      DialogTitle: config.dialogTitle,
       genderOptions: config.genderOptions
     }
   },
@@ -197,13 +164,13 @@ export default {
   },
   methods: {
     init() {
-      role.list().then(res => {
+      listRole().then(res => {
         this.roleData = res.data
       })
     },
     getList() {
       this.loading = true
-      user.list(this.query).then(res => {
+      list(this.query).then(res => {
         this.loading = false
         this.list = res.data.list
         this.total = res.data.total
@@ -214,71 +181,79 @@ export default {
       this.getList()
     },
     handleAdd() {
-      this.dialogType = this.DialogType.ADD
-      this.visible = true
+      this.resetForm()
+      this.dialog = {
+        title: '新增',
+        visible: true
+      }
     },
     handleEdit(row) {
-      this.dialogType = this.DialogType.EDIT
-      this.visible = true
-      this.selectId = row.id
-      this.$nextTick(() => {
-        this.form = JSON.parse(JSON.stringify(row))
-      }) // mounted
+      this.resetForm()
+      this.dialog = {
+        title: '修改',
+        visible: true
+      }
+      this.form = JSON.parse(JSON.stringify(row))
     },
-    submitForm() {
-      if (this.dialogType === this.DialogType.ADD) {
-        user.save(this.form).then(() => {
-          this.resetForm()
+    handleSubmit() {
+      const id = this.form.id
+      if (id === undefined) {
+        add(this.form).then(() => {
+          this.closeDialog()
           this.getList()
         })
-      } else if (this.dialogType === this.DialogType.EDIT) {
-        user.edit(this.selectId, this.form).then(() => {
-          this.resetForm()
+      } else {
+        update(id, this.form).then(() => {
+          this.closeDialog()
           this.getList()
         })
       }
     },
+    closeDialog() {
+      this.resetForm()
+      this.dialog = {
+        title: undefined,
+        visible: false
+      }
+    },
     resetForm() {
-      this.visible = false
-      this.$refs.form.resetFields()
+      this.form = {}
+      if (this.$refs.form) this.$refs.form.resetFields()
     },
-    handlePwd(row) {
-      this.pwdVisible = true
-      this.selectId = row.id
-    },
-    submitPwdDialog() {
-      user.updatePassword(this.selectId, this.pwdForm).then(() => {
-        this.resetPwdDialog()
-      })
-    },
-    resetPwdDialog() {
-      this.pwdVisible = false
-      this.$refs.pwdForm.resetFields()
-    },
-    handleRole(row) {
-      this.roleVisible = true
-      this.selectId = row.id
-      user.getRole(row.id).then(res => {
-        this.$refs.tree.setCheckedKeys(res.data)
-      })
-    },
-    submitRoleDialog() {
-      user.setRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
-        this.resetRoleDialog()
-      })
-    },
-    resetRoleDialog() {
-      this.roleVisible = false
-      this.$refs.tree.setCheckedKeys([])
-    },
-    handleRemove(row) {
+    handleDelete(row) {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        user.remove(row.id).then(() => {
+        del(row.id).then(() => {
           this.getList()
         })
       })
+    },
+    // ----- 重置密码 -----
+    handlePwd(row) {
+      this.$prompt('请输入新密码', '提示', {
+        inputValidator: (input) => { return input && input.length >= 3 && input.length <= 12 },
+        inputErrorMessage: '新密码长度为3-12'
+      }).then(({ value }) => {
+        updatePassword(row.id, value).then(() => {})
+      })
+    },
+    // ----- 设置角色 -----
+    handleRole(row) {
+      this.selectId = row.id
+      this.roleDialog.visible = true
+      getRole(this.selectId).then(res => {
+        this.$refs.tree.setCheckedKeys(res.data)
+      })
+    },
+    handleRoleSubmit() {
+      setRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
+        this.closeRoleDialog()
+      })
+    },
+    closeRoleDialog() {
+      this.roleDialog.visible = false
+      this.$refs.tree.setCheckedKeys([])
     }
   }
 }

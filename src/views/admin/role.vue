@@ -2,10 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
-      <el-table
-        v-loading="loading"
-        :data="list.slice((query.page-1)*query.limit,query.page*query.limit)"
-      >
+      <el-table v-loading="loading" :data="list.slice((query.page-1)*query.limit,query.page*query.limit)">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
         <el-table-column label="角色名字" prop="name" align="center" />
         <el-table-column label="角色标签" prop="value" align="center" />
@@ -20,20 +17,14 @@
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" @click="handleRemove(scope.row)">删除</el-button>
+            <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" />
     </el-card>
 
-    <el-dialog
-      :title="DialogTitle[dialogType]"
-      :visible.sync="visible"
-      width="30%"
-      center
-      @close="resetForm"
-    >
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="角色名字" prop="name" required>
           <el-input v-model="form.name" />
@@ -43,21 +34,15 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="resetForm">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog
-      :title="DialogTitle[roleDialogType]"
-      :visible.sync="roleVisible"
-      width="30%"
-      center
-      @close="resetRoleDialog"
-    >
+    <el-dialog :title="menuDialog.title" :visible.sync="menuDialog.visible">
       <el-tree
-        ref="tree"
-        :data="roleData"
+        ref="menuTree"
+        :data="menuData"
         show-checkbox
         check-strictly
         default-expand-all
@@ -65,140 +50,170 @@
         :props="{ label: 'name' }"
       />
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitRoleDialog">确 定</el-button>
-        <el-button @click="resetRoleDialog">取 消</el-button>
+        <el-button type="primary" @click="handleMenuSubmit">确 定</el-button>
+        <el-button @click="closeMenuDialog">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="permissionDialog.title" :visible.sync="permissionDialog.visible">
+      <el-tree
+        ref="permissionTree"
+        :data="permissionData"
+        show-checkbox
+        check-strictly
+        default-expand-all
+        node-key="id"
+        :props="{ label: 'name' }"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handlePermissionSubmit">确 定</el-button>
+        <el-button @click="closePermissionDialog">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import role from '@/api/service-admin/role'
-import menu from '@/api/service-admin/menu'
-import permission from '@/api/service-admin/permission'
-import config from '@/config'
-import Pagination from '@/components/Pagination'
-
-// 查询
-const defaultQuery = {
-  page: 1,
-  limit: 10
-}
+import { listRole, add, update, del, getMenu, getPermission, setMenu, setPermission } from '@/api/service-admin/role'
+import { treeMenu } from '@/api/service-admin/menu'
+import { treePermission } from '@/api/service-admin/permission'
 
 export default {
-  components: {
-    Pagination
-  },
   data() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
-
-      selectId: undefined,
-      dialogType: undefined,
-      visible: false,
+      query: {
+        page: 1,
+        limit: 10
+      },
+      dialog: {
+        title: undefined,
+        visible: false
+      },
       form: {
+        id: undefined,
         name: undefined,
         value: undefined
       },
 
-      roleDialogType: undefined,
-      roleVisible: false,
-      roleData: undefined,
+      menuDialog: {
+        title: '设置角色',
+        visible: false
+      },
+      menuData: undefined,
 
-      DialogType: config.dialogType,
-      DialogTitle: config.dialogTitle
+      permissionDialog: {
+        title: '设置权限',
+        visible: false
+      },
+      permissionData: undefined
     }
   },
   mounted() {
+    this.init()
     this.getList()
   },
   methods: {
+    init() {
+      treeMenu().then(res => {
+        this.menuData = res.data
+      })
+      treePermission().then(res => {
+        this.permissionData = res.data
+      })
+    },
     getList() {
       this.loading = true
-      role.list().then(res => {
+      listRole().then(res => {
         this.loading = false
         this.list = res.data
         this.total = this.list.length
       })
     },
     handleAdd() {
-      this.dialogType = this.DialogType.ADD
-      this.visible = true
+      this.resetForm()
+      this.dialog = {
+        title: '新增',
+        visible: true
+      }
     },
     handleEdit(row) {
-      this.dialogType = this.DialogType.EDIT
-      this.visible = true
-      this.selectId = row.id
-      this.$nextTick(() => {
-        this.form = JSON.parse(JSON.stringify(row))
-      }) // mounted
+      this.resetForm()
+      this.dialog = {
+        title: '修改',
+        visible: true
+      }
+      this.form = JSON.parse(JSON.stringify(row))
     },
-    submitForm() {
-      if (this.dialogType === this.DialogType.ADD) {
-        role.add(this.form).then(() => {
-          this.resetForm()
+    handleSubmit() {
+      const id = this.form.id
+      if (id === undefined) {
+        add(this.form).then(() => {
+          this.closeDialog()
           this.getList()
         })
-      } else if (this.dialogType === this.DialogType.EDIT) {
-        role.edit(this.selectId, this.form).then(() => {
-          this.resetForm()
+      } else {
+        update(id, this.form).then(() => {
+          this.closeDialog()
           this.getList()
         })
+      }
+    },
+    closeDialog() {
+      this.resetForm()
+      this.dialog = {
+        title: undefined,
+        visible: false
       }
     },
     resetForm() {
-      this.visible = false
-      this.$refs.form.resetFields()
+      this.form = {}
+      if (this.$refs.form) this.$refs.form.resetFields()
     },
-    handleRemove(row) {
+    handleDelete(row) {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        role.remove(row.id).then(() => {
+        del(row.id).then(() => {
           this.getList()
         })
       })
     },
+    // ----- 设置菜单 -----
     handleMenu(row) {
-      menu.tree().then(res => {
-        this.roleData = res.data
-        role.getMenu(row.id).then(res => {
-          this.$refs.tree.setCheckedKeys(res.data)
-        })
-      })
-      this.roleDialogType = this.DialogType.MENU
-      this.roleVisible = true
       this.selectId = row.id
+      this.menuDialog.visible = true
+      getMenu(row.id).then(res => {
+        this.$refs.menuTree.setCheckedKeys(res.data)
+      })
     },
+    handleMenuSubmit() {
+      setMenu(this.selectId, this.$refs.menuTree.getCheckedKeys()).then(() => {
+        this.closeMenuDialog()
+      })
+    },
+    closeMenuDialog() {
+      this.menuDialog.visible = false
+      this.$refs.menuTree.setCheckedKeys([])
+    },
+    // ----- 设置权限 -----
     handlePermission(row) {
-      permission.tree().then(res => {
-        this.roleData = res.data
-        role.getPermission(row.id).then(res => {
-          this.$refs.tree.setCheckedKeys(res.data)
-        })
-      })
-      this.roleDialogType = this.DialogType.PERMISSION
-      this.roleVisible = true
       this.selectId = row.id
+      this.permissionDialog.visible = true
+      getPermission(row.id).then(res => {
+        this.$refs.permissionTree.setCheckedKeys(res.data)
+      })
     },
-    submitRoleDialog() {
-      if (this.roleDialogType === this.DialogType.MENU) {
-        role.setMenu(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
-          this.resetRoleDialog()
-        })
-      } else if (this.roleDialogType === this.DialogType.PERMISSION) {
-        role.setPermission(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
-          this.resetRoleDialog()
-        })
-      }
+    handlePermissionSubmit() {
+      setPermission(this.selectId, this.$refs.permissionTree.getCheckedKeys()).then(() => {
+        this.closePermissionDialog()
+      })
     },
-    resetRoleDialog() {
-      this.roleVisible = false
-      this.roleData = undefined
-      this.$refs.tree.setCheckedKeys([])
+    closePermissionDialog() {
+      this.permissionDialog.visible = false
+      this.$refs.permissionTree.setCheckedKeys([])
     }
   }
 }

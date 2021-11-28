@@ -36,12 +36,8 @@
 <script>
 import { getInfo, updateInfo } from '@/api/service-admin/me'
 import config from '@/config'
-import AvatarUpload from '@/components/Upload/Avatar'
 
 export default {
-  components: {
-    AvatarUpload
-  },
   data() {
     return {
       form: {

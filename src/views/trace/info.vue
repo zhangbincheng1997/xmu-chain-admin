@@ -170,7 +170,7 @@
 </template>
 
 <script>
-import company from '@/api/service-admin/company'
+import { getCompanyById } from '@/api/service-admin/company'
 import { getCorpById } from '@/api/service-trace/template/corp'
 import { getProductById } from '@/api/service-trace/template/product'
 import { getPlaceById } from '@/api/service-trace/template/place'
@@ -211,7 +211,7 @@ export default {
         console.log(this.template)
         if (!this.template) return
         // template 模板
-        company.getById(this.template.companyId).then(res => { this.companyInfo = res.data })
+        getCompanyById(this.template.companyId).then(res => { this.companyInfo = res.data })
         getCorpById(this.template.corpId).then(res => { this.corpTemplate = res.data })
         getProductById(this.template.productId).then(res => { this.productTemplate = res.data })
         getPlaceById(this.template.placeId).then(res => { this.placeTemplate = res.data })

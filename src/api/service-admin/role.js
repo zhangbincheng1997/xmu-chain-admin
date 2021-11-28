@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 const API = '/service-admin/api/v1/role'
 
-function list() {
+export function listRole() {
   return request({
     url: API + '/list',
     method: 'get'
   })
 }
 
-function add(data) {
+export function add(data) {
   return request({
     url: API,
     method: 'post',
@@ -17,7 +17,7 @@ function add(data) {
   })
 }
 
-function edit(id, data) {
+export function update(id, data) {
   return request({
     url: API + '/' + id,
     method: 'put',
@@ -25,21 +25,21 @@ function edit(id, data) {
   })
 }
 
-function remove(id) {
+export function del(id) {
   return request({
     url: API + '/' + id,
     method: 'delete'
   })
 }
 
-function getMenu(id) {
+export function getMenu(id) {
   return request({
     url: API + '/menu/' + id,
     method: 'get'
   })
 }
 
-function setMenu(id, menuIds) {
+export function setMenu(id, menuIds) {
   return request({
     url: API + '/menu/' + id,
     method: 'post',
@@ -49,14 +49,14 @@ function setMenu(id, menuIds) {
   })
 }
 
-function getPermission(id) {
+export function getPermission(id) {
   return request({
     url: API + '/permission/' + id,
     method: 'get'
   })
 }
 
-function setPermission(id, permissionIds) {
+export function setPermission(id, permissionIds) {
   return request({
     url: API + '/permission/' + id,
     method: 'post',
@@ -64,15 +64,4 @@ function setPermission(id, permissionIds) {
       ids: permissionIds
     }
   })
-}
-
-export default {
-  list,
-  add,
-  edit,
-  remove,
-  getMenu,
-  setMenu,
-  getPermission,
-  setPermission
 }

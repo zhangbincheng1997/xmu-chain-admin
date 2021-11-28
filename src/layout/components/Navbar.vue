@@ -30,10 +30,10 @@
       <span class="name-roles">{{ name }}</span>
       <el-dropdown @command="handleChangeRole">
         <span class="el-dropdown-link">
-          {{ role }}<i class="el-icon-arrow-down el-icon--right" />
+          {{ roleName }}<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(item, i) in roles" :key="i" :command="item">{{ item }}</el-dropdown-item>
+          <el-dropdown-item v-for="(item, i) in roles" :key="i" :command="item.value">{{ item.name }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -52,8 +52,12 @@ export default {
     Hamburger
   },
   computed: {
-    role() {
-      return this.$store.state.role
+    roleName() {
+      const map = {}
+      this.roles.forEach(item => {
+        map[item.value] = item.name
+      })
+      return map[this.role]
     },
     ...mapGetters([
       'sidebar',

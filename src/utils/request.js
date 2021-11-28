@@ -87,9 +87,8 @@ service.interceptors.response.use(
 
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
-      // for debug
       Message({
-        message: res,
+        message: res.data,
         type: 'success',
         duration: 2 * 1000
       })

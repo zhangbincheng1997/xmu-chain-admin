@@ -9,7 +9,8 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     roles: [],
-    role: ''
+    role: '',
+    address: ''
   }
 }
 
@@ -33,6 +34,9 @@ const mutations = {
   },
   SET_ROLE: (state, role) => {
     state.role = role
+  },
+  SET_ADDRESS: (state, address) => {
+    state.address = address
   }
 }
 
@@ -60,8 +64,9 @@ const actions = {
     })
   },
 
+  // refresh token
   refreshToken({ commit }, refreshToken) {
-    commit('SET_TOKEN', undefined)
+    commit('SET_TOKEN', undefined) // yes!!!
     return new Promise((resolve, reject) => {
       token({
         grant_type: 'refresh_token',
@@ -89,12 +94,13 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, roles, role } = data
+        const { name, avatar, roles, role, address } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
         commit('SET_ROLE', role)
+        commit('SET_ADDRESS', address)
         setRole(role)
         resolve(data)
       }).catch(error => {

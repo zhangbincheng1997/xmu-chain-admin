@@ -254,7 +254,6 @@ export default {
     handlePlaceChange(val) {
       this.form.plotId = undefined
       this.plotSelectList = this.plotTemplateList.filter(obj => obj.placeId === val)
-      console.log(this.plotSelectList)
     }
   }
 }

@@ -92,16 +92,9 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
 import { getCompanyInfo, updateCompanyInfo } from '@/api/service-admin/me'
-import AvatarUpload from '@/components/Upload/Avatar'
-import ImageUpload from '@/components/Upload/Image'
 
 export default {
-  components: {
-    AvatarUpload,
-    ImageUpload
-  },
   data() {
     return {
       form: {
@@ -126,7 +119,6 @@ export default {
     })
   },
   methods: {
-    checkPermission,
     submitForm() {
       updateCompanyInfo(this.form).then(() => {})
     },
