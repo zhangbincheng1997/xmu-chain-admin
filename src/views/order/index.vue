@@ -5,7 +5,7 @@
         <el-option v-for="item in OrderStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-input v-model="query.id" placeholder="订单编号" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="getList" />
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-table v-loading="loading" :data="list">
         <el-table-column label="订单编号" prop="id" align="center" fixed="left" />
@@ -34,7 +34,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
   </div>
 </template>
@@ -77,10 +77,10 @@ export default {
     if (this.$route.query.code) {
       this.query.status = this.$route.query.status
     }
-    this.getList()
+    this.handleQuery()
   },
   methods: {
-    getList() {
+    handleQuery() {
       this.loading = true
       listOrder(this.query).then(res => {
         this.loading = false

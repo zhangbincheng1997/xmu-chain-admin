@@ -36,7 +36,7 @@
                   <i :style="{'color': colorMap[scope.row[head.enName]]}">{{ statusMap[scope.row[head.enName]] }}</i>
                 </span>
                 <span v-else-if="head.enName === 'nodeId'">
-                  <i class="el-icon-copy-document" title="复制" @click="copyNodeIdKey(scope.row[head.enName])" />
+                  <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row[head.enName])" />
                   {{ scope.row[head.enName] }}
                 </span>
                 <span v-else>{{ scope.row[head.enName] }}</span>
@@ -69,7 +69,7 @@
                       </span>
                       <img :src="sRight" alt="">
                       <span>
-                        <i class="el-icon-copy-document" title="复制" @click="copyNodeIdKey(item.sealer)" />
+                        <i class="el-icon-copy-document" title="复制" @click="copyText(item.sealer)" />
                         {{ splitAddress(item.sealer) }}
                       </span>
                     </p>
@@ -89,19 +89,19 @@
                 <div v-for="item in transactionList" :key="item.transHash" class="block-item font-color-2e384d">
                   <div class="block-amount">
                     <p class="trans-hash">
-                      <i class="el-icon-copy-document" title="复制" @click="copyNodeIdKey(item.transHash)" />
+                      <i class="el-icon-copy-document" title="复制" @click="copyText(item.transHash)" />
                       <router-link :to="{'path': '/browser/transactionInfo', 'query': {transactionHash: item.transHash}}" class="node-ip">
                         {{ item.transHash }}
                       </router-link>
                     </p>
                     <p class="trans-address color-8798AD">
                       <span>
-                        <i class="el-icon-copy-document" title="复制" @click="copyNodeIdKey(item.transFrom)" />
+                        <i class="el-icon-copy-document" title="复制" @click="copyText(item.transFrom)" />
                         {{ splitAddress(item.transFrom) }}
                       </span>
                       <img :src="sRight" alt="">
                       <span>
-                        <i class="el-icon-copy-document" title="复制" @click="copyNodeIdKey(item.transTo)" />
+                        <i class="el-icon-copy-document" title="复制" @click="copyText(item.transTo)" />
                         {{ splitAddress(item.transTo) }}
                       </span>
                     </p>
@@ -119,11 +119,6 @@
 
 <script>
 import charts from './components/chart'
-import sRight from '@/assets/images/s-right.png'
-import block_img from '@/assets/images/block.png'
-import nodes_img from '@/assets/images/nodes.png'
-import transaction_img from '@/assets/images/transation.png'
-import contract_img from '@/assets/images/contract_img.png'
 import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/service-eth/browser'
 
 export default {
@@ -134,7 +129,7 @@ export default {
   data: function() {
     return {
       groupId: localStorage.getItem('groupId') || 1,
-      sRight: sRight,
+      sRight: 'http://qiniu.littleredhat1997.com/xmu/s-right.png',
       loadingNumber: false, // getNetworkDetails
       loadingCharts: false, // getNetworkStatistics
       loadingNodes: false, // getNodeList
@@ -170,10 +165,10 @@ export default {
   computed: {
     numberHead() {
       return [
-        { label: '节点个数', name: 'nodeCount', value: 0, icon: nodes_img, bg: 'node-bg' },
-        { label: '已部署的智能合约', name: 'contractCount', value: 0, icon: contract_img, bg: 'contract-bg' },
-        { label: '区块数量', name: 'latestBlock', value: 0, icon: block_img, bg: 'block-bg' },
-        { label: '交易数量', name: 'transactionCount', value: 0, icon: transaction_img, bg: 'transaction-bg' }
+        { label: '节点个数', name: 'nodeCount', value: 0, icon: 'http://qiniu.littleredhat1997.com/xmu/nodes.png', bg: 'node-bg' },
+        { label: '已部署的智能合约', name: 'contractCount', value: 0, icon: 'http://qiniu.littleredhat1997.com/xmu/contract.png', bg: 'contract-bg' },
+        { label: '区块数量', name: 'latestBlock', value: 0, icon: 'http://qiniu.littleredhat1997.com/xmu/block.png', bg: 'block-bg' },
+        { label: '交易数量', name: 'transactionCount', value: 0, icon: 'http://qiniu.littleredhat1997.com/xmu/transation.png', bg: 'transaction-bg' }
       ]
     },
     nodeHead() {
@@ -271,15 +266,6 @@ export default {
           this.$router.push('/browser/transactionInfo')
           break
       }
-    },
-    copyNodeIdKey: function(val) {
-      this.$copyText(val).then(() => {
-        this.$message({
-          type: 'success',
-          message: '复制成功',
-          duration: 2000
-        })
-      })
     },
     splitAddress(val) {
       if (!val) return

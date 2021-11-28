@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="getList" />
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
@@ -24,7 +24,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
@@ -144,10 +144,10 @@ export default {
     }
   },
   mounted() {
-    this.getList()
+    this.handleQuery()
   },
   methods: {
-    getList() {
+    handleQuery() {
       this.loading = true
       list(this.query).then(res => {
         this.loading = false
@@ -157,7 +157,7 @@ export default {
     },
     handleSortChange({ column, prop, order }) {
       this.query.sort = order === 'descending' // default ascending
-      this.getList()
+      this.handleQuery()
     },
     handleAdd() {
       this.resetForm()
@@ -179,12 +179,12 @@ export default {
       if (id === undefined) {
         add(this.form).then(() => {
           this.closeDialog()
-          this.getList()
+          this.handleQuery()
         })
       } else {
         update(id, this.form).then(() => {
           this.closeDialog()
-          this.getList()
+          this.handleQuery()
         })
       }
     },
@@ -204,7 +204,7 @@ export default {
         type: 'warning'
       }).then(() => {
         del(row.id).then(() => {
-          this.getList()
+          this.handleQuery()
         })
       })
     },

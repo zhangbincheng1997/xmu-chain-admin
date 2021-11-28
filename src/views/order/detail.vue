@@ -7,7 +7,7 @@
       <div v-else>
         <el-button type="primary" icon="el-icon-close" style="float:right;" @click="handleClose">关闭订单</el-button>
         <el-steps direction="vertical" finish-status="success">
-          <el-step v-for="(item, i) in orderStatus" :key="i" :title="OrderStatusMap[item.status] + item.createTime" status="success">
+          <el-step v-for="(item, i) in orderStatus" :key="i" :title="OrderStatusMap[item.status] + ': ' + item.createTime" status="success">
             <template v-if="item.status === OrderStatusType.NEW" slot="description">
               <el-descriptions>
                 <el-descriptions-item label="订单编号">{{ orderInfo.id }}</el-descriptions-item>

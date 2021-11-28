@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="getList" />
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list">
@@ -53,7 +53,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
@@ -166,10 +166,10 @@ export default {
     if (this.$route.query.code) {
       this.query.code = this.$route.query.code
     }
-    this.getList()
+    this.handleQuery()
   },
   methods: {
-    getList() {
+    handleQuery() {
       this.loading = true
       Promise.all([
         allCorp().then(res => { this.corpTemplateList = res.data }),
@@ -206,12 +206,12 @@ export default {
       if (code === undefined) {
         add(this.form).then(() => {
           this.closeDialog()
-          this.getList()
+          this.handleQuery()
         })
       } else {
         update(code, this.form).then(() => {
           this.closeDialog()
-          this.getList()
+          this.handleQuery()
         })
       }
     },
@@ -231,7 +231,7 @@ export default {
         type: 'warning'
       }).then(() => {
         del(row.code).then(() => {
-          this.getList()
+          this.handleQuery()
         })
       })
     },

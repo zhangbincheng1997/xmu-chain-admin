@@ -92,10 +92,10 @@ export default {
     }
   },
   mounted() {
-    this.getList()
+    this.handleQuery()
   },
   methods: {
-    getList() {
+    handleQuery() {
       this.loading = true
       treePermission().then(res => {
         this.loading = false
@@ -123,12 +123,12 @@ export default {
       if (id === undefined) {
         add(this.form).then(() => {
           this.closeDialog()
-          this.getList()
+          this.handleQuery()
         })
       } else {
         update(id, this.form).then(() => {
           this.closeDialog()
-          this.getList()
+          this.handleQuery()
         })
       }
     },
@@ -148,7 +148,7 @@ export default {
         type: 'warning'
       }).then(() => {
         del(row.id).then(() => {
-          this.getList()
+          this.handleQuery()
         })
       })
     }

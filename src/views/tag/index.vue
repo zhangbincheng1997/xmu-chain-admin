@@ -8,7 +8,7 @@
       <el-input v-model="query.from" placeholder="FROM" style="width: 100px;" clearable />
       <el-input v-model="query.to" placeholder="TO" style="width: 100px;" clearable />
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="getList" />
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button v-permission="[SUPER_ADMIN]" type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成防伪码</el-button>
       <br>
@@ -37,7 +37,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
@@ -98,10 +98,10 @@ export default {
     if (this.$route.query.id) {
       this.query.id = this.$route.query.id
     }
-    this.getList()
+    this.handleQuery()
   },
   methods: {
-    getList() {
+    handleQuery() {
       this.loading = true
       list(this.query).then(res => {
         this.loading = false
@@ -119,7 +119,7 @@ export default {
         status(this.selectIds, this.selectStatus).then(() => {
           this.selectIds = []
           this.selectStatus = undefined
-          this.getList()
+          this.handleQuery()
         })
       })
     },
@@ -129,7 +129,7 @@ export default {
     handleSubmit() {
       generate(this.form.code, this.form.count).then(() => {
         this.closeDialog()
-        this.getList()
+        this.handleQuery()
       })
     },
     closeDialog() {

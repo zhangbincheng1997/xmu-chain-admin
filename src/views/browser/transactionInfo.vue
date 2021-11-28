@@ -4,12 +4,7 @@
       <el-input v-model="searchKey" placeholder="请输入交易哈希或块高" style="width: 500px;float:right;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>
-      <el-table
-        ref="refTable"
-        v-loading="loading"
-        :data="list"
-        @row-click="handleRowClick"
-      >
+      <el-table ref="refTable" v-loading="loading" :data="list" @row-click="handleRowClick">
         <el-table-column type="expand" align="center">
           <template slot-scope="scope">
             <v-transaction-detail :trans-hash="scope.row.transHash" />
@@ -17,7 +12,7 @@
         </el-table-column>
         <el-table-column prop="transHash" label="交易哈希" align="center">
           <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="复制哈希" @click="copyPublicKey(scope.row.transHash)" />
+            <i class="el-icon-copy-document" title="复制哈希" @click="copyText(scope.row.transHash)" />
             {{ scope.row.transHash }}
           </template>
         </el-table-column>
@@ -35,30 +30,25 @@
 
 <script>
 import { getTransactionList } from '@/api/service-eth/browser'
-import Pagination from '@/components/Pagination'
 import transactionDetail from './components/transactionDetail'
-
-// 查询
-const defaultQuery = {
-  pageNumber: 1,
-  pageSize: 10,
-  groupId: localStorage.getItem('groupId') || 1,
-  transactionHash: undefined,
-  blockNumber: undefined
-}
 
 export default {
   name: 'TransactionInfo',
   components: {
-    Pagination,
     'v-transaction-detail': transactionDetail
   },
   data: function() {
     return {
       loading: false,
-      query: Object.assign({}, defaultQuery),
       list: [],
       total: 0,
+      query: {
+        pageNumber: 1,
+        pageSize: 10,
+        groupId: localStorage.getItem('groupId') || 1,
+        transactionHash: undefined,
+        blockNumber: undefined
+      },
       searchKey: ''
     }
   },
@@ -94,11 +84,6 @@ export default {
         this.total = res.totalCount
       })
     },
-    handleRowClick: function(row, column, $event) {
-      const nodeName = $event.target.nodeName
-      if (nodeName === 'I') return // copyPublicKey
-      this.$refs.refTable.toggleRowExpansion(row)
-    },
     link: function(val) {
       this.$router.push({
         path: '/browser/blockInfo',
@@ -107,21 +92,11 @@ export default {
         }
       })
     },
-    copyPublicKey(val) {
-      this.$copyText(val).then(() => {
-        this.$message({
-          type: 'success',
-          message: '复制成功',
-          duration: 2000
-        })
-      })
+    handleRowClick: function(row, column, $event) {
+      const nodeName = $event.target.nodeName
+      if (nodeName === 'I') return // copyText
+      this.$refs.refTable.toggleRowExpansion(row)
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-.link {
-  color: #0db1c1;
-  cursor: pointer;
-}
-</style>

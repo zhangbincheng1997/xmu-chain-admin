@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-input v-model="query.tagId" placeholder="标签编号" style="width: 200px;" clearable />
       <el-input v-model="query.keyword" placeholder="关键词（IP/地点）" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="getList" />
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
@@ -23,7 +23,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
@@ -73,10 +73,10 @@ export default {
     if (this.$route.query.code) {
       this.query.code = this.$route.query.code
     }
-    this.getList()
+    this.handleQuery()
   },
   methods: {
-    getList() {
+    handleQuery() {
       this.loading = true
       listSearch(this.query).then(res => {
         this.loading = false
@@ -86,7 +86,7 @@ export default {
     },
     handleSortChange({ column, prop, order }) {
       this.query.sort = order === 'descending' // default ascending
-      this.getList()
+      this.handleQuery()
     },
     handleDetail(row) {
       this.dialog.visible = true
