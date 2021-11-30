@@ -17,11 +17,14 @@ export function list(data) {
   })
 }
 
-export function add(data) {
+export function register(company, admin) {
   return request({
-    url: API,
+    url: API + '/register',
     method: 'post',
-    data: data
+    data: {
+      company: company,
+      admin: admin
+    }
   })
 }
 

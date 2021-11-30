@@ -1,281 +1,187 @@
 <template>
-  <div class="login-container">
-    <el-form ref="form" :model="form" :rules="rules" class="login-form" auto-complete="on" label-position="left">
-
-      <div class="title-container">
-        <h3 class="title">XMU-食品溯源（管理端）</h3>
-      </div>
-
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="form.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="off"
-        />
-      </el-form-item>
-
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="form.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="off"
-          @keyup.enter.native="handleSubmit"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
-
-      <el-form-item prop="key" hidden>
-        <el-input v-model="form.key" autocomplete="off" />
-      </el-form-item>
-
-      <el-form-item prop="code">
-        <el-input v-model="form.code" autocomplete="off" />
-      </el-form-item>
-
-      <el-image :src="url" @click="getCaptcha" />
-
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleSubmit">注册</el-button>
-
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : 账号长度为3-12</span>
+  <div class="app-container">
+    <el-card class="box-card">
+      <h1 style="text-align: center;">注册企业</h1>
+      <el-steps :active="step" align-center>
+        <el-step title="步骤 1" description="企业信息" icon="el-icon-edit" />
+        <el-step title="步骤 2" description="管理员信息" icon="el-icon-upload" />
+        <el-step title="步骤 3" description="完成" icon="el-icon-picture" />
+      </el-steps>
+      <el-container>
+        <div v-if="step === 1" style="width: 800px; margin:0 auto; padding-top: 50px;">
+          <el-form ref="companyForm" :model="companyForm" :rules="companyRules" label-width="100px">
+            <el-form-item label="标志" prop="logo">
+              <AvatarUpload :avatar.sync="companyForm.logo" />
+            </el-form-item>
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="companyForm.name" />
+            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="法人" prop="legalPerson">
+                  <el-input v-model="companyForm.legalPerson" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="联系人" prop="contactPerson">
+                  <el-input v-model="companyForm.contactPerson" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="联系电话" prop="contactPhone">
+                  <el-input v-model="companyForm.contactPhone" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="联系地址" prop="contactAddress">
+                  <el-input v-model="companyForm.contactAddress" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="成立日期" prop="foundDate">
+                  <el-date-picker v-model="companyForm.foundDate" type="date" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="官方网站" prop="officialWebsite">
+                  <el-input v-model="companyForm.officialWebsite" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="注册号码" prop="registerNumber">
+                  <el-input v-model="companyForm.registerNumber" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="注册资本" prop="registerCapital">
+                  <el-input v-model="companyForm.registerCapital" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item label="营业范围" prop="businessScope">
+              <el-input v-model="companyForm.businessScope" />
+            </el-form-item>
+            <el-form-item label="营业执照" prop="businessLicense">
+              <ImageUpload :image.sync="companyForm.businessLicense" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="handleNext">下一步</el-button>
+              <el-button @click="resetForm">重置</el-button>
+            </el-form-item>
+          </el-form>
         </div>
-        <div class="tips">
-          <span>Password : 密码长度为3-2</span>
+        <div v-if="step === 2" style="width: 500px; margin:0 auto; padding-top: 50px;">
+          <el-form ref="userForm" :model="userForm" :rules="userRules" label-width="100px">
+            <el-form-item label="账号" prop="username">
+              <el-input v-model="userForm.username" autocomplete="off" />
+            </el-form-item>
+            <el-form-item label="手机" prop="phone">
+              <el-input v-model="userForm.phone" />
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="userForm.email" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="handlePrev">上一步</el-button>
+              <el-button type="primary" @click="handleNext">完成</el-button>
+              <el-button @click="resetForm">重置</el-button>
+            </el-form-item>
+          </el-form>
         </div>
-
-        <el-button class="other-button" type="primary" @click="() => { this.$router.push('/login') }">
-          登录
-        </el-button>
-      </div>
-
-    </el-form>
+        <div v-if="step === 3" style="width: 500px; margin:0 auto; padding-top: 50px;">
+          <el-result icon="success" title="成功" sub-title="请耐心等待管理员审核！！！">
+            <template slot="extra">
+              <el-button type="primary" @click="back">回到首页</el-button>
+            </template>
+          </el-result>
+        </div>
+      </el-container>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { register } from '@/api/service-admin/user'
-import { getCaptcha } from '@/api/base/captcha'
-import { validUsername, validPassword } from '@/utils/validate'
+import { register } from '@/api/service-admin/company'
 
 export default {
-  name: 'Register',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct username'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (!validPassword(value)) {
-        callback(new Error('Please enter the correct password'))
-      } else {
-        callback()
-      }
-    }
     return {
-      url: '',
-      form: {
-        username: '',
-        password: '',
-        key: '',
-        code: ''
+      step: 1,
+      companyForm: {
+        logo: undefined,
+        name: undefined,
+        legalPerson: undefined,
+        contactPerson: undefined,
+        contactPhone: undefined,
+        contactAddress: undefined,
+        foundDate: undefined,
+        officialWebsite: undefined,
+        registerNumber: undefined,
+        registerCapital: undefined,
+        businessScope: undefined,
+        businessLicense: undefined
       },
-      rules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      companyRules: {
+        logo: [{ required: true, message: '请上传标志', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' }]
       },
-      loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+      userForm: {
+        username: undefined,
+        phone: undefined,
+        email: undefined
       },
-      immediate: true
+      userRules: {
+        username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机', trigger: 'blur' }],
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }]
+      }
     }
   },
   mounted() {
-    this.getCaptcha()
   },
   methods: {
-    getCaptcha() {
-      getCaptcha().then(res => {
-        this.url = res.data.image
-        this.form.key = res.data.key
-      })
-    },
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
+    handleNext() {
+      if (this.step === 1) {
+        this.$refs.companyForm.validate((valid) => {
+          if (valid) {
+            this.step += 1
+          } else {
+            return false
+          }
+        })
+      } else if (this.step === 2) {
+        this.$refs.userForm.validate((valid) => {
+          if (valid) {
+            this.handleSubmit()
+          } else {
+            return false
+          }
+        })
       }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+    },
+    handlePrev() {
+      if (this.step === 1) this.$refs.companyForm.clearValidate()
+      if (this.step === 2) this.$refs.userForm.clearValidate()
+      this.step -= 1
+    },
+    resetForm() {
+      if (this.step === 1) this.$refs.companyForm.resetFields()
+      if (this.step === 2) this.$refs.userForm.resetFields()
     },
     handleSubmit() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.loading = true
-          register(this.form).then(() => {
-            this.$router.push('/login')
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+      register(this.companyForm, this.userForm).then(() => {
+        this.step += 1
       })
+    },
+    back() {
+      this.$router.push('/')
     }
   }
 }
 </script>
-
-<style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
-</style>
-
-<style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
-
-.login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
-
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-
-    span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
-    }
-  }
-
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-
-  .title-container {
-    position: relative;
-
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-  }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .other-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
-
-  @media only screen and (max-width: 470px) {
-    .other-button {
-      display: none;
-    }
-  }
-}
-</style>
