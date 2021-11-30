@@ -52,7 +52,8 @@ const actions = {
         key: key,
         code: code
       }).then(response => {
-        const { access_token, refresh_token, token_type } = response.data
+        const { data } = response
+        const { access_token, refresh_token, token_type } = data
         const token = token_type + ' ' + access_token
         commit('SET_TOKEN', token)
         setToken(token)
@@ -72,7 +73,8 @@ const actions = {
         grant_type: 'refresh_token',
         refresh_token: refreshToken
       }).then(response => {
-        const { access_token, refresh_token, token_type } = response.data
+        const { data } = response
+        const { access_token, refresh_token, token_type } = data
         const token = token_type + ' ' + access_token
         commit('SET_TOKEN', token)
         setToken(token)
@@ -138,15 +140,16 @@ const actions = {
   // exchange
   exchange({ commit }, key) {
     removeToken() // must remove  token  first
-    removeRefreshToken()
-    removeRole()
-    commit('RESET_STATE')
+    // removeRefreshToken()
+    // removeRole()
+    // commit('RESET_STATE')
     return new Promise((resolve, reject) => {
       token({
         grant_type: 'exchange',
         key: key
       }).then(response => {
-        const { access_token, refresh_token, token_type } = response.data
+        const { data } = response
+        const { access_token, refresh_token, token_type } = data
         const token = token_type + ' ' + access_token
         commit('SET_TOKEN', token)
         setToken(token)

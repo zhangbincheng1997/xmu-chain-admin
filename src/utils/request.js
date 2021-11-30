@@ -42,13 +42,13 @@ service.interceptors.response.use(
       if (res.code === 1002) {
         const config = response.config
         if (!refreshing) {
-          // token续期
           refreshing = true
           return store.dispatch('user/refreshToken', getRefreshToken()).then((token) => {
             // token续期成功
             config.headers['Authorization'] = token
             config.baseURL = '' // url已包含baseURL
-            waitQueue.forEach(callback => callback(token)) // 重试请求
+            // 重试请求
+            waitQueue.forEach(callback => callback(token))
             waitQueue = []
             return service(config)
           }).catch(() => {
@@ -63,7 +63,9 @@ service.interceptors.response.use(
                 location.reload()
               })
             })
+            return Promise.reject(new Error('token续期失败'))
           }).finally(() => {
+            // 一定会执行
             refreshing = false
           })
         } else {
@@ -71,7 +73,7 @@ service.interceptors.response.use(
           return new Promise(resolve => {
             waitQueue.push((token) => {
               config.headers['Authorization'] = token
-              config.baseURL = ''
+              config.baseURL = '' // url已包含baseURL
               resolve(service(config))
             })
           })

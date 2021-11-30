@@ -27,6 +27,8 @@
           <template slot-scope="scope">
             <el-button type="text" @click="handlePwd(scope.row)">密码</el-button>
             <el-button type="text" @click="handleRole(scope.row)">角色</el-button>
+            <br>
+            <el-switch v-model="scope.row.enabled" active-color="#13ce66" inactive-color="#ff4949" @change="handleEnabled(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120" align="center" fixed="right">
@@ -44,11 +46,11 @@
         <el-form-item label="账号" prop="username" required>
           <el-input v-model="form.username" autocomplete="off" :disabled="form.id !== undefined" />
         </el-form-item>
-        <el-form-item label="地址" prop="address" required>
-          <el-input v-model="form.address" autocomplete="off" :disabled="form.id !== undefined" />
-        </el-form-item>
         <el-form-item v-if="!form.id" label="密码" prop="password" required>
           <el-input v-model="form.password" type="password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item v-if="form.id !== undefined" label="地址" prop="address" required>
+          <el-input v-model="form.address" autocomplete="off" disabled />
         </el-form-item>
         <el-form-item label="头像" prop="avatar" required>
           <AvatarUpload :avatar.sync="form.avatar" />
@@ -82,7 +84,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item v-if="form.id">
+        <el-form-item v-if="form.id" prop="time">
           <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>
           <el-tag type="warning">更新时间：{{ form.updateTime }}</el-tag>
         </el-form-item>
@@ -112,7 +114,7 @@
 </template>
 
 <script>
-import { list, add, update, del, updatePassword, getRole, setRole } from '@/api/service-admin/user'
+import { list, add, update, del, updatePassword, getRole, setRole, enabled } from '@/api/service-admin/user'
 import { listRole } from '@/api/service-admin/role'
 import config from '@/config'
 
@@ -150,6 +152,9 @@ export default {
         visible: false
       },
       roleData: undefined,
+
+      selectIds: [],
+      selectStatus: undefined,
 
       genderOptions: config.genderOptions
     }
@@ -253,6 +258,10 @@ export default {
     closeRoleDialog() {
       this.roleDialog.visible = false
       this.$refs.tree.setCheckedKeys([])
+    },
+    // ----- 修改状态 -----
+    handleEnabled(row) {
+      enabled(row.id, row.enabled).then(() => {})
     }
   }
 }

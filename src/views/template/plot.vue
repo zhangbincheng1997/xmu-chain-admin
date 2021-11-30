@@ -63,7 +63,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item v-if="form.id">
+        <el-form-item v-if="form.id" prop="time">
           <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>
           <el-tag type="warning">更新时间：{{ form.updateTime }}</el-tag>
         </el-form-item>

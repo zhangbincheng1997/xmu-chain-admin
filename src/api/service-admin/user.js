@@ -59,3 +59,13 @@ export function setRole(id, roleIds) {
     }
   })
 }
+
+export function enabled(id, enabled) {
+  return request({
+    url: API + '/enabled/' + id,
+    method: 'post',
+    data: {
+      enabled: enabled
+    }
+  })
+}
