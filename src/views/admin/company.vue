@@ -4,7 +4,6 @@
       <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="标志" prop="logo" width="100" align="center">
@@ -104,7 +103,7 @@
 
 <script>
 import { gm } from '@/api/oauth'
-import { list, add, update, del } from '@/api/service-admin/company'
+import { list, update, del } from '@/api/service-admin/company'
 
 export default {
   data() {
@@ -116,7 +115,7 @@ export default {
         page: 1,
         limit: 10,
         keyword: undefined,
-        sort: undefined
+        sort: false
       },
       dialog: {
         title: undefined,
@@ -159,13 +158,6 @@ export default {
       this.query.sort = order === 'descending' // default ascending
       this.handleQuery()
     },
-    handleAdd() {
-      this.resetForm()
-      this.dialog = {
-        title: '新增',
-        visible: true
-      }
-    },
     handleEdit(row) {
       this.resetForm()
       this.dialog = {
@@ -176,17 +168,10 @@ export default {
     },
     handleSubmit() {
       const id = this.form.id
-      if (id === undefined) {
-        add(this.form).then(() => {
-          this.closeDialog()
-          this.handleQuery()
-        })
-      } else {
-        update(id, this.form).then(() => {
-          this.closeDialog()
-          this.handleQuery()
-        })
-      }
+      update(id, this.form).then(() => {
+        this.closeDialog()
+        this.handleQuery()
+      })
     },
     closeDialog() {
       this.resetForm()
@@ -213,6 +198,7 @@ export default {
       gm(row.id).then((res) => {
         // Key换取Token
         this.$store.dispatch('user/exchange', res.data).then(() => {
+          this.$store.dispatch('user/resetRouter')
           this.$router.push('/dashboard')
         })
       })

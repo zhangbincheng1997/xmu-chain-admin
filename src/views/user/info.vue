@@ -3,17 +3,17 @@
     <el-card class="box-card">
       <el-container>
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="头像" prop="avatar" required>
-            <AvatarUpload :avatar.sync="form.avatar" />
-          </el-form-item>
           <el-form-item label="姓名" prop="name" required>
             <el-input v-model="form.name" />
           </el-form-item>
-          <el-form-item label="手机" prop="phone">
+          <el-form-item label="手机" prop="phone" required>
             <el-input v-model="form.phone" />
           </el-form-item>
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item label="邮箱" prop="email" required>
             <el-input v-model="form.email" />
+          </el-form-item>
+          <el-form-item label="头像" prop="avatar">
+            <AvatarUpload :avatar.sync="form.avatar" />
           </el-form-item>
           <el-form-item label="生日" prop="birthday">
             <el-date-picker v-model="form.birthday" type="date" />
@@ -41,10 +41,10 @@ export default {
   data() {
     return {
       form: {
-        avatar: undefined,
         name: undefined,
         phone: undefined,
         email: undefined,
+        avatar: undefined,
         birthday: undefined,
         gender: undefined
       },

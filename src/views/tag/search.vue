@@ -51,7 +51,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        sort: true,
+        sort: true, // 默认逆序
         keyword: undefined,
         tagId: undefined
       },

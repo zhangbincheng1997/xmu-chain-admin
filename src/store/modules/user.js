@@ -1,7 +1,8 @@
 import { token, logout } from '@/api/oauth'
 import { getInfo } from '@/api/service-admin/me'
 import { getToken, setToken, removeToken, setRefreshToken, removeRefreshToken, setRole, removeRole } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import router, { resetRouter } from '@/router'
+import store from '@/store'
 
 const getDefaultState = () => {
   return {
@@ -159,6 +160,19 @@ const actions = {
         reject(error)
       })
     })
+  },
+
+  async resetRouter() {
+    resetRouter()
+
+    const { role } = await store.dispatch('user/getInfo')
+
+    // generate accessible routes map based on roles
+    // const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', role)
+
+    // dynamically add accessible routes
+    router.addRoutes(accessRoutes)
   }
 }
 

@@ -80,7 +80,8 @@ export default {
       change(role).then((res) => {
         // Key换取Token
         this.$store.dispatch('user/exchange', res.data).then(() => {
-          location.reload()
+          this.$store.dispatch('user/resetRouter')
+          this.$router.push('/dashboard')
         })
       })
     }

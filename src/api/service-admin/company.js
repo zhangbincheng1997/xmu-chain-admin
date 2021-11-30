@@ -17,20 +17,20 @@ export function list(data) {
   })
 }
 
-export function register(company, admin) {
+export function register(company, user) {
   return request({
     url: API + '/register',
     method: 'post',
     data: {
       company: company,
-      admin: admin
+      user: user
     }
   })
 }
 
 export function update(id, data) {
   return request({
-    url: API + '/info/' + id,
+    url: API + '/' + id,
     method: 'put',
     data: data
   })

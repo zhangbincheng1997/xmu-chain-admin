@@ -49,35 +49,35 @@
         <el-form-item v-if="!form.id" label="密码" prop="password" required>
           <el-input v-model="form.password" type="password" autocomplete="off" />
         </el-form-item>
-        <el-form-item v-if="form.id !== undefined" label="地址" prop="address" required>
+        <el-form-item v-if="form.id" label="地址" prop="address" required>
           <el-input v-model="form.address" autocomplete="off" disabled />
-        </el-form-item>
-        <el-form-item label="头像" prop="avatar" required>
-          <AvatarUpload :avatar.sync="form.avatar" />
         </el-form-item>
         <el-form-item label="姓名" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="手机" prop="phone">
+            <el-form-item label="手机" prop="phone" required>
               <el-input v-model="form.phone" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="邮箱" prop="email" required>
               <el-input v-model="form.email" />
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item v-if="form.id" label="头像" prop="avatar">
+          <AvatarUpload :avatar.sync="form.avatar" />
+        </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="生日" prop="birthday">
+            <el-form-item v-if="form.id" label="生日" prop="birthday">
               <el-date-picker v-model="form.birthday" type="date" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="性别" prop="gender">
+            <el-form-item v-if="form.id" label="性别" prop="gender">
               <el-radio-group v-model="form.gender">
                 <el-radio v-for="item in genderOptions" :key="item.value" :label="item.label">{{ item.value }}</el-radio>
               </el-radio-group>
@@ -127,7 +127,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        sort: true,
+        sort: false,
         keyword: undefined,
         roleId: undefined
       },
@@ -138,13 +138,14 @@ export default {
       form: {
         id: undefined,
         username: undefined,
-        avatar: undefined,
-        name: undefined,
         address: undefined,
+        name: undefined,
         phone: undefined,
         email: undefined,
+        avatar: undefined,
         gender: undefined,
-        birthday: undefined
+        birthday: undefined,
+        enabled: undefined
       },
 
       roleDialog: {

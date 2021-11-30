@@ -81,6 +81,12 @@
             <el-form-item label="账号" prop="username">
               <el-input v-model="userForm.username" autocomplete="off" />
             </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="userForm.password" type="password" autocomplete="off" />
+            </el-form-item>
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="userForm.name" />
+            </el-form-item>
             <el-form-item label="手机" prop="phone">
               <el-input v-model="userForm.phone" />
             </el-form-item>
@@ -133,11 +139,15 @@ export default {
       },
       userForm: {
         username: undefined,
+        password: undefined,
+        name: undefined,
         phone: undefined,
         email: undefined
       },
       userRules: {
         username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入姓名:', trigger: 'blur' }],
         phone: [{ required: true, message: '请输入手机', trigger: 'blur' }],
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }]
       }
