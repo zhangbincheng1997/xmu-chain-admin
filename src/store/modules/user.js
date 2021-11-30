@@ -140,9 +140,9 @@ const actions = {
   // exchange
   exchange({ commit }, key) {
     removeToken() // must remove  token  first
-    // removeRefreshToken()
-    // removeRole()
-    // commit('RESET_STATE')
+    removeRefreshToken()
+    removeRole()
+    commit('RESET_STATE')
     return new Promise((resolve, reject) => {
       token({
         grant_type: 'exchange',

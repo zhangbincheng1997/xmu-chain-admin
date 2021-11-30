@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="form" :model="form" :rules="rules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">XMU-食品溯源（管理端）</h3>
@@ -12,12 +12,12 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
+          v-model="form.username"
           placeholder="Username"
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
+          auto-complete="off"
         />
       </el-form-item>
 
@@ -28,13 +28,13 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="form.password"
           :type="passwordType"
           placeholder="Password"
           name="password"
           tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          auto-complete="off"
+          @keyup.enter.native="handleSubmit"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -42,20 +42,28 @@
       </el-form-item>
 
       <el-form-item prop="key" hidden>
-        <el-input v-model="loginForm.key" autocomplete="off" />
+        <el-input v-model="form.key" autocomplete="off" />
       </el-form-item>
 
       <el-form-item prop="code">
-        <el-input v-model="loginForm.code" autocomplete="off" />
+        <el-input v-model="form.code" autocomplete="off" />
       </el-form-item>
 
       <el-image :src="url" @click="getCaptcha" />
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleSubmit">注册</el-button>
 
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span>password: admin</span>
+      <div style="position:relative">
+        <div class="tips">
+          <span>Username : 账号长度为3-12</span>
+        </div>
+        <div class="tips">
+          <span>Password : 密码长度为3-2</span>
+        </div>
+
+        <el-button class="other-button" type="primary" @click="() => { this.$router.push('/login') }">
+          登录
+        </el-button>
       </div>
 
     </el-form>
@@ -63,11 +71,12 @@
 </template>
 
 <script>
+import { register } from '@/api/service-admin/user'
 import { getCaptcha } from '@/api/base/captcha'
 import { validUsername, validPassword } from '@/utils/validate'
 
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -85,13 +94,13 @@ export default {
     }
     return {
       url: '',
-      loginForm: {
-        username: 'admin',
-        password: 'admin',
+      form: {
+        username: '',
+        password: '',
         key: '',
         code: ''
       },
-      loginRules: {
+      rules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
@@ -115,7 +124,7 @@ export default {
     getCaptcha() {
       getCaptcha().then(res => {
         this.url = res.data.image
-        this.loginForm.key = res.data.key
+        this.form.key = res.data.key
       })
     },
     showPwd() {
@@ -128,12 +137,12 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleSubmit() {
+      this.$refs.form.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          register(this.form).then(() => {
+            this.$router.push('/login')
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -255,6 +264,18 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .other-button {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+  }
+
+  @media only screen and (max-width: 470px) {
+    .other-button {
+      display: none;
+    }
   }
 }
 </style>

@@ -2,6 +2,14 @@ import request from '@/utils/request'
 
 const API = '/service-admin/api/v1/user'
 
+export function register(data) {
+  return request({
+    url: API + '/register',
+    method: 'post',
+    data: data
+  })
+}
+
 export function list(data) {
   return request({
     url: API + '/list',

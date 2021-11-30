@@ -213,7 +213,7 @@ export default {
       gm(row.id).then((res) => {
         // Key换取Token
         this.$store.dispatch('user/exchange', res.data).then(() => {
-          this.$router.push('/')
+          this.$router.push('/dashboard')
         })
       })
     }
