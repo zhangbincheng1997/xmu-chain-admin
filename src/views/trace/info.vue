@@ -38,7 +38,7 @@
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(productTemplate.fromAddr)" />
                 <span class="link" @click="linkUser(productTemplate.fromAddr)">{{ productTemplate.fromAddr }}</span>
               </el-form-item>
-              <el-form-item label="交易Hash">
+              <el-form-item label="交易哈希">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(productTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(productTemplate.transHash)">{{ productTemplate.transHash }}</span>
               </el-form-item>
@@ -56,7 +56,7 @@
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(corpTemplate.fromAddr)" />
                 <span class="link" @click="linkUser(corpTemplate.fromAddr)">{{ corpTemplate.fromAddr }}</span>
               </el-form-item>
-              <el-form-item label="交易Hash">
+              <el-form-item label="交易哈希">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(corpTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(corpTemplate.transHash)">{{ corpTemplate.transHash }}</span>
               </el-form-item>
@@ -74,7 +74,7 @@
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(placeTemplate.fromAddr)" />
                 <span class="link" @click="linkUser(placeTemplate.fromAddr)">{{ placeTemplate.fromAddr }}</span>
               </el-form-item>
-              <el-form-item label="交易Hash">
+              <el-form-item label="交易哈希">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(placeTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(placeTemplate.transHash)">{{ placeTemplate.transHash }}</span>
               </el-form-item>
@@ -90,7 +90,7 @@
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.fromAddr)" />
                 <span class="link" @click="linkUser(plotTemplate.fromAddr)">{{ plotTemplate.fromAddr }}</span>
               </el-form-item>
-              <el-form-item label="交易Hash">
+              <el-form-item label="交易哈希">
                 <i class="el-icon-copy-document" title="copyText" @click="copyText(plotTemplate.transHash)" />
                 <span class="link" @click="linkTransaction(plotTemplate.transHash)">{{ plotTemplate.transHash }}</span>
               </el-form-item>
@@ -107,7 +107,7 @@
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.fromAddr)" />
                   <span class="link" @click="linkUser(item.fromAddr)">{{ item.fromAddr }}</span>
                 </el-form-item>
-                <el-descriptions-item label="交易Hash">
+                <el-descriptions-item label="交易哈希">
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
                   <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
                 </el-descriptions-item>
@@ -124,7 +124,7 @@
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.fromAddr)" />
                   <span class="link" @click="linkUser(item.fromAddr)">{{ item.fromAddr }}</span>
                 </el-form-item>
-                <el-descriptions-item label="交易Hash">
+                <el-descriptions-item label="交易哈希">
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
                   <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
                 </el-descriptions-item>
@@ -141,7 +141,7 @@
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.fromAddr)" />
                   <span class="link" @click="linkUser(item.fromAddr)">{{ item.fromAddr }}</span>
                 </el-form-item>
-                <el-descriptions-item label="交易Hash">
+                <el-descriptions-item label="交易哈希">
                   <i class="el-icon-copy-document" title="copyText" @click="copyText(item.transHash)" />
                   <span class="link" @click="linkTransaction(item.transHash)">{{ item.transHash }}</span>
                 </el-descriptions-item>

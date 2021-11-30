@@ -24,7 +24,7 @@
             <span class="link" @click="linkUser(scope.row.fromAddr)">{{ scope.row.fromAddr }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+        <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
             <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
@@ -77,7 +77,7 @@
           <el-descriptions-item label="光照">{{ form.light }}</el-descriptions-item>
           <el-descriptions-item label="备注">{{ form.remark }}</el-descriptions-item>
           <el-descriptions-item label="用户地址">{{ form.fromAddr }}</el-descriptions-item>
-          <el-descriptions-item label="交易Hash">{{ form.transHash }}</el-descriptions-item>
+          <el-descriptions-item label="交易哈希">{{ form.transHash }}</el-descriptions-item>
         </el-descriptions>
         <el-image :src="form.image" :preview-src-list="[form.image]" style="width: 100px; height: 100px" fit="contain" />
       </div>

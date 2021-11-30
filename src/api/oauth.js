@@ -23,12 +23,12 @@ export function logout() {
   })
 }
 
-export function gm(company_id) {
+export function gm(companyId) {
   return request({
     url: API + '/gm',
     method: 'post',
     params: {
-      'companyId': company_id
+      'companyId': companyId
     }
   })
 }

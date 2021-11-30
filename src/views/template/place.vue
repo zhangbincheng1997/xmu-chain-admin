@@ -18,7 +18,7 @@
             <span class="link" @click="linkUser(scope.row.fromAddr)">{{ scope.row.fromAddr }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="交易Hash" prop="transHash" align="center" show-overflow-tooltip>
+        <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
             <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>

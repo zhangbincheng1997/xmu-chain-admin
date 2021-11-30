@@ -60,7 +60,6 @@ Vue.prototype.checkPermission = checkPermission
 
 import * as utils from '@/utils/utils'
 Object.keys(utils).forEach(key => {
-  console.log(key)
   Vue.prototype[key] = utils[key]
 })
 

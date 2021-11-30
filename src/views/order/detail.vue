@@ -5,7 +5,7 @@
         <el-empty description="暂无数据" />
       </div>
       <div v-else>
-        <el-button type="primary" icon="el-icon-close" style="float:right;" @click="handleClose">关闭订单</el-button>
+        <el-button v-permission="[SUPER_ADMIN, COMPANY_ADMIN]" type="primary" icon="el-icon-close" style="float:right;" @click="handleClose">关闭订单</el-button>
         <el-steps direction="vertical" finish-status="success">
           <el-step v-for="(item, i) in orderStatus" :key="i" :title="OrderStatusMap[item.status] + ': ' + item.createTime" status="success">
             <template v-if="item.status === OrderStatusType.NEW" slot="description">
@@ -25,7 +25,7 @@
                   <el-tag v-if="orderInfo.status === OrderStatusType.CLOSE_USER || orderInfo.status === OrderStatusType.CLOSE_ADMIN" type="danger">{{ OrderStatusMap[orderInfo.status] }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
-              <el-button @click="handleUpdateOrderInfo">修改订单信息</el-button>
+              <el-button v-permission="[COMPANY_ADMIN]" @click="handleUpdateOrderInfo">修改订单信息</el-button>
               <div v-if="isEditOrderInfo">
                 <el-form ref="orderInfoForm" :model="orderInfoForm" label-width="100px">
                   <el-form-item label="溯源码" prop="code" required>
@@ -58,7 +58,7 @@
                 <el-descriptions-item label="快递公司">{{ orderExpress.express }}</el-descriptions-item>
                 <el-descriptions-item label="快递单号">{{ orderExpress.number }}</el-descriptions-item>
               </el-descriptions>
-              <el-button @click="handleUpdateOrderExpress">修改物流信息</el-button>
+              <el-button v-permission="[SUPER_ADMIN]" @click="handleUpdateOrderExpress">修改物流信息</el-button>
               <div v-if="isEditOrderExpress">
                 <el-form ref="orderExpressForm" :model="orderExpressForm" label-width="100px">
                   <el-form-item label="快递公司" prop="express" required>
@@ -83,17 +83,17 @@
           </el-step>
           <el-step v-if="orderStatus[orderStatus.length-1].status === OrderStatusType.NEW" title="等待接单（管理员）">
             <template slot="description">
-              <el-button @click="handleTake">接单</el-button><!-- handle -->
+              <el-button v-permission="[SUPER_ADMIN]" @click="handleTake">接单</el-button>
             </template>
           </el-step>
           <el-step v-if="orderStatus[orderStatus.length-1].status === OrderStatusType.TAKE" title="等待发货（管理员）">
             <template slot="description">
-              <el-button @click="handleSend">发货</el-button><!-- handle -->
+              <el-button v-permission="[SUPER_ADMIN]" @click="handleSend">发货</el-button>
             </template>
           </el-step>
           <el-step v-if="orderStatus[orderStatus.length-1].status === OrderStatusType.SEND" title="等待收货（企业）">
             <template slot="description">
-              <el-button @click="handleReceive">收货</el-button><!-- handle -->
+              <el-button v-permission="[COMPANY_ADMIN]" @click="handleReceive">收货</el-button>
             </template>
           </el-step>
         </el-steps>
