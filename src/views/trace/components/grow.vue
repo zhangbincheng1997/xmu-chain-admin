@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-date-picker v-model="query.start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" />
+    <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
+    <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
     <el-button type="primary" icon="el-icon-plus" style="float: right;" @click="handleAdd">添加</el-button>
     <el-table v-loading="loading" :data="list">
       <el-table-column type="index" width="50" />
@@ -90,7 +93,9 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        code: undefined
+        code: undefined,
+        start: undefined,
+        end: undefined
       },
       dialog: {
         title: undefined,

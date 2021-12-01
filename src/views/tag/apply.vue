@@ -55,7 +55,12 @@ export default {
   methods: {
     submitForm() {
       saveOrderInfo(this.form).then((res) => {
-        this.linkDetail(res.data)
+        this.$router.push({
+          path: '/order/detail',
+          query: {
+            id: res.data
+          }
+        })
       })
     },
     resetForm() {

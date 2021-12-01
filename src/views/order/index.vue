@@ -87,6 +87,14 @@ export default {
         this.list = res.data.list
         this.total = res.data.total
       })
+    },
+    linkDetail(val) {
+      this.$router.push({
+        path: '/order/detail',
+        query: {
+          id: val
+        }
+      })
     }
   }
 }

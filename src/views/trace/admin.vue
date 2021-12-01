@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
+      <el-date-picker v-model="query.start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" />
+      <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
@@ -38,13 +40,14 @@
         <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
           <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
         </el-table-column>
+        <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             <br>
-            <el-button type="text" @click="handleData(scope.row.code)">大数据</el-button>
             <el-button type="text" @click="getQRCode(scope.row.code)">二维码</el-button>
+            <el-button type="text" @click="linkOperate(scope.row.code)">大数据</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -125,7 +128,9 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        code: undefined
+        code: undefined,
+        start: undefined,
+        end: undefined
       },
       dialog: {
         title: undefined,
@@ -230,7 +235,14 @@ export default {
         })
       })
     },
-    handleData(code) {
+    getQRCode(code) {
+      this.qrCodeDialog = {
+        title: '生成二维码',
+        visible: true
+      }
+      getQRCode(code).then((res) => { this.qrCode = res.data })
+    },
+    linkOperate(code) {
       this.$router.push({
         path: '/trace/operate',
         query: {
@@ -238,12 +250,13 @@ export default {
         }
       })
     },
-    getQRCode(code) {
-      this.qrCodeDialog = {
-        title: '生成二维码',
-        visible: true
-      }
-      getQRCode(code).then((res) => { this.qrCode = res.data })
+    linkTemplate(type, val) {
+      this.$router.push({
+        path: '/template/' + type,
+        query: {
+          id: val
+        }
+      })
     },
     getById(list, id) {
       const template = list.find(obj => obj.id === id)

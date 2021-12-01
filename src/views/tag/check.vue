@@ -16,11 +16,6 @@
           <el-result icon="warning" title="校验成功" sub-title="防伪码正确！但不是首次查询！" />
           <el-table :data="list">
             <el-table-column label="#" prop="id" align="center" fixed="left" />
-            <el-table-column label="标签编号" prop="tagId" width="100" align="center" fixed="left">
-              <template slot-scope="scope">
-                <span class="link" @click="linkTag(scope.row.tagId)">{{ scope.row.tagId }}</span>
-              </template>
-            </el-table-column>
             <el-table-column label="IP" prop="ip" align="center" />
             <el-table-column label="地点" prop="location" align="center" />
             <el-table-column label="经度" prop="longitude" align="center" />

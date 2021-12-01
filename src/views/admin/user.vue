@@ -11,15 +11,12 @@
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="头像" prop="avatar" width="100" align="center">
-          <template slot-scope="scope"><el-image :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" fit="fill" /></template>
+          <template slot-scope="scope"><image-preview :image="scope.row.image" /></template>
         </el-table-column>
         <el-table-column label="账号" prop="username" align="center" />
         <el-table-column label="姓名" prop="name" align="center" />
         <el-table-column label="地址" prop="address" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.address)" />
-            <span class="link" @click="linkUser(scope.row.address)">{{ scope.row.address }}</span>
-          </template>
+          <template slot-scope="scope"><copy-user :text="scope.row.address" /></template>
         </el-table-column>
         <el-table-column label="手机" prop="phone" align="center" />
         <el-table-column label="邮箱" prop="email" align="center" />

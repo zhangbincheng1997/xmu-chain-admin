@@ -25,12 +25,7 @@ export default {
   },
   data() {
     return {
-      code: ''
-    }
-  },
-  mounted() {
-    if (this.$route.query.code) {
-      this.code = this.$route.query.code
+      code: this.$route.query.code
     }
   },
   methods: {
