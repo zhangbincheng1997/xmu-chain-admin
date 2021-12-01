@@ -13,21 +13,14 @@
           </template>
         </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
-        <el-table-column label="图片" prop="image" width="100" align="center">
-          <template slot-scope="scope"><el-image :src="scope.row.image" :preview-src-list="[scope.row.image]" fit="fill" /></template>
+        <el-table-column label="图片" prop="image" align="center">
+          <template slot-scope="scope"><image-preview :image="scope.row.image" /></template>
         </el-table-column>
-        <el-table-column label="介绍" prop="content" width="200" align="center" show-overflow-tooltip />
         <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.fromAddr)" />
-            <span class="link" @click="linkUser(scope.row.fromAddr)">{{ scope.row.fromAddr }}</span>
-          </template>
+          <template slot-scope="scope"><copy-user :text="scope.row.fromAddr" /></template>
         </el-table-column>
         <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
-            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
-          </template>
+          <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
@@ -142,7 +135,7 @@ export default {
     handleAdd() {
       this.resetForm()
       this.dialog = {
-        title: '新增',
+        title: '添加',
         visible: true
       }
     },

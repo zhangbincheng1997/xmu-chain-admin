@@ -72,7 +72,7 @@
         </div>
         <div v-else>
           <el-form label-width="100px">
-            <el-form-item label="图片"><el-image v-if="form.logo" :src="form.logo" :preview-src-list="[form.logo]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+            <el-form-item label="标志"><image-preview :image="form.logo" /></el-form-item>
             <el-form-item label="名称"><span>{{ form.name }}</span></el-form-item>
             <el-form-item label="法人"><span>{{ form.legalPerson }}</span></el-form-item>
             <el-form-item label="联系人"><span>{{ form.contactPerson }}</span></el-form-item>
@@ -83,7 +83,7 @@
             <el-form-item label="注册号码"><span>{{ form.registerNumber }}</span></el-form-item>
             <el-form-item label="注册资本"><span>{{ form.registerCapital }}</span></el-form-item>
             <el-form-item label="营业范围"><span>{{ form.businessScope }}</span></el-form-item>
-            <el-form-item label="营业执照"><el-image v-if="form.businessLicense" :src="form.businessLicense" :preview-src-list="[form.businessLicense]" style="width: 100px; height: 100px" fit="contain" /></el-form-item>
+            <el-form-item label="营业执照"><image-preview :image="form.businessLicense" /></el-form-item>
           </el-form>
         </div>
       </el-container>

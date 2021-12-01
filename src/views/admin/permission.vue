@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="图标" prop="icon">
-          <el-input v-model="form.icon" />
+          <e-icon-picker v-model="form.icon" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="form.sort" />
@@ -106,7 +106,7 @@ export default {
     handleAdd() {
       this.resetForm()
       this.dialog = {
-        title: '新增',
+        title: '添加',
         visible: true
       }
     },

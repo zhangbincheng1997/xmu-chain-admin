@@ -6,8 +6,8 @@
       </el-input>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="标志" prop="logo" width="100" align="center">
-          <template slot-scope="scope"><el-image :src="scope.row.logo" :preview-src-list="[scope.row.logo]" fit="fill" /></template>
+        <el-table-column label="标志" prop="logo" align="center">
+          <template slot-scope="scope"><image-preview :image="scope.row.logo" /></template>
         </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="法人" prop="legalPerson" align="center" />

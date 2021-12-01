@@ -4,7 +4,6 @@
       <el-select v-model="query.status" placeholder="标签状态" style="width: 200px;" clearable>
         <el-option v-for="item in TagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-input v-model="query.id" placeholder="标签编号" style="width: 200px;" clearable />
       <el-input v-model="query.from" placeholder="FROM" style="width: 100px;" clearable />
       <el-input v-model="query.to" placeholder="TO" style="width: 100px;" clearable />
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable>
@@ -20,7 +19,7 @@
       </span>
       <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" />
-        <el-table-column label="标签编号" prop="id" align="center" fixed="left" />
+        <el-table-column label="#" prop="id" align="center" fixed="left" />
         <el-table-column label="溯源码" prop="code" align="center">
           <template slot-scope="scope">
             <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
@@ -70,7 +69,6 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        id: undefined,
         code: undefined,
         from: undefined,
         to: undefined,

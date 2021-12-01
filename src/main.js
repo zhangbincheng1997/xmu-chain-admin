@@ -37,15 +37,30 @@ Vue.use(ElementUI)
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
+// 图标选择功能
+import eIconPicker from 'e-icon-picker'
+import 'e-icon-picker/lib/symbol.js' // 基本彩色图标库
+import 'e-icon-picker/lib/index.css' // 基本样式，包含基本图标
+import 'font-awesome/css/font-awesome.min.css' // font-awesome 图标库
+import 'element-ui/lib/theme-chalk/icon.css' // element-ui 图标库
+// Vue.use(eIconPicker, { FontAwesome: true, ElementUI: true, eIcon: true, eIconSymbol: true })
+Vue.use(eIconPicker, { ElementUI: true })
+
 // 全局组件挂载
 import Pagination from '@/components/Pagination'
 import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
+import ImagePreview from '@/components/ImagePreview'
 import CodeComplete from '@/components/CodeComplete'
+import CopyUser from '@/components/Copy/User'
+import CopyTrans from '@/components/Copy/Trans'
 Vue.component('Pagination', Pagination)
 Vue.component('AvatarUpload', AvatarUpload)
 Vue.component('ImageUpload', ImageUpload)
+Vue.component('ImagePreview', ImagePreview)
 Vue.component('CodeComplete', CodeComplete)
+Vue.component('CopyUser', CopyUser)
+Vue.component('CopyTrans', CopyTrans)
 
 // 全局指令注册
 import permission from '@/directive/permission'

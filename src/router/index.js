@@ -32,12 +32,6 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/',
-    component: () => import('@/views/front/index'),
-    hidden: true
-  },
-
-  {
     path: '/login',
     component: () => import('@/views/front/login'),
     hidden: true
@@ -56,11 +50,11 @@ export const constantRoutes = [
   },
 
   {
-    path: '/dashboard',
+    path: '/',
     component: Layout,
-    redirect: '/dashboard/index',
+    redirect: '/dashboard',
     children: [{
-      path: 'index',
+      path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }

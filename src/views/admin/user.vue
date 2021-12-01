@@ -188,7 +188,7 @@ export default {
     handleAdd() {
       this.resetForm()
       this.dialog = {
-        title: '新增',
+        title: '添加',
         visible: true
       }
     },

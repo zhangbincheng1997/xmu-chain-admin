@@ -33,22 +33,17 @@
           </template>
         </el-table-column>
         <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.fromAddr)" />
-            <span class="link" @click="linkUser(scope.row.fromAddr)">{{ scope.row.fromAddr }}</span>
-          </template>
+          <template slot-scope="scope"><copy-user :text="scope.row.fromAddr" /></template>
         </el-table-column>
         <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="copyText" @click="copyText(scope.row.transHash)" />
-            <span class="link" @click="linkTransaction(scope.row.transHash)">{{ scope.row.transHash }}</span>
-          </template>
+          <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             <br>
+            <el-button type="text" @click="handleData(scope.row.code)">大数据</el-button>
             <el-button type="text" @click="getQRCode(scope.row.code)">二维码</el-button>
           </template>
         </el-table-column>
@@ -187,7 +182,7 @@ export default {
     handleAdd() {
       this.resetForm()
       this.dialog = {
-        title: '新增',
+        title: '添加',
         visible: true
       }
     },
@@ -233,6 +228,14 @@ export default {
         del(row.code).then(() => {
           this.handleQuery()
         })
+      })
+    },
+    handleData(code) {
+      this.$router.push({
+        path: '/trace/operate',
+        query: {
+          code: code
+        }
       })
     },
     getQRCode(code) {
