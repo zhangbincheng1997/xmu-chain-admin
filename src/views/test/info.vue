@@ -79,9 +79,9 @@
               </el-tab-pane>
             </el-tabs>
           </el-tab-pane>
-          <el-tab-pane label="溯源情况">
+          <el-tab-pane label="溯源操作">
             <el-tabs tab-position="left">
-              <el-tab-pane label="生长情况">
+              <el-tab-pane label="生长信息">
                 <div v-for="(item, i) in growList" :key="item.id">
                   <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                     <el-descriptions-item label="温度">{{ item.temperature }}</el-descriptions-item>
@@ -94,7 +94,7 @@
                   <image-preview :image="item.image" />
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="农事情况">
+              <el-tab-pane label="农事信息">
                 <div v-for="(item, i) in farmList" :key="item.id">
                   <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                     <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
@@ -105,7 +105,7 @@
                   <image-preview :image="item.image" />
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="加工情况">
+              <el-tab-pane label="加工信息">
                 <div v-for="(item, i) in processList" :key="item.id">
                   <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
                     <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>

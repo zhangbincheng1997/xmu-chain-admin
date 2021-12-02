@@ -36,12 +36,12 @@
           <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
-        <el-table-column label="溯源操作" align="center" fixed="right">
+        <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             <br>
-            <el-button type="text" @click="linkOperate(scope.row.code)">操作</el-button>
+            <el-button type="text" @click="linkOperate(scope.row.code)">溯源操作</el-button>
           </template>
         </el-table-column>
       </el-table>
