@@ -15,7 +15,7 @@
         <div v-else>
           <el-result icon="warning" title="校验成功" sub-title="防伪码正确！但不是首次查询！" />
           <el-table :data="list">
-            <el-table-column label="#" prop="id" align="center" fixed="left" />
+            <el-table-column type="index" width="50" />
             <el-table-column label="IP" prop="ip" align="center" />
             <el-table-column label="地点" prop="location" align="center" />
             <el-table-column label="经度" prop="longitude" align="center" />

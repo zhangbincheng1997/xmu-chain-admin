@@ -25,6 +25,15 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="父节点" prop="pid">
+          <el-cascader
+            v-model="form.pid"
+            placeholder="默认根节点"
+            :options="list"
+            :props="{ value: 'id', label: 'name', expandTrigger: 'hover', emitPath: false, checkStrictly: true }"
+            :show-all-levels="false"
+          />
+        </el-form-item>
         <el-form-item label="名字" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
@@ -41,15 +50,6 @@
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="form.sort" />
-        </el-form-item>
-        <el-form-item label="父节点" prop="pid">
-          <el-cascader
-            v-model="form.pid"
-            placeholder="默认根节点"
-            :options="list"
-            :props="{ value: 'id', label: 'name', expandTrigger: 'hover', emitPath: false, checkStrictly: true }"
-            :show-all-levels="false"
-          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
