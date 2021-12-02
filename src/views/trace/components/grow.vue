@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { add, list } from '@/api/service-trace/trace/grow'
+import { add, list } from '@/api/service-trace/trace/op/grow'
 
 export default {
   name: 'Grow',

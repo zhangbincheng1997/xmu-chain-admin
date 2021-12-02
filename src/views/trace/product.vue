@@ -7,11 +7,6 @@
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list">
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
-        <el-table-column label="产地" prop="place" align="center">
-          <template slot-scope="scope">
-            <span class="link" @click="linkTemplate('place', scope.row.placeId)">{{ getPlaceById(scope.row.placeId) }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
         <el-table-column label="图片" prop="image" align="center">
           <template slot-scope="scope"><image-preview :image="scope.row.image" /></template>
@@ -34,26 +29,29 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="产地模板" prop="place" required>
-          <el-select v-model="form.placeId" placeholder="请选择">
-            <el-option v-for="item in placeTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="图片" prop="image" required>
           <ImageUpload :image.sync="form.image" />
         </el-form-item>
         <el-form-item label="名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
+        <el-form-item label="介绍" prop="content">
+          <el-input v-model="form.content" type="textarea" />
+        </el-form-item>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="土壤类型" prop="soilType">
-              <el-input v-model="form.soilType" />
+          <el-col :span="8">
+            <el-form-item label="价格" prop="price">
+              <el-input v-model="form.price" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="土壤酸碱度" prop="soilPh">
-              <el-input v-model="form.soilPh" />
+          <el-col :span="8">
+            <el-form-item label="重量" prop="weight">
+              <el-input v-model="form.weight" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="保质期" prop="exp">
+              <el-input v-model="form.exp" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -71,8 +69,7 @@
 </template>
 
 <script>
-import { list, add, update, del } from '@/api/service-trace/template/plot'
-import { allPlace } from '@/api/service-trace/template/place'
+import { list, add, update, del } from '@/api/service-trace/trace/product'
 
 export default {
   data() {
@@ -91,17 +88,17 @@ export default {
       },
       form: {
         id: undefined,
-        placeId: undefined,
         name: undefined,
         image: undefined,
-        soilType: undefined,
-        soilPh: undefined,
+        content: undefined,
+        price: undefined,
+        weight: undefined,
+        exp: undefined,
         fromAddr: undefined,
         transHash: undefined,
         createTime: undefined,
         updateTime: undefined
-      },
-      placeTemplateList: []
+      }
     }
   },
   mounted() {
@@ -113,13 +110,10 @@ export default {
   methods: {
     handleQuery() {
       this.loading = true
-      allPlace().then(res => {
-        this.placeTemplateList = res.data
-        list(this.query).then(res => {
-          this.loading = false
-          this.list = res.data.list
-          this.total = res.data.total
-        })
+      list(this.query).then(res => {
+        this.loading = false
+        this.list = res.data.list
+        this.total = res.data.total
       })
     },
     handleAdd() {
@@ -170,10 +164,6 @@ export default {
           this.handleQuery()
         })
       })
-    },
-    getPlaceById(id) {
-      const place = this.placeTemplateList.find(obj => obj.id === id)
-      return place.name + '(' + place.id + ')'
     }
   }
 }

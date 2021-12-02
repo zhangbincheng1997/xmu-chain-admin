@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/trace/grow'
+const API = '/service-trace/api/v1/trace/op/farm'
 
-export function listGrowByCode(code) {
+export function listFarmByCode(code) {
   return request({
     url: API + '/list/' + code,
     method: 'get'

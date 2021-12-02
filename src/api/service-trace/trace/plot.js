@@ -1,15 +1,15 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/template/place'
+const API = '/service-trace/api/v1/trace/plot'
 
-export function getPlaceById(id) {
+export function getPlotById(id) {
   return request({
     url: API + '/' + id,
     method: 'get'
   })
 }
 
-export function allPlace() {
+export function allPlot() {
   return request({
     url: API + '/all',
     method: 'get'

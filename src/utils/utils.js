@@ -28,7 +28,7 @@ export function linkTransaction(val) {
 
 export function linkTrace(val) {
   this.$router.push({
-    path: '/trace/info',
+    path: '/test/info',
     query: {
       code: val
     }

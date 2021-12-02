@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/template/product'
+const API = '/service-trace/api/v1/trace/product'
 
 export function getProductById(id) {
   return request({

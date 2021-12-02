@@ -35,27 +35,21 @@
         <el-form-item label="名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
+        <el-form-item label="地址" prop="name">
+          <el-input v-model="form.address" />
+        </el-form-item>
+        <el-form-item label="介绍" prop="content">
+          <el-input v-model="form.content" type="textarea" />
+        </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="灌溉周期" prop="guangai">
-              <el-input v-model="form.guangai" />
+            <el-form-item label="面积" prop="area">
+              <el-input v-model="form.area" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="施肥周期" prop="shifei">
-              <el-input v-model="form.shifei" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="除草周期" prop="chucao">
-              <el-input v-model="form.chucao" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="除虫周期" prop="chuchong">
-              <el-input v-model="form.chuchong" />
+            <el-form-item label="海拔" prop="altitude">
+              <el-input v-model="form.altitude" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -73,7 +67,7 @@
 </template>
 
 <script>
-import { list, add, update, del } from '@/api/service-trace/template/corp'
+import { list, add, update, del } from '@/api/service-trace/trace/place'
 
 export default {
   data() {
@@ -94,10 +88,10 @@ export default {
         id: undefined,
         name: undefined,
         image: undefined,
-        guangai: undefined,
-        shifei: undefined,
-        chucao: undefined,
-        chuchong: undefined,
+        address: undefined,
+        content: undefined,
+        area: undefined,
+        altitude: undefined,
         fromAddr: undefined,
         transHash: undefined,
         createTime: undefined,

@@ -7,7 +7,7 @@
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
-      <el-table v-loading="loading" :data="list">
+      <el-table ref="refTable" v-loading="loading" :data="list" @row-click="handleRowClick">
         <el-table-column label="溯源码" prop="code" width="100" align="center" fixed="left">
           <template slot-scope="scope">
             <span class="link" @click="linkTrace(scope.row.code)">{{ scope.row.code }}</span>
@@ -17,11 +17,6 @@
         <el-table-column label="商品" prop="productId" align="center">
           <template slot-scope="scope">
             <span class="link" @click="linkTemplate('product', scope.row.productId)">{{ getById(productTemplateList, scope.row.productId) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="作物" prop="corpId" align="center">
-          <template slot-scope="scope">
-            <span class="link" @click="linkTemplate('corp', scope.row.corpId)">{{ getById(corpTemplateList, scope.row.corpId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="产地" prop="placeId" align="center">
@@ -41,13 +36,12 @@
           <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
-        <el-table-column label="操作" align="center" fixed="right">
+        <el-table-column label="溯源操作" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             <br>
-            <el-button type="text" @click="getQRCode(scope.row.code)">二维码</el-button>
-            <el-button type="text" @click="linkOperate(scope.row.code)">大数据</el-button>
+            <el-button type="text" @click="linkOperate(scope.row.code)">操作</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -62,32 +56,21 @@
         <el-form-item label="批次编号" prop="batch" required>
           <el-input v-model="form.batch" />
         </el-form-item>
+        <el-form-item label="商品" prop="productId" required>
+          <el-select v-model="form.productId" placeholder="请选择">
+            <el-option v-for="item in productTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="作物模板" prop="corpId" required>
-              <el-select v-model="form.corpId" placeholder="请选择" @change="handleCorpChange">
-                <el-option v-for="item in corpTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item v-if="form.corpId" label="商品模板" prop="productId" required><!-- 需要先选作物 -->
-              <el-select v-model="form.productId" placeholder="请选择" @change="$forceUpdate()"><!-- 强制刷新 -->
-                <el-option v-for="item in productSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="产地模板" prop="placeId" required>
+            <el-form-item label="产地" prop="placeId" required>
               <el-select v-model="form.placeId" placeholder="请选择" @change="handlePlaceChange">
                 <el-option v-for="item in placeTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.placeId" label="地块模板" prop="plotId" required><!-- 需要先选产地 -->
+            <el-form-item v-if="form.placeId" label="地块" prop="plotId" required><!-- 需要先选产地 -->
               <el-select v-model="form.plotId" placeholder="请选择" @change="$forceUpdate()"><!-- 强制刷新 -->
                 <el-option v-for="item in plotSelectList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
               </el-select>
@@ -105,17 +88,23 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="qrCodeDialog.title" :visible.sync="qrCodeDialog.visible" @close="qrCode = undefined">
+    <el-dialog
+      :title="qrCodeDialog.title"
+      :visible.sync="qrCodeDialog.visible"
+      center
+      width="300px"
+      height="300px"
+      @close="qrCode = undefined"
+    >
       <el-image :src="qrCode" fit="fill" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { allCorp } from '@/api/service-trace/template/corp'
-import { allProduct } from '@/api/service-trace/template/product'
-import { allPlace } from '@/api/service-trace/template/place'
-import { allPlot } from '@/api/service-trace/template/plot'
+import { allProduct } from '@/api/service-trace/trace/product'
+import { allPlace } from '@/api/service-trace/trace/place'
+import { allPlot } from '@/api/service-trace/trace/plot'
 import { list, add, update, del } from '@/api/service-trace/trace/admin'
 import { getQRCode } from '@/api/service-trace/scan'
 
@@ -139,7 +128,6 @@ export default {
       form: {
         code: undefined, // 主键
         batch: undefined,
-        corpId: undefined,
         productId: undefined,
         placeId: undefined,
         plotId: undefined,
@@ -148,11 +136,9 @@ export default {
         createTime: undefined,
         updateTime: undefined
       },
-      corpTemplateList: [],
       productTemplateList: [],
       placeTemplateList: [],
       plotTemplateList: [],
-      productSelectList: [],
       plotSelectList: [],
 
       qrCode: undefined,
@@ -172,7 +158,6 @@ export default {
     handleQuery() {
       this.loading = true
       Promise.all([
-        allCorp().then(res => { this.corpTemplateList = res.data }),
         allProduct().then(res => { this.productTemplateList = res.data }),
         allPlace().then(res => { this.placeTemplateList = res.data }),
         allPlot().then(res => { this.plotTemplateList = res.data })
@@ -197,7 +182,6 @@ export default {
         title: '修改',
         visible: true
       }
-      this.handleCorpChange(row.corpId) // 作物模板限制商品模板
       this.handlePlaceChange(row.placeId) // 产地模板限制地块模板
       this.form = JSON.parse(JSON.stringify(row))
     },
@@ -235,12 +219,14 @@ export default {
         })
       })
     },
-    getQRCode(code) {
+    handleRowClick: function(row, column, $event) {
+      const nodeName = $event.target.nodeName
+      if (nodeName === 'I') return // copyText
       this.qrCodeDialog = {
         title: '生成二维码',
         visible: true
       }
-      getQRCode(code).then((res) => { this.qrCode = res.data })
+      getQRCode(row.code).then((res) => { this.qrCode = res.data })
     },
     linkOperate(code) {
       this.$router.push({
@@ -262,10 +248,6 @@ export default {
       const template = list.find(obj => obj.id === id)
       if (!template) return '???'
       return template.name + '(' + template.id + ')'
-    },
-    handleCorpChange(val) {
-      this.form.productId = undefined
-      this.productSelectList = this.productTemplateList.filter(obj => obj.corpId === val)
     },
     handlePlaceChange(val) {
       this.form.plotId = undefined

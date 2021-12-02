@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/trace/farm'
+const API = '/service-trace/api/v1/trace/op/process'
 
-export function listFarmByCode(code) {
+export function listProcessByCode(code) {
   return request({
     url: API + '/list/' + code,
     method: 'get'

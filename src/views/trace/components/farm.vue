@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { add, list } from '@/api/service-trace/trace/farm'
+import { add, list } from '@/api/service-trace/trace/op/farm'
 
 export default {
   name: 'Farm',

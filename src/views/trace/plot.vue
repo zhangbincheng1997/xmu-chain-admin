@@ -7,9 +7,9 @@
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list">
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
-        <el-table-column label="作物" prop="product" align="center">
+        <el-table-column label="产地" prop="place" align="center">
           <template slot-scope="scope">
-            <span class="link" @click="linkTemplate('corp', scope.row.corpId)">{{ getCorpById(scope.row.corpId) }}</span>
+            <span class="link" @click="linkTemplate('place', scope.row.placeId)">{{ getPlaceById(scope.row.placeId) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="名称" prop="name" align="center" />
@@ -34,9 +34,9 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="作物模板" prop="corpId" required>
-          <el-select v-model="form.corpId" placeholder="请选择">
-            <el-option v-for="item in corpTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
+        <el-form-item label="产地模板" prop="place" required>
+          <el-select v-model="form.placeId" placeholder="请选择">
+            <el-option v-for="item in placeTemplateList" :key="item.id" :label="item.name+'('+item.id+')'" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="图片" prop="image" required>
@@ -45,23 +45,15 @@
         <el-form-item label="名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="介绍" prop="content">
-          <el-input v-model="form.content" type="textarea" />
-        </el-form-item>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="价格" prop="price">
-              <el-input v-model="form.price" />
+          <el-col :span="12">
+            <el-form-item label="土壤类型" prop="soilType">
+              <el-input v-model="form.soilType" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="重量" prop="weight">
-              <el-input v-model="form.weight" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="保质期" prop="exp">
-              <el-input v-model="form.exp" />
+          <el-col :span="12">
+            <el-form-item label="土壤酸碱度" prop="soilPh">
+              <el-input v-model="form.soilPh" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -79,8 +71,8 @@
 </template>
 
 <script>
-import { list, add, update, del } from '@/api/service-trace/template/product'
-import { allCorp } from '@/api/service-trace/template/corp'
+import { list, add, update, del } from '@/api/service-trace/trace/plot'
+import { allPlace } from '@/api/service-trace/trace/place'
 
 export default {
   data() {
@@ -99,19 +91,17 @@ export default {
       },
       form: {
         id: undefined,
-        corpId: undefined,
+        placeId: undefined,
         name: undefined,
         image: undefined,
-        content: undefined,
-        price: undefined,
-        weight: undefined,
-        exp: undefined,
+        soilType: undefined,
+        soilPh: undefined,
         fromAddr: undefined,
         transHash: undefined,
         createTime: undefined,
         updateTime: undefined
       },
-      corpTemplateList: []
+      placeTemplateList: []
     }
   },
   mounted() {
@@ -123,8 +113,8 @@ export default {
   methods: {
     handleQuery() {
       this.loading = true
-      allCorp().then(res => {
-        this.corpTemplateList = res.data
+      allPlace().then(res => {
+        this.placeTemplateList = res.data
         list(this.query).then(res => {
           this.loading = false
           this.list = res.data.list
@@ -181,9 +171,9 @@ export default {
         })
       })
     },
-    getCorpById(id) {
-      const corp = this.corpTemplateList.find(obj => obj.id === id)
-      return corp.name + '(' + corp.id + ')'
+    getPlaceById(id) {
+      const place = this.placeTemplateList.find(obj => obj.id === id)
+      return place.name + '(' + place.id + ')'
     }
   }
 }

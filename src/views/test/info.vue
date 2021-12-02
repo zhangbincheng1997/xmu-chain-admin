@@ -39,18 +39,6 @@
                   <el-form-item label="交易哈希"><copy-trans :text="productTemplate.transHash" /></el-form-item>
                 </el-form>
               </el-tab-pane>
-              <el-tab-pane label="作物信息">
-                <el-form label-width="100px">
-                  <el-form-item label="图片"><image-preview :image="productTemplate.image" /></el-form-item>
-                  <el-form-item label="名称">{{ corpTemplate.name }}</el-form-item>
-                  <el-form-item label="灌溉周期">{{ corpTemplate.guangai }}</el-form-item>
-                  <el-form-item label="施肥周期">{{ corpTemplate.shifei }}</el-form-item>
-                  <el-form-item label="除草周期">{{ corpTemplate.chucao }}</el-form-item>
-                  <el-form-item label="除虫周期">{{ corpTemplate.chuchong }}</el-form-item>
-                  <el-form-item label="用户地址"><copy-user :text="corpTemplate.fromAddr" /></el-form-item>
-                  <el-form-item label="交易哈希"><copy-trans :text="corpTemplate.transHash" /></el-form-item>
-                </el-form>
-              </el-tab-pane>
               <el-tab-pane label="产地信息">
                 <el-form label-width="100px">
                   <el-form-item label="图片"><image-preview :image="placeTemplate.image" /></el-form-item>
@@ -137,26 +125,24 @@
 </template>
 
 <script>
+import { getProductById } from '@/api/service-trace/trace/product'
+import { getPlaceById } from '@/api/service-trace/trace/place'
+import { getPlotById } from '@/api/service-trace/trace/plot'
 import { getCompanyById } from '@/api/service-admin/company'
-import { getCorpById } from '@/api/service-trace/template/corp'
-import { getProductById } from '@/api/service-trace/template/product'
-import { getPlaceById } from '@/api/service-trace/template/place'
-import { getPlotById } from '@/api/service-trace/template/plot'
 import { getTraceByCode } from '@/api/service-trace/trace/admin'
-import { listGrowByCode } from '@/api/service-trace/trace/grow'
-import { listFarmByCode } from '@/api/service-trace/trace/farm'
-import { listProcessByCode } from '@/api/service-trace/trace/process'
+import { listGrowByCode } from '@/api/service-trace/trace/op/grow'
+import { listFarmByCode } from '@/api/service-trace/trace/op/farm'
+import { listProcessByCode } from '@/api/service-trace/trace/op/process'
 
 export default {
   data() {
     return {
       code: undefined,
       template: undefined,
-      companyInfo: {},
-      corpTemplate: {},
       productTemplate: {},
       placeTemplate: {},
       plotTemplate: {},
+      companyInfo: {},
       growList: [],
       farmList: [],
       processList: [],
@@ -177,13 +163,12 @@ export default {
         this.template = res.data
         console.log(this.template)
         if (!this.template) return
-        // template 模板
-        getCompanyById(this.template.companyId).then(res => { this.companyInfo = res.data })
-        getCorpById(this.template.corpId).then(res => { this.corpTemplate = res.data })
+        // trace
         getProductById(this.template.productId).then(res => { this.productTemplate = res.data })
         getPlaceById(this.template.placeId).then(res => { this.placeTemplate = res.data })
         getPlotById(this.template.plotId).then(res => { this.plotTemplate = res.data })
-        // trace 溯源
+        getCompanyById(this.template.companyId).then(res => { this.companyInfo = res.data })
+        // trace op
         listGrowByCode(this.code).then(res => { this.growList = res.data })
         listFarmByCode(this.code).then(res => { this.farmList = res.data })
         listProcessByCode(this.code).then(res => { this.processList = res.data })
