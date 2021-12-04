@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/trace/admin'
+const API = '/service-trace/api/v1/trace/info'
 
-export function getTraceByCode(code) {
+export function getInfoByCode(code) {
   return request({
     url: API + '/' + code,
     method: 'get'

@@ -11,11 +11,11 @@
         <el-table-column label="图片" prop="image" align="center">
           <template slot-scope="scope"><image-preview :image="scope.row.image" /></template>
         </el-table-column>
-        <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
-          <template slot-scope="scope"><copy-user :text="scope.row.fromAddr" /></template>
-        </el-table-column>
         <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
-          <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
+          <template slot-scope="scope"><copy-hash :text="scope.row.transHash" /></template>
+        </el-table-column>
+        <el-table-column label="发送方" prop="transFrom" align="center" show-overflow-tooltip>
+          <template slot-scope="scope"><copy-from :text="scope.row.transFrom" /></template>
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
@@ -94,8 +94,8 @@ export default {
         price: undefined,
         weight: undefined,
         exp: undefined,
-        fromAddr: undefined,
         transHash: undefined,
+        transFrom: undefined,
         createTime: undefined,
         updateTime: undefined
       }

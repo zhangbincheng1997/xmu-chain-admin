@@ -52,15 +52,15 @@ import AvatarUpload from '@/components/Upload/Avatar'
 import ImageUpload from '@/components/Upload/Image'
 import ImagePreview from '@/components/ImagePreview'
 import CodeComplete from '@/components/CodeComplete'
-import CopyUser from '@/components/Copy/User'
-import CopyTrans from '@/components/Copy/Trans'
+import CopyFrom from '@/components/Copy/From'
+import CopyHash from '@/components/Copy/Hash'
 Vue.component('Pagination', Pagination)
 Vue.component('AvatarUpload', AvatarUpload)
 Vue.component('ImageUpload', ImageUpload)
 Vue.component('ImagePreview', ImagePreview)
 Vue.component('CodeComplete', CodeComplete)
-Vue.component('CopyUser', CopyUser)
-Vue.component('CopyTrans', CopyTrans)
+Vue.component('CopyFrom', CopyFrom)
+Vue.component('CopyHash', CopyHash)
 
 // 全局指令注册
 import permission from '@/directive/permission'

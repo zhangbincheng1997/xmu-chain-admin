@@ -90,7 +90,7 @@
                   <div class="block-amount">
                     <p class="trans-hash">
                       <i class="el-icon-copy-document" title="复制" @click="copyText(item.transHash)" />
-                      <router-link :to="{'path': '/browser/transactionInfo', 'query': {transactionHash: item.transHash}}" class="node-ip">
+                      <router-link :to="{'path': '/browser/transactionInfo', 'query': {transHash: item.transHash}}" class="node-ip">
                         {{ item.transHash }}
                       </router-link>
                     </p>

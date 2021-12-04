@@ -16,7 +16,7 @@
         <el-table-column label="账号" prop="username" align="center" />
         <el-table-column label="姓名" prop="name" align="center" />
         <el-table-column label="地址" prop="address" align="center" show-overflow-tooltip>
-          <template slot-scope="scope"><copy-user :text="scope.row.address" /></template>
+          <template slot-scope="scope"><copy-from :text="scope.row.address" /></template>
         </el-table-column>
         <el-table-column label="手机" prop="phone" align="center" />
         <el-table-column label="邮箱" prop="email" align="center" />
@@ -158,9 +158,6 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.keyword) {
-      this.query.keyword = this.$route.query.keyword
-    }
     this.init()
     this.handleQuery()
   },

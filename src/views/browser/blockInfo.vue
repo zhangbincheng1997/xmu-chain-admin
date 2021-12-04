@@ -13,7 +13,7 @@
         <el-table-column prop="transCount" label="交易" width="100" align="center" />
         <el-table-column prop="pkHash" label="区块哈希" align="center">
           <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="复制哈希" @click="copyText(scope.row.pkHash)" />
+            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.pkHash)" />
             {{ scope.row.pkHash }}
           </template>
         </el-table-column>
@@ -38,7 +38,7 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         groupId: localStorage.getItem('groupId') || 1,
-        transactionHash: undefined,
+        pkHash: undefined,
         blockNumber: undefined
       },
       searchKey: ''
@@ -46,14 +46,12 @@ export default {
   },
   mounted: function() {
     if (this.$route.query.pkHash) {
-      this.query.pkHash = this.$route.query.pkHash
-      this.searchKey = this.query.pkHash
+      this.searchKey = this.$route.query.pkHash
     }
     if (this.$route.query.blockNumber) {
-      this.query.blockNumber = this.$route.query.blockNumber
-      this.searchKey = this.query.blockNumber
+      this.searchKey = this.$route.query.blockNumber
     }
-    this.getBlockList()
+    this.search()
   },
   methods: {
     search() {

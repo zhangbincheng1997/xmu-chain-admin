@@ -8,27 +8,27 @@ export function copyText(val) {
   })
 }
 
-export function linkUser(val) {
+export function linkFrom(val) {
   this.$router.push({
-    path: '/admin/user',
+    path: '/browser/transactionInfo',
     query: {
-      keyword: val
+      transFrom: val
     }
   })
 }
 
-export function linkTransaction(val) {
+export function linkHash(val) {
   this.$router.push({
     path: '/browser/transactionInfo',
     query: {
-      transactionHash: val
+      transHash: val
     }
   })
 }
 
 export function linkTrace(val) {
   this.$router.push({
-    path: '/test/info',
+    path: '/test/trace',
     query: {
       code: val
     }

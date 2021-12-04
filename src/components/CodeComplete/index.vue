@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { allTrace } from '@/api/service-trace/trace/admin'
+import { allTrace } from '@/api/service-trace/trace/info'
 
 export default {
   name: 'CodeComplete',

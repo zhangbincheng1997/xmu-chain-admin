@@ -29,11 +29,11 @@
             <span class="link" @click="linkTemplate('plot', scope.row.plotId)">{{ getById(plotTemplateList, scope.row.plotId) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
-          <template slot-scope="scope"><copy-user :text="scope.row.fromAddr" /></template>
-        </el-table-column>
         <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
-          <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
+          <template slot-scope="scope"><copy-hash :text="scope.row.transHash" /></template>
+        </el-table-column>
+        <el-table-column label="发送方" prop="transFrom" align="center" show-overflow-tooltip>
+          <template slot-scope="scope"><copy-from :text="scope.row.transFrom" /></template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" align="center" fixed="right">
@@ -41,7 +41,7 @@
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             <br>
-            <el-button type="text" @click="linkOperate(scope.row.code)">溯源操作</el-button>
+            <el-button type="text" @click="linkOperate(scope.row.code)">操作上链</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -105,7 +105,7 @@
 import { allProduct } from '@/api/service-trace/trace/product'
 import { allPlace } from '@/api/service-trace/trace/place'
 import { allPlot } from '@/api/service-trace/trace/plot'
-import { list, add, update, del } from '@/api/service-trace/trace/admin'
+import { list, add, update, del } from '@/api/service-trace/trace/info'
 import { getQRCode } from '@/api/service-trace/scan'
 
 export default {
@@ -131,8 +131,8 @@ export default {
         productId: undefined,
         placeId: undefined,
         plotId: undefined,
-        fromAddr: undefined,
         transHash: undefined,
+        transFrom: undefined,
         createTime: undefined,
         updateTime: undefined
       },
@@ -221,7 +221,9 @@ export default {
     },
     handleRowClick: function(row, column, $event) {
       const nodeName = $event.target.nodeName
+      console.log(nodeName)
       if (nodeName === 'I') return // copyText
+      if (nodeName === 'SPAN') return // Button
       this.qrCodeDialog = {
         title: '生成二维码',
         visible: true

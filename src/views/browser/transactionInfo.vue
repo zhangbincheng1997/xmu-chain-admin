@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="searchKey" placeholder="请输入交易哈希或块高" style="width: 500px;float:right;" clearable>
+      <el-input v-model="searchKey" placeholder="请输入交易哈希/发送方/块高" style="width: 500px;float:right;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>
       <el-table ref="refTable" v-loading="loading" :data="list" @row-click="handleRowClick">
@@ -10,10 +10,16 @@
             <v-transaction-detail :trans-hash="scope.row.transHash" />
           </template>
         </el-table-column>
-        <el-table-column prop="transHash" label="交易哈希" align="center">
+        <el-table-column label="交易哈希" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="复制哈希" @click="copyText(scope.row.transHash)" />
+            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.transHash)" />
             {{ scope.row.transHash }}
+          </template>
+        </el-table-column>
+        <el-table-column label="发送方" align="center" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.transFrom)" />
+            {{ scope.row.transFrom }}
           </template>
         </el-table-column>
         <el-table-column prop="blockNumber" label="块高" width="120" align="center">
@@ -47,29 +53,34 @@ export default {
         pageSize: 10,
         groupId: localStorage.getItem('groupId') || 1,
         transactionHash: undefined,
+        transactionFrom: undefined,
         blockNumber: undefined
       },
       searchKey: ''
     }
   },
   mounted: function() {
-    if (this.$route.query.transactionHash) {
-      this.query.transactionHash = this.$route.query.transactionHash
-      this.searchKey = this.query.transactionHash
+    if (this.$route.query.transHash) {
+      this.searchKey = this.$route.query.transHash
+    }
+    if (this.$route.query.transFrom) {
+      this.searchKey = this.$route.query.transFrom
     }
     if (this.$route.query.blockNumber) {
-      this.query.blockNumber = this.$route.query.blockNumber
-      this.searchKey = this.query.blockNumber
+      this.searchKey = this.$route.query.blockNumber
     }
-    this.getTransactionList()
+    this.search()
   },
   methods: {
     search() {
       this.query.transactionHash = undefined
+      this.query.transactionFrom = undefined
       this.query.blockNumber = undefined
       if (this.searchKey) {
         if (this.searchKey.length === 66) {
           this.query.transactionHash = this.searchKey
+        } else if (this.searchKey.length === 42) {
+          this.query.transactionFrom = this.searchKey
         } else {
           this.query.blockNumber = this.searchKey
         }

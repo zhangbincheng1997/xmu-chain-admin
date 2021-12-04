@@ -10,11 +10,11 @@
         <template slot-scope="scope"><image-preview :image="scope.row.image" /></template>
       </el-table-column>
       <el-table-column label="内容" prop="content" align="center" show-overflow-tooltip />
-      <el-table-column label="用户地址" prop="fromAddr" align="center" show-overflow-tooltip>
-        <template slot-scope="scope"><copy-user :text="scope.row.fromAddr" /></template>
-      </el-table-column>
       <el-table-column label="交易哈希" prop="transHash" align="center" show-overflow-tooltip>
-        <template slot-scope="scope"><copy-trans :text="scope.row.transHash" /></template>
+        <template slot-scope="scope"><copy-hash :text="scope.row.transHash" /></template>
+      </el-table-column>
+      <el-table-column label="发送方" prop="transFrom" align="center" show-overflow-tooltip>
+        <template slot-scope="scope"><copy-from :text="scope.row.transFrom" /></template>
       </el-table-column>
       <el-table-column label="创建时间" prop="createTime" align="center" />
       <el-table-column label="操作" align="center" fixed="right">
@@ -45,8 +45,8 @@
           <el-descriptions-item label="湿度">{{ form.humidity }}</el-descriptions-item>
           <el-descriptions-item label="光照">{{ form.light }}</el-descriptions-item>
           <el-descriptions-item label="备注">{{ form.remark }}</el-descriptions-item>
-          <el-descriptions-item label="用户地址"><copy-user :text="form.fromAddr" /></el-descriptions-item>
-          <el-descriptions-item label="交易哈希"><copy-trans :text="form.transHash" /></el-descriptions-item>
+          <el-descriptions-item label="交易哈希"><copy-hash :text="form.transHash" /></el-descriptions-item>
+          <el-descriptions-item label="发送方"><copy-from :text="form.transFrom" /></el-descriptions-item>
         </el-descriptions>
         <image-preview :image="form.image" />
       </div>
@@ -91,7 +91,7 @@ export default {
         image: undefined, // 属性
         content: undefined, // 属性
         remark: undefined, // 属性
-        fromAddr: undefined,
+        transFrom: undefined,
         transHash: undefined,
         createTime: undefined,
         updateTime: undefined

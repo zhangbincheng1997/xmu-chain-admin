@@ -2,21 +2,22 @@
   <el-tabs type="border-card">
     <el-tab-pane label="交易回执">
       <el-form label-position="left" class="demo-table-expand">
-        <el-form-item label="blockHash:">{{ receipt.blockHash }}</el-form-item>
-        <el-form-item label="blockNumber:">{{ receipt.blockNumber }}</el-form-item>
-        <el-form-item label="gasUsed:">{{ receipt.gasUsed }}</el-form-item>
-        <el-form-item label="contractAddress:">{{ receipt.contractAddress }}</el-form-item>
-        <el-form-item label="from:">{{ receipt.from }}</el-form-item>
-        <el-form-item label="to:">{{ receipt.to }}</el-form-item>
-        <el-form-item label="transactionHash:">{{ receipt.transactionHash }}</el-form-item>
-        <el-form-item label="transactionIndex:">{{ receipt.transactionIndex }}</el-form-item>
-        <el-form-item label="status:">{{ receipt.status }}</el-form-item>
+        <el-form-item label="交易哈希">{{ receipt.transactionHash }}</el-form-item>
+        <el-form-item label="交易序号">{{ receipt.transactionIndex | parseInt }}</el-form-item>
+        <el-form-item label="交易状态">{{ receipt.status | parseStatus }}</el-form-item>
+        <el-form-item label="区块哈希">{{ receipt.blockHash }}</el-form-item>
+        <el-form-item label="区块高度">{{ receipt.blockNumber | parseInt }}</el-form-item>
+        <el-form-item label="燃料消耗">{{ receipt.gasUsed | parseInt }}</el-form-item>
+        <el-form-item label="合约地址">{{ receipt.contractAddress }}</el-form-item>
+        <el-form-item label="状态根">{{ receipt.root }}</el-form-item>
+        <el-form-item label="发送方">{{ receipt.from }}</el-form-item>
+        <el-form-item label="接收方">{{ receipt.to }}</el-form-item>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="解码">
       <el-form label-position="left" class="demo-table-expand">
-        <el-form-item label="type:">{{ result.type }}</el-form-item>
-        <el-form-item label="input:">
+        <el-form-item label="类型">{{ result.type }}</el-form-item>
+        <el-form-item label="输入">
           <span v-if="!decodeInput" style="color: #727476">{{ receipt.input }}</span>
           <div v-else-if="result.input">
             <div class="input-data">
@@ -41,7 +42,7 @@
           <br>
           <el-button type="primary" @click="decodeInputClick">{{ decodeInput ? "还原" : "解码" }}</el-button>
         </el-form-item>
-        <el-form-item label="output:">
+        <el-form-item label="输出">
           <span v-if="!decodeOutput" style="color: #727476">{{ receipt.output }}</span>
           <div v-else-if="result.output">
             <div class="input-data">
@@ -66,7 +67,7 @@
           <br>
           <el-button type="primary" @click="decodeOutputClick">{{ decodeOutput ? "还原" : "解码" }}</el-button>
         </el-form-item>
-        <el-form-item label="logs:">
+        <el-form-item label="事件">
           <div v-for="(log, i) in result.logs" :key="i" class="input-data">
             <span v-if="!decodeLogs" style="color: #727476">{{ receipt.logs[i] }}</span>
             <div v-else>
@@ -139,6 +140,17 @@ import { getTransactionReceipt, decode } from '@/api/service-eth/browser'
 
 export default {
   name: 'TransactionDetail',
+  filters: {
+    parseInt: function(value) {
+      if (!value) return ''
+      return parseInt(value)
+    },
+    parseStatus: function(value) {
+      if (!value) return ''
+      const status = parseInt(value)
+      return status === 0 ? '正常' : status
+    }
+  },
   props: {
     transHash: {
       type: String,

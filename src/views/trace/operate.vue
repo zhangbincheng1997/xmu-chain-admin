@@ -4,9 +4,9 @@
       <el-page-header :content="'当前溯源码：' + code" @back="back()" />
       <br>
       <el-tabs tab-position="left">
-        <el-tab-pane label="生长信息"><grow :code="code" /></el-tab-pane>
-        <el-tab-pane label="农事信息"><farm :code="code" /></el-tab-pane>
-        <el-tab-pane label="加工信息"><process :code="code" /></el-tab-pane>
+        <el-tab-pane label="生长操作"><grow :code="code" /></el-tab-pane>
+        <el-tab-pane label="农事操作"><farm :code="code" /></el-tab-pane>
+        <el-tab-pane label="加工操作"><process :code="code" /></el-tab-pane>
       </el-tabs>
     </el-card>
   </div>
