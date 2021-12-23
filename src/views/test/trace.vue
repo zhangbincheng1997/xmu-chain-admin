@@ -84,39 +84,48 @@
           <el-tab-pane label="上链操作">
             <el-tabs tab-position="left">
               <el-tab-pane label="生长操作">
-                <div v-for="(item, i) in growList" :key="item.id">
-                  <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
-                    <el-descriptions-item label="温度">{{ item.temperature }}</el-descriptions-item>
-                    <el-descriptions-item label="湿度">{{ item.humidity }}</el-descriptions-item>
-                    <el-descriptions-item label="光照">{{ item.light }}</el-descriptions-item>
-                    <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                    <el-descriptions-item label="交易哈希"><copy-hash :text="item.transHash" /></el-descriptions-item>
-                    <el-descriptions-item label="发送方"><copy-from :text="item.transFrom" /></el-descriptions-item>
-                  </el-descriptions>
-                  <image-preview :image="item.image" />
-                </div>
+                <el-carousel height="600px" :autoplay="false">
+                  <el-carousel-item v-for="(item, i) in growList" :key="i">
+                    <el-form label-width="100px">
+                      <el-form-item label="图片"><image-preview :image="item.image" /></el-form-item>
+                      <el-form-item label="温度">{{ item.temperature }}</el-form-item>
+                      <el-form-item label="湿度">{{ item.humidity }}</el-form-item>
+                      <el-form-item label="光照">{{ item.light }}</el-form-item>
+                      <el-form-item label="备注">{{ item.remark }}</el-form-item>
+                      <el-form-item label="时间">{{ item.createTime }}</el-form-item>
+                      <el-form-item label="交易哈希"><copy-hash :text="item.transHash" /></el-form-item>
+                      <el-form-item label="发送方"><copy-from :text="item.transFrom" /></el-form-item>
+                    </el-form>
+                  </el-carousel-item>
+                </el-carousel>
               </el-tab-pane>
               <el-tab-pane label="农事操作">
-                <div v-for="(item, i) in farmList" :key="item.id">
-                  <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
-                    <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
-                    <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                    <el-descriptions-item label="交易哈希"><copy-hash :text="item.transHash" /></el-descriptions-item>
-                    <el-descriptions-item label="发送方"><copy-from :text="item.transFrom" /></el-descriptions-item>
-                  </el-descriptions>
-                  <image-preview :image="item.image" />
-                </div>
+                <el-carousel height="500px" :autoplay="false">
+                  <el-carousel-item v-for="(item, i) in farmList" :key="i">
+                    <el-form label-width="100px">
+                      <el-form-item label="图片"><image-preview :image="item.image" /></el-form-item>
+                      <el-form-item label="内容">{{ item.content }}</el-form-item>
+                      <el-form-item label="备注">{{ item.remark }}</el-form-item>
+                      <el-form-item label="时间">{{ item.createTime }}</el-form-item>
+                      <el-form-item label="交易哈希"><copy-hash :text="item.transHash" /></el-form-item>
+                      <el-form-item label="发送方"><copy-from :text="item.transFrom" /></el-form-item>
+                    </el-form>
+                  </el-carousel-item>
+                </el-carousel>
               </el-tab-pane>
               <el-tab-pane label="加工操作">
-                <div v-for="(item, i) in processList" :key="item.id">
-                  <el-descriptions :title="'# ' + (i+1) + ': ' + item.createTime">
-                    <el-descriptions-item label="内容">{{ item.content }}</el-descriptions-item>
-                    <el-descriptions-item label="备注">{{ item.remark }}</el-descriptions-item>
-                    <el-descriptions-item label="交易哈希"><copy-hash :text="item.transHash" /></el-descriptions-item>
-                    <el-descriptions-item label="发送方"><copy-from :text="item.transFrom" /></el-descriptions-item>
-                  </el-descriptions>
-                  <image-preview :image="item.image" />
-                </div>
+                <el-carousel height="500px" :autoplay="false">
+                  <el-carousel-item v-for="(item, i) in processList" :key="i">
+                    <el-form label-width="100px">
+                      <el-form-item label="图片"><image-preview :image="item.image" /></el-form-item>
+                      <el-form-item label="内容">{{ item.content }}</el-form-item>
+                      <el-form-item label="备注">{{ item.remark }}</el-form-item>
+                      <el-form-item label="时间">{{ item.createTime }}</el-form-item>
+                      <el-form-item label="交易哈希"><copy-hash :text="item.transHash" /></el-form-item>
+                      <el-form-item label="发送方"><copy-from :text="item.transFrom" /></el-form-item>
+                    </el-form>
+                  </el-carousel-item>
+                </el-carousel>
               </el-tab-pane>
             </el-tabs>
           </el-tab-pane>
