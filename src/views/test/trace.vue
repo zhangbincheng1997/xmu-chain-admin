@@ -127,11 +127,11 @@
 </template>
 
 <script>
+import { getInfoByCode } from '@/api/service-trace/trace/info'
 import { getProductById } from '@/api/service-trace/trace/product'
 import { getPlaceById } from '@/api/service-trace/trace/place'
 import { getPlotById } from '@/api/service-trace/trace/plot'
 import { getCompanyById } from '@/api/service-admin/company'
-import { getInfoByCode } from '@/api/service-trace/trace/info'
 import { listGrowByCode } from '@/api/service-trace/trace/op/grow'
 import { listFarmByCode } from '@/api/service-trace/trace/op/farm'
 import { listProcessByCode } from '@/api/service-trace/trace/op/process'

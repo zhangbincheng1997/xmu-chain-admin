@@ -6,13 +6,13 @@
     :show-file-list="false"
     accept=".jpg, .jpeg, .png"
   >
-    <img v-if="avatar" :src="avatar" class="avatar" alt="">
+    <img v-if="avatar" :src="ipfsAvatar" class="avatar" alt="">
     <i v-else class="el-icon-plus avatar-uploader-icon" />
   </el-upload>
 </template>
 
 <script>
-import { upload } from '@/api/base/upload'
+import { upload } from '@/api/base/ipfs'
 
 export default {
   name: 'AvatarUpload',
@@ -20,6 +20,11 @@ export default {
     avatar: {
       type: String,
       default: ''
+    }
+  },
+  computed: {
+    ipfsAvatar() {
+      return this.IPFS_GATEWAY + '/' + this.avatar
     }
   },
   methods: {

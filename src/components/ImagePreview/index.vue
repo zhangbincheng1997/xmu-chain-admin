@@ -1,5 +1,5 @@
 <template>
-  <el-image v-if="image" :src="image" :preview-src-list="[image]" :style="style" fit="contain" />
+  <el-image v-if="image" :src="ipfsImage" :preview-src-list="[ipfsImage]" :style="style" fit="contain" />
 </template>
 
 <script>
@@ -26,6 +26,11 @@ export default {
         width: this.width,
         height: this.height
       }
+    }
+  },
+  computed: {
+    ipfsImage() {
+      return this.IPFS_GATEWAY + '/' + this.image
     }
   }
 }

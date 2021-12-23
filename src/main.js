@@ -66,6 +66,7 @@ Vue.component('CopyHash', CopyHash)
 import permission from '@/directive/permission'
 Vue.use(permission)
 
+// 全局变量注册
 import global from '@/utils/global'
 Vue.use(global)
 
