@@ -119,7 +119,7 @@
 
 <script>
 import charts from './components/chart'
-import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/service-eth/browser'
+import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/chain/browser'
 
 export default {
   name: 'BrowserHome',

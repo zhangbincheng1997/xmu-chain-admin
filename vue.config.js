@@ -44,6 +44,13 @@ module.exports = {
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
+      },
+      [process.env.VUE_APP_CHAIN_API]: {
+        target: 'http://139.198.106.18:8080', // block chain
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_CHAIN_API]: ''
+        }
       }
     }
     // before: require('./mock/mock-server.js')

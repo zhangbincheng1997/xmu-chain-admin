@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getTransactionList } from '@/api/service-eth/browser'
+import { getTransactionList } from '@/api/chain/browser'
 import transactionDetail from './components/transactionDetail'
 
 export default {

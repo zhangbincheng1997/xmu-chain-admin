@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { getBlockList } from '@/api/service-eth/browser'
+import { getBlockList } from '@/api/chain/browser'
 
 export default {
   name: 'BlockInfo',

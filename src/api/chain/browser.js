@@ -1,6 +1,6 @@
-import request from '@/utils/request'
+import request from '@/utils/requestChain'
 
-const API = '/service-eth/api/v1/browser'
+const API = '/api/v1/browser'
 
 export function getNumberData(data) {
   return request({
