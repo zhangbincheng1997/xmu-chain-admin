@@ -11,30 +11,6 @@ export default {
     { label: 'PUT', value: 'PUT' },
     { label: 'DELETE', value: 'DELETE' }
   ],
-  orderStatusOptions: [
-    { label: '订单关闭（申请人）', value: -1 },
-    { label: '订单关闭（管理员）', value: -2 },
-    { label: '新订单（申请人）', value: 0 },
-    { label: '已接单（管理员）', value: 1 },
-    { label: '已发货（管理员）', value: 2 },
-    { label: '已收货（申请人）', value: 3 }
-  ],
-  orderStatusMap: {
-    0: '新订单（申请人）',
-    1: '已接单（管理员）',
-    2: '已发货（管理员）',
-    3: '已收货（申请人）',
-    [-1]: '订单关闭（申请人）',
-    [-2]: '订单关闭（管理员）'
-  },
-  orderStatusType: {
-    NEW: 0,
-    TAKE: 1,
-    SEND: 2,
-    RECEIVE: 3,
-    CLOSE_USER: -1,
-    CLOSE_ADMIN: -2
-  },
   tagStatusOptions: [
     { label: '未操作', value: 0 },
     { label: '已绑定', value: 1 },

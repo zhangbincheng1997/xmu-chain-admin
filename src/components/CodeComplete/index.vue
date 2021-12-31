@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { allTrace } from '@/api/service-trace/trace/info'
+// import { allTrace } from '@/api/service-trace/trace/info'
 
 export default {
   name: 'CodeComplete',
@@ -20,9 +20,9 @@ export default {
     }
   },
   mounted() {
-    allTrace().then(res => {
-      res.data.forEach(item => this.codeList.push({ value: item.code }))
-    })
+    // allTrace().then(res => {
+    //   res.data.forEach(item => this.codeList.push({ value: item.code }))
+    // })
   },
   methods: {
     querySearchAsync(queryString, cb) {
