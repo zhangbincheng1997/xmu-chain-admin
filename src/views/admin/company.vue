@@ -6,14 +6,10 @@
       </el-input>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="标志" prop="logo" align="center">
-          <template slot-scope="scope"><image-preview :image="scope.row.logo" /></template>
-        </el-table-column>
-        <el-table-column label="名称" prop="name" align="center" />
-        <el-table-column label="法人" prop="legalPerson" align="center" />
-        <el-table-column label="联系人" prop="contactPerson" align="center" />
-        <el-table-column label="联系电话" prop="contactPhone" align="center" />
-        <el-table-column label="联系地址" prop="contactAddress" align="contactAddress" show-overflow-tooltip />
+        <el-table-column label="企业名称" prop="name" align="center" />
+        <el-table-column label="统一社会信用代码" prop="uscc" align="center" />
+        <el-table-column label="法人姓名" prop="legalPerson" align="center" />
+        <el-table-column label="法人身份证号" prop="legalId" align="center" />
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleGM(scope.row)">进入后台</el-button>
@@ -28,62 +24,26 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="标志" prop="logo" required>
-          <AvatarUpload :avatar.sync="form.logo" />
-        </el-form-item>
-        <el-form-item label="名称" prop="name" required>
+        <el-form-item label="企业名称" prop="name" required>
           <el-input v-model="form.name" />
+        </el-form-item>
+        <el-form-item label="统一社会信用代码" prop="uscc" required>
+          <el-input v-model="form.uscc" />
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="法人" prop="legalPerson">
+            <el-form-item label="法人姓名" prop="legalPerson">
               <el-input v-model="form.legalPerson" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="联系人" prop="contactPerson">
-              <el-input v-model="form.contactPerson" />
+            <el-form-item label="法人身份证号" prop="legalId">
+              <el-input v-model="form.legalId" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="联系电话" prop="contactPhone">
-              <el-input v-model="form.contactPhone" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="联系地址" prop="contactAddress">
-              <el-input v-model="form.contactAddress" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="成立日期" prop="foundDate">
-              <el-date-picker v-model="form.foundDate" type="date" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="官方网站" prop="officialWebsite">
-              <el-input v-model="form.officialWebsite" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="注册号码" prop="registerNumber">
-              <el-input v-model="form.registerNumber" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="注册资本" prop="registerCapital">
-              <el-input v-model="form.registerCapital" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="营业范围" prop="businessScope">
-          <el-input v-model="form.businessScope" />
+        <el-form-item label="联系方式" prop="contactInfo">
+          <el-input v-model="form.contactInfo" />
         </el-form-item>
         <el-form-item label="营业执照" prop="businessLicense">
           <ImageUpload :image.sync="form.businessLicense" />
@@ -123,19 +83,11 @@ export default {
       },
       form: {
         id: undefined,
-        username: undefined,
-        password: undefined,
-        logo: undefined,
         name: undefined,
+        uscc: undefined,
         legalPerson: undefined,
-        contactPerson: undefined,
-        contactPhone: undefined,
-        contactAddress: undefined,
-        foundDate: undefined,
-        officialWebsite: undefined,
-        registerNumber: undefined,
-        registerCapital: undefined,
-        businessScope: undefined,
+        legalId: undefined,
+        contactInfo: undefined,
         businessLicense: undefined,
         createTime: undefined,
         updateTime: undefined

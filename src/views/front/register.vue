@@ -10,62 +10,26 @@
       <el-container>
         <div v-if="step === 1" style="width: 800px; margin:0 auto; padding-top: 50px;">
           <el-form ref="companyForm" :model="companyForm" :rules="companyRules" label-width="100px">
-            <el-form-item label="标志" prop="logo">
-              <AvatarUpload :avatar.sync="companyForm.logo" />
-            </el-form-item>
-            <el-form-item label="名称" prop="name">
+            <el-form-item label="企业名称" prop="name" required>
               <el-input v-model="companyForm.name" />
+            </el-form-item>
+            <el-form-item label="统一社会信用代码" prop="uscc" required>
+              <el-input v-model="companyForm.uscc" />
             </el-form-item>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="法人" prop="legalPerson">
+                <el-form-item label="法人姓名" prop="legalPerson">
                   <el-input v-model="companyForm.legalPerson" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="联系人" prop="contactPerson">
-                  <el-input v-model="companyForm.contactPerson" />
+                <el-form-item label="法人身份证号" prop="legalId">
+                  <el-input v-model="companyForm.legalId" />
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="联系电话" prop="contactPhone">
-                  <el-input v-model="companyForm.contactPhone" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="联系地址" prop="contactAddress">
-                  <el-input v-model="companyForm.contactAddress" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="成立日期" prop="foundDate">
-                  <el-date-picker v-model="companyForm.foundDate" type="date" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="官方网站" prop="officialWebsite">
-                  <el-input v-model="companyForm.officialWebsite" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="注册号码" prop="registerNumber">
-                  <el-input v-model="companyForm.registerNumber" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="注册资本" prop="registerCapital">
-                  <el-input v-model="companyForm.registerCapital" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="营业范围" prop="businessScope">
-              <el-input v-model="companyForm.businessScope" />
+            <el-form-item label="联系方式" prop="contactInfo">
+              <el-input v-model="companyForm.contactInfo" />
             </el-form-item>
             <el-form-item label="营业执照" prop="businessLicense">
               <ImageUpload :image.sync="companyForm.businessLicense" />
@@ -120,22 +84,16 @@ export default {
     return {
       step: 1,
       companyForm: {
-        logo: undefined,
         name: undefined,
+        uscc: undefined,
         legalPerson: undefined,
-        contactPerson: undefined,
-        contactPhone: undefined,
-        contactAddress: undefined,
-        foundDate: undefined,
-        officialWebsite: undefined,
-        registerNumber: undefined,
-        registerCapital: undefined,
-        businessScope: undefined,
+        legalId: undefined,
+        contactInfo: undefined,
         businessLicense: undefined
       },
       companyRules: {
-        logo: [{ required: true, message: '请上传标志', trigger: 'blur' }],
-        name: [{ required: true, message: '请输入名称', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入企业名称', trigger: 'blur' }],
+        uscc: [{ required: true, message: '请输入统一社会信用代码', trigger: 'blur' }]
       },
       userForm: {
         username: undefined,
