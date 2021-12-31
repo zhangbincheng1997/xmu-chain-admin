@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="请输入关键字" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
@@ -10,6 +10,7 @@
         <el-table-column label="统一社会信用代码" prop="uscc" align="center" />
         <el-table-column label="法人姓名" prop="legalPerson" align="center" />
         <el-table-column label="法人身份证号" prop="legalId" align="center" />
+        <el-table-column label="联系方式" prop="contactInfo" align="center" show-overflow-tooltip />
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleGM(scope.row)">进入后台</el-button>
@@ -102,8 +103,8 @@ export default {
       this.loading = true
       list(this.query).then(res => {
         this.loading = false
-        this.list = res.data.list
-        this.total = res.data.total
+        this.list = res.data
+        this.total = res.total
       })
     },
     handleSortChange({ column, prop, order }) {

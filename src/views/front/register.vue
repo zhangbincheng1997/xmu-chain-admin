@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { register } from '@/api/service-admin/company'
+import { register } from '@/api/service-admin/register'
 
 export default {
   data() {

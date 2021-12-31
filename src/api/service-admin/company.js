@@ -10,17 +10,6 @@ export function list(data) {
   })
 }
 
-export function register(company, user) {
-  return request({
-    url: API + '/register',
-    method: 'post',
-    data: {
-      company: company,
-      user: user
-    }
-  })
-}
-
 export function update(id, data) {
   return request({
     url: API + '/' + id,

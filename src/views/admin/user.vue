@@ -4,7 +4,7 @@
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-input v-model="query.keyword" placeholder="ID/NAME" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="请输入关键字" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
@@ -39,14 +39,14 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item v-if="form.id" label="地址" prop="address" required>
+          <el-input v-model="form.address" autocomplete="off" disabled />
+        </el-form-item>
         <el-form-item label="账号" prop="username" required>
           <el-input v-model="form.username" autocomplete="off" :disabled="form.id !== undefined" />
         </el-form-item>
         <el-form-item v-if="!form.id" label="密码" prop="password" required>
           <el-input v-model="form.password" type="password" autocomplete="off" />
-        </el-form-item>
-        <el-form-item v-if="form.id" label="地址" prop="address" required>
-          <el-input v-model="form.address" autocomplete="off" disabled />
         </el-form-item>
         <el-form-item label="姓名" prop="name" required>
           <el-input v-model="form.name" />
@@ -135,13 +135,16 @@ export default {
         id: undefined,
         address: undefined,
         username: undefined,
+        password: undefined,
         name: undefined,
         phone: undefined,
         email: undefined,
         avatar: undefined,
         gender: undefined,
         birthday: undefined,
-        enabled: undefined
+        enabled: undefined,
+        createTime: undefined,
+        updateTime: undefined
       },
 
       roleDialog: {
@@ -149,9 +152,6 @@ export default {
         visible: false
       },
       roleData: undefined,
-
-      selectIds: [],
-      selectStatus: undefined,
 
       genderOptions: config.genderOptions
     }
@@ -170,8 +170,8 @@ export default {
       this.loading = true
       list(this.query).then(res => {
         this.loading = false
-        this.list = res.data.list
-        this.total = res.data.total
+        this.list = res.data
+        this.total = res.total
       })
     },
     handleSortChange({ column, prop, order }) {
