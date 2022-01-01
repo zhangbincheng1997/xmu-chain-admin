@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.keyword" placeholder="请输入关键字" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">

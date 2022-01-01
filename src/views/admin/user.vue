@@ -4,7 +4,7 @@
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-input v-model="query.keyword" placeholder="请输入关键字" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>

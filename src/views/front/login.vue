@@ -55,12 +55,11 @@
 
       <div style="position:relative">
         <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : admin</span>
+          <span>测试账号：admin</span>
+          <span>测试密码：admin</span>
         </div>
         <div class="tips">
-          <span>Username : tencent</span>
-          <span>Password : tencent</span>
+          <span>测试角色：超级管理员（默认）、企业管理员、企业员工</span>
         </div>
 
         <el-button class="other-button" type="primary" @click="() => { this.$router.push('/register') }">
