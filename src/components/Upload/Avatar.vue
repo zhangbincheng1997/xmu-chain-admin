@@ -15,7 +15,7 @@
 import { upload } from '@/api/base/ipfs'
 
 export default {
-  name: 'AvatarUpload',
+  name: 'UploadAvatar',
   props: {
     avatar: {
       type: String,

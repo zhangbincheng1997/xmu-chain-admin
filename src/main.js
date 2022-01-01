@@ -48,15 +48,17 @@ Vue.use(eIconPicker, { ElementUI: true })
 
 // 全局组件挂载
 import Pagination from '@/components/Pagination'
-import AvatarUpload from '@/components/Upload/Avatar'
-import ImageUpload from '@/components/Upload/Image'
+import UploadAvatar from '@/components/Upload/Avatar'
+import UploadImage from '@/components/Upload/Image'
+import UploadFile from '@/components/Upload/File'
 import ImagePreview from '@/components/ImagePreview'
 import CodeComplete from '@/components/CodeComplete'
 import CopyFrom from '@/components/Copy/From'
 import CopyHash from '@/components/Copy/Hash'
 Vue.component('Pagination', Pagination)
-Vue.component('AvatarUpload', AvatarUpload)
-Vue.component('ImageUpload', ImageUpload)
+Vue.component('UploadAvatar', UploadAvatar)
+Vue.component('UploadImage', UploadImage)
+Vue.component('UploadFile', UploadFile)
 Vue.component('ImagePreview', ImagePreview)
 Vue.component('CodeComplete', CodeComplete)
 Vue.component('CopyFrom', CopyFrom)

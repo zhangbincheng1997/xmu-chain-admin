@@ -64,7 +64,7 @@
           </el-col>
         </el-row>
         <el-form-item v-if="form.id" label="头像" prop="avatar">
-          <AvatarUpload :avatar.sync="form.avatar" />
+          <UploadAvatar :avatar.sync="form.avatar" />
         </el-form-item>
         <el-row>
           <el-col :span="12">

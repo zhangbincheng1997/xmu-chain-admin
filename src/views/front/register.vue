@@ -32,7 +32,7 @@
               <el-input v-model="companyForm.contactInfo" />
             </el-form-item>
             <el-form-item label="营业执照" prop="businessLicense">
-              <ImageUpload :image.sync="companyForm.businessLicense" />
+              <UploadImage :image.sync="companyForm.businessLicense" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleNext">下一步</el-button>

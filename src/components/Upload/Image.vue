@@ -1,13 +1,12 @@
 <template>
   <el-upload
-    class="image-uploader"
     action=""
     :http-request="uploadImage"
     :show-file-list="false"
     accept=".jpg, .jpeg, .png"
   >
-    <img v-if="image" :src="ipfsImage" class="image" alt="">
-    <i v-else class="el-icon-plus image-uploader-icon" />
+    <img v-if="image" :src="ipfsImage" :style="style" class="image" alt="">
+    <i v-else class="el-icon-plus" />
   </el-upload>
 </template>
 
@@ -15,11 +14,27 @@
 import { upload } from '@/api/base/ipfs'
 
 export default {
-  name: 'AvatarUpload',
+  name: 'UploadImage',
   props: {
     image: {
       type: String,
       default: ''
+    },
+    width: {
+      type: String,
+      default: '100px'
+    },
+    height: {
+      type: String,
+      default: '100px'
+    }
+  },
+  data() {
+    return {
+      style: {
+        width: this.width,
+        height: this.height
+      }
     }
   },
   computed: {
@@ -42,29 +57,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.image-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.image-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.image-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.image {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-</style>

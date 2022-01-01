@@ -26,7 +26,7 @@
               <el-input v-model="form.contactInfo" />
             </el-form-item>
             <el-form-item label="营业执照" prop="businessLicense">
-              <ImageUpload :image.sync="form.businessLicense" />
+              <UploadImage :image.sync="form.businessLicense" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm">提交</el-button>
