@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/template/product'
+const API = '/service-trace/api/v1/template/phase'
 
-export function allProduct() {
+export function allPhase() {
   return request({
     url: API + '/all',
     method: 'get'

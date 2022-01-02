@@ -8,6 +8,7 @@
       <el-table v-loading="loading" :data="list">
         <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
         <el-table-column label="模板名称" prop="name" align="center" />
+        <el-table-column label="模板标题" prop="title" align="center" />
         <el-table-column label="模板内容" prop="content" align="center" show-overflow-tooltip>
           <template slot-scope="scope">{{ JSON.stringify(scope.row.content) }}</template>
         </el-table-column>
@@ -25,6 +26,9 @@
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="模板名称" prop="name" required>
           <el-input v-model="form.name" />
+        </el-form-item>
+        <el-form-item label="模板标题" prop="title">
+          <el-input v-model="form.title" />
         </el-form-item>
         <el-form-item label="模板内容" prop="content">
           <el-table :data="form.content">
@@ -73,7 +77,7 @@
 </template>
 
 <script>
-import { list, add, update, del } from '@/api/service-trace/template/product'
+import { list, add, update, del } from '@/api/service-trace/template/phase'
 import config from '@/config'
 
 export default {
@@ -94,6 +98,7 @@ export default {
       form: {
         id: undefined,
         name: undefined,
+        title: undefined,
         content: undefined,
         createTime: undefined,
         updateTime: undefined
