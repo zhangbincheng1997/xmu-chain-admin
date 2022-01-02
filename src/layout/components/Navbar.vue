@@ -7,7 +7,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="ipfsAvatar" class="user-avatar" alt="">
+          <img :src="avatarSrc" class="user-avatar" alt="">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -59,7 +59,7 @@ export default {
       })
       return map[this.role]
     },
-    ipfsAvatar() {
+    avatarSrc() {
       return this.IPFS_GATEWAY + '/' + this.avatar + '?imageView2/1/w/80/h/80'
     },
     ...mapGetters([

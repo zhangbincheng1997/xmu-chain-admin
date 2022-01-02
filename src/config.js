@@ -11,6 +11,13 @@ export default {
     { label: 'PUT', value: 'PUT' },
     { label: 'DELETE', value: 'DELETE' }
   ],
+  typeOptions: [
+    { label: '文本', value: 'text' },
+    { label: '图片', value: 'image' },
+    { label: '视频', value: 'video' },
+    { label: '音频', value: 'audio' },
+    { label: '文件', value: 'file' }
+  ],
   tagStatusOptions: [
     { label: '未操作', value: 0 },
     { label: '已绑定', value: 1 },

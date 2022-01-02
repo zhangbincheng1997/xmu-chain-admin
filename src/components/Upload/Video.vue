@@ -3,9 +3,11 @@
     action=""
     :http-request="handleUpload"
     :show-file-list="false"
-    accept=".jpg, .jpeg, .png, .gif"
+    accept=".mp4, .webm, .ogg"
   >
-    <img v-if="image" :src="imageUrl" :style="style" alt="">
+    <video v-if="video" controls>
+      <source :src="videoUrl">
+    </video>
     <i v-else class="el-icon-plus" />
   </el-upload>
 </template>
@@ -14,32 +16,16 @@
 import { upload } from '@/api/base/ipfs'
 
 export default {
-  name: 'UploadImage',
+  name: 'UploadVideo',
   props: {
-    image: {
+    video: {
       type: String,
       default: ''
-    },
-    width: {
-      type: String,
-      default: '100px'
-    },
-    height: {
-      type: String,
-      default: '100px'
-    }
-  },
-  data() {
-    return {
-      style: {
-        width: this.width,
-        height: this.height
-      }
     }
   },
   computed: {
-    imageUrl() {
-      return this.IPFS_GATEWAY + '/' + this.image
+    videoUrl() {
+      return this.IPFS_GATEWAY + '/' + this.video
     }
   },
   methods: {
@@ -51,7 +37,7 @@ export default {
       const formData = new FormData()
       formData.append('file', param.file)
       upload(formData).then(res => {
-        this.$emit('update:image', res.data) // 子组件向父组件传值
+        this.$emit('update:video', res.data) // 子组件向父组件传值
       })
     }
   }
