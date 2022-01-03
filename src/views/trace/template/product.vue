@@ -5,13 +5,13 @@
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
-      <el-table v-loading="loading" :data="list">
-        <el-table-column label="#" prop="id" width="50" align="center" fixed="left" />
+      <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
+        <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="模板名称" prop="name" align="center" />
         <el-table-column label="模板内容" prop="content" align="center" show-overflow-tooltip>
           <template slot-scope="scope">{{ JSON.stringify(scope.row.content) }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center" fixed="right">
+        <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
@@ -28,12 +28,12 @@
         </el-form-item>
         <el-form-item label="模板内容" prop="content">
           <el-table :data="form.content">
-            <el-table-column prop="title" width="200px" label="标题">
+            <el-table-column prop="title" width="200" label="标题">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.title" />
               </template>
             </el-table-column>
-            <el-table-column prop="type" width="200px" label="类型">
+            <el-table-column prop="type" width="200" label="类型">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.type" clearable>
                   <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -49,7 +49,7 @@
                 <UploadFile v-if="scope.row.type==='file'" :file.sync="scope.row.value" />
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="200px" align="center" fixed="right">
+            <el-table-column label="操作" width="120" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-button type="text" @click="delContent(scope.$index)">删除</el-button>
               </template>
@@ -85,7 +85,8 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        keyword: undefined
+        keyword: undefined,
+        sort: false
       },
       dialog: {
         title: undefined,
@@ -116,6 +117,10 @@ export default {
         this.list = res.data
         this.total = res.total
       })
+    },
+    handleSortChange({ column, prop, order }) {
+      this.query.sort = order === 'descending' // default ascending
+      this.handleQuery()
     },
     handleAdd() {
       this.resetForm()
