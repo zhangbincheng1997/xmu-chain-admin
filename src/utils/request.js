@@ -89,11 +89,11 @@ service.interceptors.response.use(
 
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
-      // Message({
-      //   message: res,
-      //   type: 'success',
-      //   duration: 2 * 1000
-      // })
+      Message({
+        message: res,
+        type: 'success',
+        duration: 2 * 1000
+      })
       return res
     }
   },

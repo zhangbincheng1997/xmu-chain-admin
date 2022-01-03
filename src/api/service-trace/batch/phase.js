@@ -34,7 +34,7 @@ export function del(id) {
 
 export function chain(id) {
   return request({
-    url: API + '/chain' + id,
+    url: API + '/chain/' + id,
     method: 'post'
   })
 }
