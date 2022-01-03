@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/batch/product'
 
-export function getByBatchId(batchId) {
+export function getProductByBatchId(batchId) {
   return request({
     url: API + '/' + batchId,
     method: 'get'
