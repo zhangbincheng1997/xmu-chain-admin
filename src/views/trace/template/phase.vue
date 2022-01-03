@@ -7,8 +7,8 @@
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="模板名称" prop="name" align="center" />
-        <el-table-column label="模板内容" prop="content" align="center" show-overflow-tooltip>
+        <el-table-column label="环节名称" prop="name" align="center" />
+        <el-table-column label="环节内容" prop="content" align="center" show-overflow-tooltip>
           <template slot-scope="scope">{{ JSON.stringify(scope.row.content) }}</template>
         </el-table-column>
         <el-table-column label="操作" width="120" align="center" fixed="right">
@@ -23,13 +23,10 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="100%">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="模板名称" prop="name" required>
+        <el-form-item label="环节名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="模板标题" prop="title">
-          <el-input v-model="form.title" />
-        </el-form-item>
-        <el-form-item label="模板内容" prop="content">
+        <el-form-item label="环节内容" prop="content">
           <el-table :data="form.content">
             <el-table-column prop="title" width="200" label="标题">
               <template slot-scope="scope">
