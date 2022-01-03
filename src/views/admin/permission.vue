@@ -41,7 +41,7 @@
           <el-input v-model="form.url" />
         </el-form-item>
         <el-form-item label="方法" prop="method" required>
-          <el-select v-model="form.method" placeholder="请选择">
+          <el-select v-model="form.method" clearable>
             <el-option v-for="item in methodOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
