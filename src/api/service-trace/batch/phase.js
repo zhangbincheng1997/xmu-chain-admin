@@ -9,7 +9,7 @@ export function getPhaseByBatchId(batchId) {
   })
 }
 
-export function add(data) {
+export function addPhase(data) {
   return request({
     url: API,
     method: 'post',
@@ -17,7 +17,7 @@ export function add(data) {
   })
 }
 
-export function update(id, data) {
+export function updatePhase(id, data) {
   return request({
     url: API + '/' + id,
     method: 'put',
@@ -25,7 +25,7 @@ export function update(id, data) {
   })
 }
 
-export function del(id) {
+export function delPhase(id) {
   return request({
     url: API + '/' + id,
     method: 'delete'

@@ -54,12 +54,14 @@ export default {
     // ----- 添加一行 -----
     addContent() {
       this.content.push({})
+      this.$emit('update:content', this.content) // 子组件向父组件传值
       this.$forceUpdate()
       console.log('add: ' + JSON.stringify(this.content))
     },
     // ----- 删除一行 -----
     delContent(index) {
       this.content.splice(index, 1)
+      this.$emit('update:content', this.content) // 子组件向父组件传值
       console.log('del: ' + JSON.stringify(this.content))
     }
   }

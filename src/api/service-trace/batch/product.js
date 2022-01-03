@@ -9,7 +9,7 @@ export function getProductByBatchId(batchId) {
   })
 }
 
-export function update(id, data) {
+export function updateProduct(id, data) {
   return request({
     url: API + '/' + id,
     method: 'put',

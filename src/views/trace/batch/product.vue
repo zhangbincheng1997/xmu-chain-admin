@@ -5,10 +5,9 @@
     <el-card class="box-card">
       <div style="width: 100%;">
         <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
-        <el-button v-else type="text" @click="chain(form.id)">上链</el-button>
+        <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form.id)">上链</el-button>
         <el-button type="text" style="float: right;" @click="importVisible = true">导入模板</el-button>
         <el-button type="text" style="float: right;" @click="saveTemplate">保存模板</el-button>
-        <el-divider />
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="商品名称" prop="name" required>
             <el-input v-model="form.name" />
@@ -18,7 +17,6 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm">保存</el-button>
-            <el-button @click="back">返 回</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -26,7 +24,7 @@
 
     <el-dialog title="导入模板" :visible.sync="importVisible">
       <el-select v-model="importId" filterable clearable>
-        <el-option v-for="item in productTemplates" :key="item.id" :label="item.name" :value="item.id" />
+        <el-option v-for="item in templates" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
       <el-button type="primary" @click="importTemplate">导入</el-button>
     </el-dialog>
@@ -34,7 +32,7 @@
 </template>
 
 <script>
-import { getProductByBatchId, update, chain } from '@/api/service-trace/batch/product'
+import { getProductByBatchId, updateProduct, chain } from '@/api/service-trace/batch/product'
 import { allProduct, add } from '@/api/service-trace/template/product'
 import BatchInfo from '@/components/BatchInfo'
 import Items from '@/components/Items'
@@ -55,26 +53,28 @@ export default {
 
       importId: undefined,
       importVisible: false,
-      productTemplates: []
+      templates: []
     }
   },
   mounted() {
     const batchId = this.$route.query.batchId
+    if (!batchId) {
+      this.$router.push('/trace/batch/admin')
+      return
+    }
     getProductByBatchId(batchId).then(res => {
       this.form = res.data
     })
     allProduct().then(res => {
-      this.productTemplates = res.data
+      this.templates = res.data
     })
   },
   methods: {
     submitForm() {
-      update(this.form.id, this.form).then(() => {
-        this.back()
-      })
+      updateProduct(this.form.id, this.form).then(() => {})
     },
     importTemplate() {
-      const template = this.productTemplates.filter(item => item.id === this.importId)[0]
+      const template = this.templates.filter(item => item.id === this.importId)[0]
       this.form.name = template.name
       this.form.content = template.content
       this.importVisible = false
@@ -95,9 +95,6 @@ export default {
           this.$forceUpdate()
         })
       })
-    },
-    back() {
-      this.$router.go(-1)
     }
   }
 }
