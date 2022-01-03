@@ -1,11 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
-      <el-descriptions title="批次信息">
-        <el-descriptions-item label="批次号">{{ batchInfo.no }}</el-descriptions-item>
-        <el-descriptions-item label="商品名称">{{ batchInfo.productName }}</el-descriptions-item>
-      </el-descriptions>
-    </el-card>
+    <BatchInfo />
     <br>
     <el-card class="box-card">
       <div style="width: 100%;">
@@ -26,21 +21,18 @@
 </template>
 
 <script>
-import { getBatchById } from '@/api/service-trace/batch/admin'
 import { getProductByBatchId, update } from '@/api/service-trace/batch/product'
+import BatchInfo from '@/components/BatchInfo'
 import Items from '@/components/Items'
 
 export default {
   components: {
+    BatchInfo,
     Items
   },
   data() {
     return {
       batchId: undefined,
-      batchInfo: {
-        no: undefined,
-        productName: undefined
-      },
       form: {
         name: undefined,
         content: undefined
@@ -49,9 +41,6 @@ export default {
   },
   mounted() {
     this.batchId = this.$route.query.batchId
-    getBatchById(this.batchId).then(res => {
-      this.batchInfo = res.data
-    })
     getProductByBatchId(this.batchId).then(res => {
       this.form = res.data
     })
