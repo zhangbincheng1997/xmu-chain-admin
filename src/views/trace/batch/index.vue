@@ -1,5 +1,7 @@
 <template>
   <div class="app-container">
+    <el-alert title="注：同一批次下的商品的溯源信息是一样的，如果溯源信息不一样请分不同批次。" type="warning" />
+    <br>
     <el-card class="box-card">
       <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
