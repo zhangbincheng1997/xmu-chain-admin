@@ -3,23 +3,21 @@
     <BatchInfo />
     <br>
     <el-card class="box-card">
-      <div style="width: 100%;">
-        <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
-        <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form.id)">上链</el-button>
-        <el-button type="text" style="float: right;" @click="importClick">导入模板</el-button>
-        <el-button type="text" style="float: right;" @click="saveTemplate">保存模板</el-button>
-        <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="商品名称" prop="name" required>
-            <el-input v-model="form.name" />
-          </el-form-item>
-          <el-form-item label="商品内容" prop="content">
-            <Items :content="form.content" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm">保存</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
+      <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form.id)">上链</el-button>
+      <el-button type="text" style="float: right;" @click="importClick">导入模板</el-button>
+      <el-button type="text" style="float: right;" @click="saveTemplate">保存模板</el-button>
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="商品名称" prop="name" required>
+          <el-input v-model="form.name" />
+        </el-form-item>
+        <el-form-item label="商品内容" prop="content">
+          <Items :content="form.content" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm">保存</el-button>
+        </el-form-item>
+      </el-form>
     </el-card>
 
     <el-dialog title="导入模板" :visible.sync="importVisible">
@@ -52,7 +50,7 @@ export default {
       },
       importId: undefined,
       importVisible: false,
-      templates: []
+      templates: undefined
     }
   },
   mounted() {
@@ -64,16 +62,19 @@ export default {
     getProductByBatchId(batchId).then(res => {
       this.form = res.data
     })
-    allTemplate().then(res => {
-      this.templates = res.data
-    })
   },
   methods: {
     submitForm() {
       updateProduct(this.form.id, this.form).then(() => {})
     },
     importClick() {
+      this.importId = undefined
       this.importVisible = true
+      if (!this.templates) {
+        allTemplate().then(res => {
+          this.templates = res.data
+        })
+      }
     },
     importTemplate() {
       const template = this.templates.filter(item => item.id === this.importId)[0]
@@ -91,7 +92,10 @@ export default {
             name: this.form.name,
             content: this.form.content
           }
-          this.templates.push(template)
+          if (this.templates) {
+            this.templates.push(template)
+            this.$forceUpdate()
+          }
         })
       })
     },

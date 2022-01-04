@@ -6,26 +6,24 @@
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item, i) in list" :key="i" :name="i.toString()">
           <template slot="title">
-            <el-tag v-if="item.id">{{ item.name }} - {{ item.updateTime }}</el-tag>
+            <el-tag v-if="item.id">{{ item.name }} - {{ item.createTime }}</el-tag>
             <i v-if="item.id" class="el-icon-delete" style="margin-left: 20px;" @click="handleDelete(item.id)">删除</i>
           </template>
-          <div style="width: 100%;">
-            <el-tag v-if="item.txId" type="success">已上链：{{ item.txId }}</el-tag>
-            <el-button v-else type="text" :disabled="item.id === undefined" @click="chain(item)">上链</el-button>
-            <el-button type="text" style="float: right;" @click="importClick(item)">导入模板</el-button>
-            <el-button type="text" style="float: right;" @click="saveTemplate(item)">保存模板</el-button>
-            <el-form ref="form" :model="item" label-width="100px">
-              <el-form-item label="环节名称" prop="name" required>
-                <el-input v-model="item.name" />
-              </el-form-item>
-              <el-form-item label="环节内容" prop="content">
-                <Items :content.sync="item.content" />
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="submitForm(item)">保存</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+          <el-tag v-if="item.txId" type="success">已上链：{{ item.txId }}</el-tag>
+          <el-button v-else type="text" :disabled="item.id === undefined" @click="chain(item)">上链</el-button>
+          <el-button type="text" style="float: right;" @click="importClick(item)">导入模板</el-button>
+          <el-button type="text" style="float: right;" @click="saveTemplate(item)">保存模板</el-button>
+          <el-form ref="form" :model="item" label-width="100px">
+            <el-form-item label="环节名称" prop="name" required>
+              <el-input v-model="item.name" />
+            </el-form-item>
+            <el-form-item label="环节内容" prop="content">
+              <Items :content.sync="item.content" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm(item)">保存</el-button>
+            </el-form-item>
+          </el-form>
         </el-collapse-item>
         <div style="text-align: center">
           <el-button type="text" @click="addContent">新增环节</el-button>
@@ -60,7 +58,9 @@ export default {
       selectItem: undefined,
       importId: undefined,
       importVisible: false,
-      templates: [],
+      templates: undefined,
+
+      // 当前展开的折叠面板
       activeNames: undefined
     }
   },
@@ -74,9 +74,6 @@ export default {
       this.list = res.data
       // 展开最后一项
       if (this.list.length > 0) this.activeNames = (this.list.length - 1).toString()
-    })
-    allTemplate().then(res => {
-      this.templates = res.data
     })
   },
   methods: {
@@ -94,7 +91,13 @@ export default {
     },
     importClick(item) {
       this.selectItem = item
+      this.importId = undefined
       this.importVisible = true
+      if (!this.templates) {
+        allTemplate().then(res => {
+          this.templates = res.data
+        })
+      }
     },
     importTemplate() {
       const template = this.templates.filter(item => item.id === this.importId)[0]
@@ -112,7 +115,10 @@ export default {
             name: item.name,
             content: item.content
           }
-          this.templates.push(template)
+          if (this.templates) {
+            this.templates.push(template)
+            this.$forceUpdate()
+          }
         })
       })
     },
