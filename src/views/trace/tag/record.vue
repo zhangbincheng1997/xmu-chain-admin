@@ -5,12 +5,12 @@
         <el-option v-for="item in tagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-input v-model="query.batchNo" placeholder="批次号" style="width: 200px;" clearable />
-      <el-input v-model="query.code" placeholder="溯源码" style="width: 200px;" clearable>
+      <el-input v-model="query.code" placeholder="溯源码" style="width: 400px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <br>
       <span v-if="selectIds.length > 0">
-        <el-select v-model="selectStatus" placeholder="标签状态" clearable>
+        <el-select v-model="selectStatus" clearable>
           <el-option v-for="item in tagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
         <el-button icon="el-icon-edit" @click="handleStatus">修改状态</el-button>
@@ -25,7 +25,18 @@
           </template>
         </el-table-column>
         <el-table-column label="溯源码" prop="code" align="center" />
-        <el-table-column label="二维码" prop="qrcode" align="center" />
+        <el-table-column label="二维码" prop="qrcode" align="center">
+          <template slot-scope="scope">
+            <el-popover
+              placement="top"
+              title="扫一扫（记录次数）"
+              trigger="hover"
+            >
+              <vue-qr :text="companyId + '/' + scope.row.batchNo + '/' + scope.row.code" :size="200" />
+              <vue-qr slot="reference" :text="companyId + '/' + scope.row.batchNo + '/' + scope.row.code" :size="50" />
+            </el-popover>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="标签状态" prop="status" align="center">
           <template slot-scope="scope">
@@ -39,9 +50,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { list, status } from '@/api/service-trace/tag/record'
+import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
 
 export default {
+  components: {
+    VueQr
+  },
   data() {
     return {
       loading: false,
@@ -65,6 +81,11 @@ export default {
         { label: '禁用', value: 'false' }
       ]
     }
+  },
+  computed: {
+    ...mapGetters([
+      'companyId'
+    ])
   },
   mounted() {
     this.handleQuery()
