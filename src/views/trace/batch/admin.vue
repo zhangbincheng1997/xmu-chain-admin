@@ -12,7 +12,7 @@
         <el-table-column label="批次号" prop="no" align="center">
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.no)" />
-            <span class="link" @click="linkTrace(scope.row.no)">{{ scope.row.no }}</span>
+            <span class="link" @click="linkBatch(scope.row.no)">{{ scope.row.no }}</span>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" prop="productName" align="center" />
@@ -34,8 +34,6 @@
         <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handlePreview(scope.row)">预览</el-button>
-            <br>
-            <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -89,7 +87,7 @@
 </template>
 
 <script>
-import { list, add, update, del, updateShop } from '@/api/service-trace/batch/admin'
+import { list, add, del, updateShop } from '@/api/service-trace/batch/admin'
 import { allTemplate } from '@/api/service-trace/template/product'
 
 export default {
@@ -105,7 +103,7 @@ export default {
         sort: false
       },
       dialog: {
-        title: undefined,
+        title: '批次配置',
         visible: false
       },
       form: {
@@ -119,7 +117,7 @@ export default {
       },
 
       shopDialog: {
-        title: '配置店铺',
+        title: '店铺配置',
         visible: false
       },
       shopForm: {
@@ -156,39 +154,18 @@ export default {
     },
     handleAdd() {
       this.resetForm()
-      this.dialog = {
-        title: '添加',
-        visible: true
-      }
-    },
-    handleEdit(row) {
-      this.resetForm()
-      this.dialog = {
-        title: '修改',
-        visible: true
-      }
-      this.form = JSON.parse(JSON.stringify(row))
+      this.dialog.visible = true
     },
     handleSubmit() {
-      const id = this.form.id
-      if (id === undefined) {
-        add(this.form).then(() => {
-          this.closeDialog()
-          this.handleQuery()
-        })
-      } else {
-        update(id, this.form).then(() => {
-          this.closeDialog()
-          this.handleQuery()
-        })
-      }
+      add(this.form).then(() => {
+        this.closeDialog()
+        this.handleQuery()
+      })
     },
     closeDialog() {
-      this.resetForm()
-      this.dialog = {
-        title: undefined,
-        visible: false
-      }
+      // this.resetForm()
+      this.dialog.visible = false
+      if (this.$refs.form) this.$refs.form.resetFields()
     },
     resetForm() {
       this.form = {}

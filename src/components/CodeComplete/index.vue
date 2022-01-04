@@ -1,41 +1,35 @@
 <template>
-  <el-autocomplete v-model="currentCode" placeholder="请输入溯源码" :fetch-suggestions="querySearchAsync" @input="handleInput" />
+  <el-select v-model="currentNo" placeholder="请输入批次号" filterable clearable @change="handleChange">
+    <el-option v-for="item in batchList" :key="item.no" :label="item.label" :value="item.no" />
+  </el-select>
 </template>
 
 <script>
-// import { allTrace } from '@/api/service-trace/trace/info'
+import { list } from '@/api/service-trace/batch/admin'
 
 export default {
   name: 'CodeComplete',
   props: {
-    code: {
+    no: {
       type: String,
       default: ''
     }
   },
   data() {
     return {
-      currentCode: this.code,
-      codeList: []
+      currentNo: this.no,
+      batchList: []
     }
   },
   mounted() {
-    // allTrace().then(res => {
-    //   res.data.forEach(item => this.codeList.push({ value: item.code }))
-    // })
+    list().then(res => {
+      res.data.forEach(item => this.batchList.push({ no: item.no, label: item.no + '-' + item.productName }))
+    })
   },
   methods: {
-    querySearchAsync(queryString, cb) {
-      const results = queryString ? this.codeList.filter(this.searchFilter(queryString)) : this.codeList
-      cb(results)
-    },
-    searchFilter(queryString) {
-      return (item) => {
-        return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
-    },
-    handleInput(value) {
-      this.$emit('update:code', value)
+    handleChange(value) {
+      console.log(value)
+      this.$emit('update:no', value)
     }
   }
 }

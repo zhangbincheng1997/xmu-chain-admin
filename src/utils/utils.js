@@ -26,11 +26,11 @@ export function linkHash(val) {
   })
 }
 
-export function linkTrace(val) {
+export function linkBatch(val) {
   this.$router.push({
-    path: '/test/trace',
+    path: '/trace/batch/admin',
     query: {
-      code: val
+      keyword: val
     }
   })
 }

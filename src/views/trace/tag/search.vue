@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { listSearch } from '@/api/service-trace/tag'
+import { listSearch } from '@/api/service-trace/tag/pack'
 
 export default {
   data() {

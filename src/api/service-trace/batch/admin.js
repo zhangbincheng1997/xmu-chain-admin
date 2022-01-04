@@ -25,14 +25,6 @@ export function add(data) {
   })
 }
 
-export function update(id, data) {
-  return request({
-    url: API + '/' + id,
-    method: 'put',
-    data: data
-  })
-}
-
 export function del(id) {
   return request({
     url: API + '/' + id,
