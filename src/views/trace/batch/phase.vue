@@ -44,7 +44,7 @@
 
 <script>
 import { getPhaseByBatchId, addPhase, updatePhase, delPhase, chain } from '@/api/service-trace/batch/phase'
-import { allPhase, add } from '@/api/service-trace/template/phase'
+import { allTemplate, addTemplate } from '@/api/service-trace/template/phase'
 import BatchInfo from '@/components/BatchInfo'
 import Items from '@/components/Items'
 
@@ -56,12 +56,6 @@ export default {
   data() {
     return {
       list: [],
-      form: {
-        id: undefined,
-        name: undefined,
-        content: undefined,
-        txId: undefined
-      },
       batchId: undefined,
       selectItem: undefined,
       importId: undefined,
@@ -81,21 +75,13 @@ export default {
       // 展开最后一项
       if (this.list.length > 0) this.activeNames = (this.list.length - 1).toString()
     })
-    allPhase().then(res => {
+    allTemplate().then(res => {
       this.templates = res.data
     })
   },
   methods: {
     submitForm(item) {
-      const id = item.id
-      if (id) {
-        updatePhase(id, item).then(() => {})
-      } else {
-        item.batchId = this.batchId // 关联
-        addPhase(item).then((res) => {
-          item.id = res.data // 环节ID
-        })
-      }
+      updatePhase(item.id, item).then(() => {})
     },
     handleDelete(id) {
       this.$confirm('是否删除？', '提示', {
@@ -114,13 +100,20 @@ export default {
       const template = this.templates.filter(item => item.id === this.importId)[0]
       this.selectItem.name = template.name
       this.selectItem.content = template.content
+      this.importId = undefined
       this.importVisible = false
     },
     saveTemplate(item) {
       this.$confirm('是否保存模板？', '提示', {
         type: 'warning'
       }).then(() => {
-        add(item).then(res => {})
+        addTemplate(item).then(res => {
+          const template = {
+            name: item.name,
+            content: item.content
+          }
+          this.templates.push(template)
+        })
       })
     },
     chain(item) {

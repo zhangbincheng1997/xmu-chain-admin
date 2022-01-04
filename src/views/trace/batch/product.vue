@@ -6,7 +6,7 @@
       <div style="width: 100%;">
         <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
         <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form.id)">上链</el-button>
-        <el-button type="text" style="float: right;" @click="importVisible = true">导入模板</el-button>
+        <el-button type="text" style="float: right;" @click="importClick">导入模板</el-button>
         <el-button type="text" style="float: right;" @click="saveTemplate">保存模板</el-button>
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="商品名称" prop="name" required>
@@ -33,7 +33,7 @@
 
 <script>
 import { getProductByBatchId, updateProduct, chain } from '@/api/service-trace/batch/product'
-import { allProduct, add } from '@/api/service-trace/template/product'
+import { allTemplate, addTemplate } from '@/api/service-trace/template/product'
 import BatchInfo from '@/components/BatchInfo'
 import Items from '@/components/Items'
 
@@ -50,7 +50,6 @@ export default {
         content: undefined,
         txId: undefined
       },
-
       importId: undefined,
       importVisible: false,
       templates: []
@@ -65,7 +64,7 @@ export default {
     getProductByBatchId(batchId).then(res => {
       this.form = res.data
     })
-    allProduct().then(res => {
+    allTemplate().then(res => {
       this.templates = res.data
     })
   },
@@ -73,17 +72,27 @@ export default {
     submitForm() {
       updateProduct(this.form.id, this.form).then(() => {})
     },
+    importClick() {
+      this.importVisible = true
+    },
     importTemplate() {
       const template = this.templates.filter(item => item.id === this.importId)[0]
       this.form.name = template.name
       this.form.content = template.content
+      this.importId = undefined
       this.importVisible = false
     },
     saveTemplate() {
       this.$confirm('是否保存模板？', '提示', {
         type: 'warning'
       }).then(() => {
-        add(this.form).then(res => {})
+        addTemplate(this.form).then(res => {
+          const template = {
+            name: this.form.name,
+            content: this.form.content
+          }
+          this.templates.push(template)
+        })
       })
     },
     chain(id) {

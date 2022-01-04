@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { list, add, update, del } from '@/api/service-trace/template/product'
+import { listTemplate, addTemplate, updateTemplate, delTemplate } from '@/api/service-trace/template/product'
 import Items from '@/components/Items'
 
 export default {
@@ -83,7 +83,7 @@ export default {
   methods: {
     handleQuery() {
       this.loading = true
-      list(this.query).then(res => {
+      listTemplate(this.query).then(res => {
         this.loading = false
         this.list = res.data
         this.total = res.total
@@ -111,12 +111,12 @@ export default {
     handleSubmit() {
       const id = this.form.id
       if (id === undefined) {
-        add(this.form).then(() => {
+        addTemplate(this.form).then(() => {
           this.closeDialog()
           this.handleQuery()
         })
       } else {
-        update(id, this.form).then(() => {
+        updateTemplate(id, this.form).then(() => {
           this.closeDialog()
           this.handleQuery()
         })
@@ -137,7 +137,7 @@ export default {
       this.$confirm('是否删除？', '提示', {
         type: 'warning'
       }).then(() => {
-        del(row.id).then(() => {
+        delTemplate(row.id).then(() => {
           this.handleQuery()
         })
       })

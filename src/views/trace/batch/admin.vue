@@ -90,7 +90,7 @@
 
 <script>
 import { list, add, update, del, updateShop } from '@/api/service-trace/batch/admin'
-import { allProduct } from '@/api/service-trace/template/product'
+import { allTemplate } from '@/api/service-trace/template/product'
 
 export default {
   data() {
@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     init() {
-      allProduct().then(res => {
+      allTemplate().then(res => {
         this.productTemplates = res.data
       })
     },

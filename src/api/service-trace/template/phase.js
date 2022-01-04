@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 const API = '/service-trace/api/v1/template/phase'
 
-export function allPhase() {
+export function allTemplate() {
   return request({
     url: API + '/all',
     method: 'get'
   })
 }
 
-export function list(data) {
+export function listTemplate(data) {
   return request({
     url: API + '/list',
     method: 'get',
@@ -17,7 +17,7 @@ export function list(data) {
   })
 }
 
-export function add(data) {
+export function addTemplate(data) {
   return request({
     url: API,
     method: 'post',
@@ -25,7 +25,7 @@ export function add(data) {
   })
 }
 
-export function update(id, data) {
+export function updateTemplate(id, data) {
   return request({
     url: API + '/' + id,
     method: 'put',
@@ -33,7 +33,7 @@ export function update(id, data) {
   })
 }
 
-export function del(id) {
+export function delTemplate(id) {
   return request({
     url: API + '/' + id,
     method: 'delete'
