@@ -62,7 +62,6 @@
 
 <script>
 import { treePermission, add, update, del } from '@/api/service-admin/permission'
-import config from '@/config'
 
 export default {
   data() {
@@ -88,7 +87,13 @@ export default {
         pid: undefined
       },
 
-      methodOptions: config.methodOptions
+      methodOptions: [
+        { label: '*', value: '*' },
+        { label: 'GET', value: 'GET' },
+        { label: 'POST', value: 'POST' },
+        { label: 'PUT', value: 'PUT' },
+        { label: 'DELETE', value: 'DELETE' }
+      ]
     }
   },
   mounted() {

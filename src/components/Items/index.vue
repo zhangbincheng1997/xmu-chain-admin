@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import config from '@/config'
-
 export default {
   name: 'Items',
   props: {
@@ -47,7 +45,13 @@ export default {
   },
   data() {
     return {
-      typeOptions: config.typeOptions
+      typeOptions: [
+        { label: '文本', value: 'text' },
+        { label: '图片', value: 'image' },
+        { label: '视频', value: 'video' },
+        { label: '音频', value: 'audio' },
+        { label: '文件', value: 'file' }
+      ]
     }
   },
   methods: {
