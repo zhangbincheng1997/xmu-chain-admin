@@ -48,7 +48,7 @@
         </el-form-item>
         <!-- 添加可以选择商品模板；编辑不可以选择商品模板 -->
         <el-form-item v-if="!form.id" label="商品模板" prop="productId" required>
-          <el-select v-model="form.productId" clearable>
+          <el-select v-model="form.productId" filterable clearable>
             <el-option v-for="item in productTemplates" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
