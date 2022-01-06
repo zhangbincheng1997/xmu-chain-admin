@@ -18,8 +18,8 @@
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template slot-scope="scope">
-            <el-button type="text" @click="downloadText(scope.row.id)">文字码包</el-button>
-            <el-button type="text" @click="downloadImage(scope.row.id)">图片码包</el-button>
+            <el-button :disabled="downloadTextLoading" type="text" @click="downloadText(scope.row.id)">文字码包</el-button>
+            <el-button :disabled="downloadImageLoading" type="text" @click="downloadImage(scope.row.id)">图片码包</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,7 +44,8 @@
 </template>
 
 <script>
-import { list, generate, getPackCode } from '@/api/service-trace/tag/pack'
+import fileDownload from 'js-file-download'
+import { list, generate, downloadText, downloadImage } from '@/api/service-trace/tag/pack'
 
 export default {
   data() {
@@ -66,7 +67,10 @@ export default {
       form: {
         batchNo: undefined,
         count: undefined
-      }
+      },
+
+      downloadTextLoading: false,
+      downloadImageLoading: false
     }
   },
   mounted() {
@@ -101,14 +105,20 @@ export default {
     },
     // ----- 文字码包 -----
     downloadText(id) {
-      getPackCode(id).then(res => {
-        console.log(res)
+      this.downloadTextLoading = true
+      downloadText(id).then(res => {
+        const filename = res.headers['content-disposition'].split(';')[1].split('=')[1]
+        fileDownload(res.data, unescape(decodeURI(filename)))
+        this.downloadTextLoading = false
       })
     },
     // ----- 图片码包 -----
     downloadImage(id) {
-      getPackCode(id).then(res => {
-        console.log(res)
+      this.downloadImageLoading = true
+      downloadImage(id).then(res => {
+        const filename = res.headers['content-disposition'].split(';')[1].split('=')[1]
+        fileDownload(res.data, unescape(decodeURI(filename)))
+        this.downloadImageLoading = false
       })
     },
     // ----- 跳转记录 -----

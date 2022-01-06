@@ -27,13 +27,9 @@
         <el-table-column label="溯源码" prop="code" align="center" />
         <el-table-column label="二维码" prop="qrcode" align="center">
           <template slot-scope="scope">
-            <el-popover
-              placement="top"
-              title="扫一扫（记录次数）"
-              trigger="hover"
-            >
-              <vue-qr :text="companyId + '/' + scope.row.batchNo + '/' + scope.row.code" :size="200" />
-              <vue-qr slot="reference" :text="companyId + '/' + scope.row.batchNo + '/' + scope.row.code" :size="50" />
+            <el-popover placement="top" title="扫一扫（记录次数）" trigger="hover">
+              <vue-qr :text="scope.row.qrcode" :size="200" />
+              <vue-qr slot="reference" :text="scope.row.qrcode" :size="50" />
             </el-popover>
           </template>
         </el-table-column>
