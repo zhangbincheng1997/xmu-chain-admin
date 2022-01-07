@@ -35,6 +35,7 @@
             :options="list"
             :props="{ value: 'id', label: 'name', expandTrigger: 'hover', emitPath: false, checkStrictly: true }"
             :show-all-levels="false"
+            clearable
           />
         </el-form-item>
         <el-form-item label="名字" prop="name" required>

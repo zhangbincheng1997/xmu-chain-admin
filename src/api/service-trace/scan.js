@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
-const API = '/service-trace/api/v1/stat'
+const API = '/service-trace/api/v1/scan'
 
-export function stat(data) {
+export function list(data) {
   return request({
-    url: API,
+    url: API + '/list',
     method: 'get',
     params: data
   })
 }
 
-export function list(data) {
+export function stat(data) {
   return request({
-    url: API + '/list',
+    url: API + '/stat',
     method: 'get',
     params: data
   })

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { list } from '@/api/service-trace/stat'
+import { list } from '@/api/service-trace/scan'
 
 export default {
   data() {
