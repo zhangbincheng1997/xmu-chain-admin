@@ -39,3 +39,13 @@ export function updateShop(id, data) {
     data: data
   })
 }
+
+export function status(id, status) {
+  return request({
+    url: API + '/status/' + id,
+    method: 'post',
+    data: {
+      status: status
+    }
+  })
+}

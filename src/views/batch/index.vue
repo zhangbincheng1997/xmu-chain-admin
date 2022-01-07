@@ -12,7 +12,7 @@
         <el-table-column label="批次号" prop="no" align="center">
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.no)" />
-            <span class="link" @click="linkBatch(scope.row.no)">{{ scope.row.no }}</span>
+            <span class="link" @click="linkStat(scope.row.no)">{{ scope.row.no }}</span>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" prop="productName" align="center" />
@@ -31,9 +31,13 @@
             <el-button type="text" @click="handlePhase(scope.row)">配置</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <el-table-column label="批次状态" prop="status" align="center">
           <template slot-scope="scope">
-            <el-button type="text" @click="handlePreview(scope.row)">预览</el-button>
+            <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" fixed="right">
+          <template slot-scope="scope">
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -87,7 +91,7 @@
 </template>
 
 <script>
-import { list, add, del, updateShop } from '@/api/service-trace/batch/admin'
+import { list, add, del, updateShop, status } from '@/api/service-trace/batch/admin'
 import { allTemplate } from '@/api/service-trace/template/product'
 
 export default {
@@ -131,6 +135,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.query.keyword) {
+      this.query.keyword = this.$route.query.keyword
+    }
     this.init()
     this.handleQuery()
   },
@@ -201,6 +208,10 @@ export default {
       this.shopForm = {}
       if (this.$refs.shopForm) this.$refs.shopForm.resetFields()
     },
+    // ----- 修改状态 -----
+    handleSwitchChange(row) {
+      status(row.id, row.status).then(() => {})
+    },
     // ----- 配置商品信息 -----
     handleProduct(row) {
       this.$router.push({
@@ -219,9 +230,14 @@ export default {
         }
       })
     },
-    // ----- 预览 -----
-    handlePreview(row) {
-      // TODO xmu-chain-app
+    // ----- 跳转统计 -----
+    linkStat(val) {
+      this.$router.push({
+        path: '/scan/stat',
+        query: {
+          batchNo: val
+        }
+      })
     }
   }
 }
