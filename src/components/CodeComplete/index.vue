@@ -13,6 +13,14 @@ export default {
     no: {
       type: String,
       default: ''
+    },
+    isDefault: {
+      type: Boolean,
+      default: false
+    },
+    onFinish: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -24,11 +32,17 @@ export default {
   mounted() {
     list().then(res => {
       res.data.forEach(item => this.batchList.push({ no: item.no, label: item.no + '-' + item.productName }))
+      // 设置默认值
+      if (this.isDefault && this.batchList.length > 0) {
+        this.currentNo = this.batchList[0].no
+        this.handleChange(this.currentNo)
+      }
+      // 加载完成回调
+      this.onFinish()
     })
   },
   methods: {
     handleChange(value) {
-      console.log(value)
       this.$emit('update:no', value)
     }
   }
