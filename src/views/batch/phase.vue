@@ -6,7 +6,7 @@
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item, i) in list" :key="i" :name="i.toString()">
           <template slot="title">
-            <el-tag v-if="item.id">{{ item.name }} - {{ item.createTime }}</el-tag>
+            <el-tag v-if="item.id">{{ item.name }}</el-tag>
             <i v-if="item.id" class="el-icon-delete" style="margin-left: 20px;" @click="handleDelete(item.id)">删除</i>
           </template>
           <el-tag v-if="item.txId" type="success">已上链：{{ item.txId }}</el-tag>

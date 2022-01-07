@@ -6,9 +6,8 @@
       <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
       <br>
       <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable />
-      <el-input v-model="query.keyword" placeholder="关键词（IP/地点/经度/纬度）" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
-      </el-input>
+      <el-input v-model="query.keyword" placeholder="关键词（IP/地点/经度/纬度）" style="width: 300px;" clearable />
+      <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="批次号" prop="batchNo" align="center" />

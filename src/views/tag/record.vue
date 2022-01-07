@@ -4,10 +4,9 @@
       <el-select v-model="query.status" placeholder="标签状态" style="width: 200px;" clearable>
         <el-option v-for="item in tagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-input v-model="query.batchNo" placeholder="批次号" style="width: 200px;" clearable />
-      <el-input v-model="query.code" placeholder="溯源码" style="width: 400px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
-      </el-input>
+      <code-complete :no.sync="query.batchNo" />
+      <el-input v-model="query.code" placeholder="溯源码" style="width: 400px;" clearable />
+      <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <br>
       <span v-if="selectIds.length > 0">
         <el-select v-model="selectStatus" clearable>
@@ -46,7 +45,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { list, status } from '@/api/service-trace/tag/record'
 import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
 
@@ -77,11 +75,6 @@ export default {
         { label: '禁用', value: 'false' }
       ]
     }
-  },
-  computed: {
-    ...mapGetters([
-      'companyId'
-    ])
   },
   mounted() {
     this.handleQuery()

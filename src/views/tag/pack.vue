@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.batchNo" placeholder="批次号" style="width: 300px;" clearable>
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
-      </el-input>
+      <code-complete :no.sync="query.batchNo" />
+      <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成码包</el-button>
       <br>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">

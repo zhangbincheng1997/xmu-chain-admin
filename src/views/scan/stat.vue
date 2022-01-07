@@ -4,8 +4,8 @@
       <code-complete :no.sync="query.batchNo" :on-finish="search" is-default />
       <el-date-picker v-model="query.start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" />
       <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
-      <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
-      <div style="height: 600px; width: 100%;">
+      <el-button icon="el-icon-search" @click="search">查询</el-button>
+      <div style="height: 600px; width: 100%; margin-top: 20px;">
         <el-bmap :map-style-v2="mapStyle" :tilt="tilt" :heading="heading" :zoom="zoom" :center="center">
           <el-bmapv-view>
             <el-bmapv-point-layer :data="data" :size="size" :color="color" />
@@ -80,8 +80,6 @@ export default {
           })
         })
       })
-    },
-    render() {
     }
   }
 }
