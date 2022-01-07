@@ -25,12 +25,3 @@ export function linkHash(val) {
     }
   })
 }
-
-export function linkBatch(val) {
-  this.$router.push({
-    path: '/trace/batch/admin',
-    query: {
-      keyword: val
-    }
-  })
-}

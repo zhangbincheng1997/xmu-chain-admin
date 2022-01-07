@@ -12,7 +12,7 @@
         <el-table-column label="批次号" prop="no" align="center">
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.no)" />
-            <span class="link" @click="linkStat(scope.row.no)">{{ scope.row.no }}</span>
+            <span class="link" @click="linkTagRecord(scope.row.no)">{{ scope.row.no }}</span>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" prop="productName" align="center" />
@@ -31,7 +31,7 @@
             <el-button type="text" @click="handlePhase(scope.row)">配置</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="批次状态" prop="status" align="center">
+        <el-table-column label="状态" prop="status" align="center">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
           </template>
@@ -135,9 +135,6 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.keyword) {
-      this.query.keyword = this.$route.query.keyword
-    }
     this.init()
     this.handleQuery()
   },
@@ -230,10 +227,10 @@ export default {
         }
       })
     },
-    // ----- 跳转统计 -----
-    linkStat(val) {
+    // ----- 跳转标签记录 -----
+    linkTagRecord(val) {
       this.$router.push({
-        path: '/scan/stat',
+        path: '/tag/record',
         query: {
           batchNo: val
         }

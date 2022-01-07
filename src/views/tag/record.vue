@@ -17,12 +17,7 @@
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" />
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="批次号" prop="batchNo" align="center">
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.batchNo)" />
-            <span class="link" @click="linkTagPack(scope.row.batchNo)">{{ scope.row.batchNo }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="批次号" prop="batchNo" align="center" />
         <el-table-column label="溯源码" prop="code" align="center" />
         <el-table-column label="二维码" prop="qrcode" align="center">
           <template slot-scope="scope">
@@ -33,9 +28,14 @@
           </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime" align="center" />
-        <el-table-column label="标签状态" prop="status" align="center">
+        <el-table-column label="状态" prop="status" align="center">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handlePreview(scope.row)">预览</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,6 +77,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.query.batchNo) {
+      this.query.batchNo = this.$route.query.batchNo
+    }
     this.handleQuery()
   },
   methods: {
@@ -92,6 +95,7 @@ export default {
       this.query.sort = order === 'descending' // default ascending
       this.handleQuery()
     },
+    // ----- 修改状态 -----
     handleSwitchChange(row) {
       status([row.id], row.status).then(() => {})
     },
@@ -109,14 +113,9 @@ export default {
         })
       })
     },
-    // ----- 跳转码包 -----
-    linkTagPack(val) {
-      this.$router.push({
-        path: '/tag/pack',
-        query: {
-          batchNo: val
-        }
-      })
+    // ----- 预览 -----
+    handlePreview(row) {
+      // TODO xmu-chain-app
     }
   }
 }

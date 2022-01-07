@@ -7,12 +7,7 @@
       <br>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="批次号" prop="batchNo" align="center">
-          <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.batchNo)" />
-            <span class="link" @click="linkTagRecord(scope.row.batchNo)">{{ scope.row.batchNo }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="批次号" prop="batchNo" align="center" />
         <el-table-column label="数量" prop="count" align="center" />
         <el-table-column label="创建时间" prop="createTime" align="center" />
         <el-table-column label="操作" width="200" align="center" fixed="right">
@@ -118,15 +113,6 @@ export default {
         const filename = res.headers['content-disposition'].split(';')[1].split('=')[1]
         fileDownload(res.data, unescape(decodeURI(filename)))
         this.downloadImageLoading = false
-      })
-    },
-    // ----- 跳转记录 -----
-    linkTagRecord(val) {
-      this.$router.push({
-        path: '/tag/record',
-        query: {
-          batchNo: val
-        }
       })
     }
   }
