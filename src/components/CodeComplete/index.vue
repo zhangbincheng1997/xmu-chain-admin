@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="currentNo" placeholder="请输入批次号" filterable clearable @change="handleChange">
+  <el-select v-model="currentNo" placeholder="批次号" filterable clearable @change="handleChange">
     <el-option v-for="item in batchList" :key="item.no" :label="item.label" :value="item.no" />
   </el-select>
 </template>
@@ -38,7 +38,9 @@ export default {
         this.handleChange(this.currentNo)
       }
       // 加载完成回调
-      this.onFinish()
+      if (this.onFinish) {
+        this.onFinish()
+      }
     })
   },
   methods: {

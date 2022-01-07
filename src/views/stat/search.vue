@@ -1,14 +1,18 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-input v-model="query.code" placeholder="溯源码" style="width: 200px;" clearable />
-      <el-input v-model="query.keyword" placeholder="关键词（IP/地点）" style="width: 300px;" clearable>
+      <code-complete :no.sync="query.batchNo" />
+      <el-date-picker v-model="query.start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" />
+      <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
+      <br>
+      <el-input v-model="query.code" placeholder="溯源码" style="width: 300px;" clearable />
+      <el-input v-model="query.keyword" placeholder="关键词（IP/地点/经度/纬度）" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
+        <el-table-column label="批次号" prop="batchNo" align="center" />
         <el-table-column label="溯源码" prop="code" align="center" />
-        <el-table-column label="防伪码" prop="securityCode" align="center" />
         <el-table-column label="IP" prop="ip" align="center" />
         <el-table-column label="地点" prop="location" align="center" />
         <el-table-column label="经度" prop="longitude" align="center" />
@@ -21,7 +25,7 @@
 </template>
 
 <script>
-import { listSearch } from '@/api/service-trace/tag/pack'
+import { list } from '@/api/service-trace/stat'
 
 export default {
   data() {
@@ -32,32 +36,24 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        sort: true, // 默认逆序
-        keyword: undefined
-      },
-      form: {
+        batchNo: undefined,
         code: undefined,
-        securityCode: undefined,
-        ip: undefined,
-        location: undefined,
-        longitude: undefined,
-        latitude: undefined
+        start: undefined,
+        end: undefined,
+        sort: false
       }
     }
   },
   mounted() {
-    if (this.$route.query.code) {
-      this.query.code = this.$route.query.code
-    }
     this.handleQuery()
   },
   methods: {
     handleQuery() {
       this.loading = true
-      listSearch(this.query).then(res => {
+      list(this.query).then(res => {
         this.loading = false
-        this.list = res.data.list
-        this.total = res.data.total
+        this.list = res.data
+        this.total = res.total
       })
     },
     handleSortChange({ column, prop, order }) {

@@ -9,3 +9,11 @@ export function stat(data) {
     params: data
   })
 }
+
+export function list(data) {
+  return request({
+    url: API + '/list',
+    method: 'get',
+    params: data
+  })
+}
