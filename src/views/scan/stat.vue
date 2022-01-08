@@ -17,12 +17,14 @@
 </template>
 
 <script>
+import { stat } from '@/api/service-trace/scan'
+
+// ----- baidu map -----
 import Vue from 'vue'
 import VueBMap from 'vue-bmap-gl' // https://docs.guyixi.cn/vue-bmap-gl/#/
 import VueMapvgl from 'vue-mapvgl' // https://docs.guyixi.cn/vue-mapvgl/#/
 import 'vue-bmap-gl/dist/style.css'
 import config from '@/common'
-import { stat } from '@/api/service-trace/scan'
 
 Vue.use(VueBMap)
 Vue.use(VueMapvgl)
@@ -30,6 +32,7 @@ VueBMap.initBMapApiLoader({
   ak: '4iosGMuqbTMu55Xh0lAa3pBXrCznsu9m',
   v: '1.0'
 })
+// ----- baidu map -----
 
 export default {
   data() {

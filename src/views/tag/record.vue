@@ -84,6 +84,12 @@ import { list, status } from '@/api/service-trace/tag/record'
 import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
 import ItemsCard from '@/components/ItemsCard'
 
+const tagStatusOptions = [
+  { label: '全部', value: '' },
+  { label: '启用', value: 'true' },
+  { label: '禁用', value: 'false' }
+]
+
 export default {
   components: {
     VueQr,
@@ -110,11 +116,7 @@ export default {
       previewIndex: undefined,
       previewData: {},
 
-      tagStatusOptions: [
-        { label: '全部', value: '' },
-        { label: '启用', value: 'true' },
-        { label: '禁用', value: 'false' }
-      ]
+      tagStatusOptions
     }
   },
   mounted() {

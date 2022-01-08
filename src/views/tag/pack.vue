@@ -20,7 +20,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="批次号" prop="batchNo" required>
           <batch-complete :no.sync="form.batchNo" />
@@ -31,7 +31,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -53,15 +53,11 @@ export default {
         batchNo: undefined,
         sort: false
       },
-
       dialog: {
         title: '生成码包',
         visible: false
       },
-      form: {
-        batchNo: undefined,
-        count: undefined
-      },
+      form: {},
 
       downloadTextLoading: false,
       downloadImageLoading: false
@@ -89,13 +85,14 @@ export default {
     },
     handleSubmit() {
       generate(this.form.batchNo, this.form.count).then(() => {
-        this.closeDialog()
+        this.handleClose()
         this.handleQuery()
       })
     },
-    closeDialog() {
-      this.dialog.visible = false
+    handleClose() {
+      this.form = {}
       this.$refs.form.resetFields()
+      this.dialog.visible = false
     },
     // ----- 文字码包 -----
     downloadText(id) {

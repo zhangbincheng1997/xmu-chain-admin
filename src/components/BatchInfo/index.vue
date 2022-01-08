@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { getBatchById } from '@/api/service-trace/batch/admin'
+import { getBatchById } from '@/api/service-trace/batch'
 
 export default {
   name: 'BatchInfo',

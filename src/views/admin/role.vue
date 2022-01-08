@@ -24,7 +24,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="角色名字" prop="name" required>
           <el-input v-model="form.name" />
@@ -35,11 +35,11 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog :title="menuDialog.title" :visible.sync="menuDialog.visible">
+    <el-dialog :title="menuDialog.title" :visible.sync="menuDialog.visible" @close="handleMenuClose">
       <el-tree
         ref="menuTree"
         :data="menuData"
@@ -51,11 +51,11 @@
       />
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleMenuSubmit">确 定</el-button>
-        <el-button @click="closeMenuDialog">取 消</el-button>
+        <el-button @click="handleMenuClose">取 消</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog :title="permissionDialog.title" :visible.sync="permissionDialog.visible">
+    <el-dialog :title="permissionDialog.title" :visible.sync="permissionDialog.visible" @click="handlePermissionClose">
       <el-tree
         ref="permissionTree"
         :data="permissionData"
@@ -67,7 +67,7 @@
       />
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handlePermissionSubmit">确 定</el-button>
-        <el-button @click="closePermissionDialog">取 消</el-button>
+        <el-button @click="handlePermissionClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -92,11 +92,7 @@ export default {
         title: undefined,
         visible: false
       },
-      form: {
-        id: undefined,
-        name: undefined,
-        value: undefined
-      },
+      form: {},
 
       menuDialog: {
         title: '设置角色',
@@ -133,14 +129,12 @@ export default {
       })
     },
     handleAdd() {
-      this.resetForm()
       this.dialog = {
         title: '添加',
         visible: true
       }
     },
     handleEdit(row) {
-      this.resetForm()
       this.dialog = {
         title: '修改',
         visible: true
@@ -151,26 +145,23 @@ export default {
       const id = this.form.id
       if (id === undefined) {
         add(this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       } else {
         update(id, this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       }
     },
-    closeDialog() {
-      this.resetForm()
+    handleClose() {
+      this.form = {}
+      this.$refs.form.resetFields()
       this.dialog = {
         title: undefined,
         visible: false
       }
-    },
-    resetForm() {
-      this.form = {}
-      if (this.$refs.form) this.$refs.form.resetFields()
     },
     handleDelete(row) {
       this.$confirm('是否删除？', '提示', {
@@ -191,10 +182,10 @@ export default {
     },
     handleMenuSubmit() {
       setMenu(this.selectId, this.$refs.menuTree.getCheckedKeys()).then(() => {
-        this.closeMenuDialog()
+        this.handleMenuClose()
       })
     },
-    closeMenuDialog() {
+    handleMenuClose() {
       this.menuDialog.visible = false
       this.$refs.menuTree.setCheckedKeys([])
     },
@@ -208,10 +199,10 @@ export default {
     },
     handlePermissionSubmit() {
       setPermission(this.selectId, this.$refs.permissionTree.getCheckedKeys()).then(() => {
-        this.closePermissionDialog()
+        this.handlePermissionClose()
       })
     },
-    closePermissionDialog() {
+    handlePermissionClose() {
       this.permissionDialog.visible = false
       this.$refs.permissionTree.setCheckedKeys([])
     }

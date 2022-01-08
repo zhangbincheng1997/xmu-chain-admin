@@ -36,7 +36,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -65,19 +65,10 @@ export default {
         title: undefined,
         visible: false
       },
-      form: {
-        id: undefined,
-        name: undefined,
-        content: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      }
+      form: {}
     }
   },
   mounted() {
-    if (this.$route.query.id) {
-      this.query.keyword = this.$route.query.id
-    }
     this.handleQuery()
   },
   methods: {
@@ -94,14 +85,12 @@ export default {
       this.handleQuery()
     },
     handleAdd() {
-      this.resetForm()
       this.dialog = {
         title: '添加',
         visible: true
       }
     },
     handleEdit(row) {
-      this.resetForm()
       this.dialog = {
         title: '修改',
         visible: true
@@ -112,26 +101,23 @@ export default {
       const id = this.form.id
       if (id === undefined) {
         addTemplate(this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       } else {
         updateTemplate(id, this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       }
     },
-    closeDialog() {
-      this.resetForm()
+    handleClose() {
+      this.form = {}
+      this.$refs.form.resetFields()
       this.dialog = {
         title: undefined,
         visible: false
       }
-    },
-    resetForm() {
-      this.form = {}
-      if (this.$refs.form) this.$refs.form.resetFields()
     },
     handleDelete(row) {
       this.$confirm('是否删除？', '提示', {

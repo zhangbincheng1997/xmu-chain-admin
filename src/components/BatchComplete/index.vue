@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { list } from '@/api/service-trace/batch/admin'
+import { list } from '@/api/service-trace/batch'
 
 export default {
   name: 'BatchComplete',

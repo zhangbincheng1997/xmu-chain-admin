@@ -26,7 +26,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="父节点" prop="pid">
           <el-cascader
@@ -59,7 +59,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -82,16 +82,7 @@ export default {
         title: undefined,
         visible: false
       },
-      form: {
-        id: undefined,
-        name: undefined,
-        path: undefined,
-        component: undefined,
-        icon: undefined,
-        sort: undefined,
-        pid: undefined,
-        hidden: undefined
-      }
+      form: {}
     }
   },
   mounted() {
@@ -107,14 +98,12 @@ export default {
       })
     },
     handleAdd() {
-      this.resetForm()
       this.dialog = {
         title: '添加',
         visible: true
       }
     },
     handleEdit(row) {
-      this.resetForm()
       this.dialog = {
         title: '修改',
         visible: true
@@ -125,26 +114,23 @@ export default {
       const id = this.form.id
       if (id === undefined) {
         add(this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       } else {
         update(id, this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       }
     },
-    closeDialog() {
-      this.resetForm()
+    handleClose() {
+      this.form = {}
+      this.$refs.form.resetFields()
       this.dialog = {
         title: undefined,
         visible: false
       }
-    },
-    resetForm() {
-      this.form = {}
-      if (this.$refs.form) this.$refs.form.resetFields()
     },
     handleDelete(row) {
       this.$confirm('是否删除？', '提示', {

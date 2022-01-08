@@ -37,7 +37,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item v-if="form.id" label="地址" prop="address" required>
           <el-input v-model="form.address" autocomplete="off" disabled />
@@ -87,11 +87,11 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog :title="roleDialog.title" :visible.sync="roleDialog.visible">
+    <el-dialog :title="roleDialog.title" :visible.sync="roleDialog.visible" @close="handleRoleClose">
       <el-tree
         ref="tree"
         :data="roleData"
@@ -103,7 +103,7 @@
       />
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleRoleSubmit">确 定</el-button>
-        <el-button @click="closeRoleDialog">取 消</el-button>
+        <el-button @click="handleRoleClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -112,6 +112,12 @@
 <script>
 import { list, add, update, del, updatePassword, getRole, setRole, enabled } from '@/api/service-admin/user'
 import { listRole } from '@/api/service-admin/role'
+
+const genderOptions = [
+  { label: 0, value: '未知' },
+  { label: 1, value: '男' },
+  { label: 2, value: '女' }
+]
 
 export default {
   data() {
@@ -130,21 +136,7 @@ export default {
         title: undefined,
         visible: false
       },
-      form: {
-        id: undefined,
-        address: undefined,
-        username: undefined,
-        password: undefined,
-        name: undefined,
-        phone: undefined,
-        email: undefined,
-        avatar: undefined,
-        gender: undefined,
-        birthday: undefined,
-        enabled: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      },
+      form: {},
 
       roleDialog: {
         title: '设置角色',
@@ -152,11 +144,7 @@ export default {
       },
       roleData: undefined,
 
-      genderOptions: [
-        { label: 0, value: '未知' },
-        { label: 1, value: '男' },
-        { label: 2, value: '女' }
-      ]
+      genderOptions
     }
   },
   mounted() {
@@ -182,14 +170,14 @@ export default {
       this.handleQuery()
     },
     handleAdd() {
-      this.resetForm()
+      this.handleReset()
       this.dialog = {
         title: '添加',
         visible: true
       }
     },
     handleEdit(row) {
-      this.resetForm()
+      this.handleReset()
       this.dialog = {
         title: '修改',
         visible: true
@@ -200,26 +188,23 @@ export default {
       const id = this.form.id
       if (id === undefined) {
         add(this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       } else {
         update(id, this.form).then(() => {
-          this.closeDialog()
+          this.handleClose()
           this.handleQuery()
         })
       }
     },
-    closeDialog() {
-      this.resetForm()
+    handleClose() {
+      this.form = {}
+      this.$refs.form.resetFields()
       this.dialog = {
         title: undefined,
         visible: false
       }
-    },
-    resetForm() {
-      this.form = {}
-      if (this.$refs.form) this.$refs.form.resetFields()
     },
     handleDelete(row) {
       this.$confirm('是否删除？', '提示', {
@@ -249,10 +234,10 @@ export default {
     },
     handleRoleSubmit() {
       setRole(this.selectId, this.$refs.tree.getCheckedKeys()).then(() => {
-        this.closeRoleDialog()
+        this.handleRoleClose()
       })
     },
-    closeRoleDialog() {
+    handleRoleClose() {
       this.roleDialog.visible = false
       this.$refs.tree.setCheckedKeys([])
     },

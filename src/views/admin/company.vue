@@ -56,7 +56,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -79,20 +79,10 @@ export default {
         sort: false
       },
       dialog: {
-        title: undefined,
+        title: '编辑',
         visible: false
       },
-      form: {
-        id: undefined,
-        name: undefined,
-        uscc: undefined,
-        legalPerson: undefined,
-        legalId: undefined,
-        contactInfo: undefined,
-        businessLicense: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      }
+      form: {}
     }
   },
   mounted() {
@@ -112,30 +102,19 @@ export default {
       this.handleQuery()
     },
     handleEdit(row) {
-      this.resetForm()
-      this.dialog = {
-        title: '修改',
-        visible: true
-      }
+      this.dialog.visible = true
       this.form = JSON.parse(JSON.stringify(row))
     },
     handleSubmit() {
-      const id = this.form.id
-      update(id, this.form).then(() => {
-        this.closeDialog()
+      update(this.form.id, this.form).then(() => {
+        this.handleClose()
         this.handleQuery()
       })
     },
-    closeDialog() {
-      this.resetForm()
-      this.dialog = {
-        title: undefined,
-        visible: false
-      }
-    },
-    resetForm() {
+    handleClose() {
       this.form = {}
-      if (this.$refs.form) this.$refs.form.resetFields()
+      this.$refs.form.resetFields()
+      this.dialog.visible = false
     },
     handleDelete(row) {
       this.$confirm('是否删除？', '提示', {

@@ -45,7 +45,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="批次号" prop="no" required>
           <el-input v-model="form.no" />
@@ -63,11 +63,11 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog :title="shopDialog.title" :visible.sync="shopDialog.visible">
+    <el-dialog :title="shopDialog.title" :visible.sync="shopDialog.visible" @close="handleShopClose">
       <el-form ref="shopForm" :model="shopForm" label-width="100px">
         <el-form-item label="店铺名称" prop="name">
           <el-input v-model="shopForm.name" />
@@ -83,15 +83,15 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="updateShop">确 定</el-button>
-        <el-button @click="closeShop">取 消</el-button>
+        <el-button type="primary" @click="handleShopSubmit">确 定</el-button>
+        <el-button @click="handleShopClose">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { list, add, del, updateShop, status } from '@/api/service-trace/batch/admin'
+import { list, add, del, updateShop, status } from '@/api/service-trace/batch'
 import { allTemplate } from '@/api/service-trace/template/product'
 
 export default {
@@ -110,26 +110,13 @@ export default {
         title: '批次配置',
         visible: false
       },
-      form: {
-        id: undefined,
-        no: undefined,
-        productId: undefined,
-        productName: undefined,
-        shopInfo: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      },
+      form: {},
 
       shopDialog: {
         title: '店铺配置',
         visible: false
       },
-      shopForm: {
-        name: undefined,
-        content: undefined,
-        icon: undefined,
-        url: undefined
-      },
+      shopForm: {},
 
       productTemplates: []
     }
@@ -157,22 +144,18 @@ export default {
       this.handleQuery()
     },
     handleAdd() {
-      this.resetForm()
       this.dialog.visible = true
     },
     handleSubmit() {
       add(this.form).then(() => {
-        this.closeDialog()
+        this.handleClose()
         this.handleQuery()
       })
     },
-    closeDialog() {
-      this.resetForm()
-      this.dialog.visible = false
-    },
-    resetForm() {
+    handleClose() {
       this.form = {}
-      if (this.$refs.form) this.$refs.form.resetFields()
+      this.$refs.form.resetFields()
+      this.dialog.visible = false
     },
     handleDelete(row) {
       this.$confirm('是否删除？', '提示', {
@@ -183,30 +166,26 @@ export default {
         })
       })
     },
+    // ----- 修改状态 -----
+    handleSwitchChange(row) {
+      status(row.id, row.status).then(() => {})
+    },
     // ----- 配置店铺信息 -----
     handleShop(row) {
       this.shopForm = row.shopInfo ? JSON.parse(row.shopInfo) : {}
       this.shopForm.id = row.id
       this.shopDialog.visible = true
     },
-    updateShop() {
-      const id = this.shopForm.id
-      updateShop(id, this.shopForm).then(() => {
-        this.closeShop()
+    handleShopSubmit() {
+      updateShop(this.shopForm.id, this.shopForm).then(() => {
+        this.handleShopClose()
         this.handleQuery()
       })
     },
-    closeShop() {
-      this.resetShop()
-      this.shopDialog.visible = false
-    },
-    resetShop() {
+    handleShopClose() {
       this.shopForm = {}
-      if (this.$refs.shopForm) this.$refs.shopForm.resetFields()
-    },
-    // ----- 修改状态 -----
-    handleSwitchChange(row) {
-      status(row.id, row.status).then(() => {})
+      this.$refs.shopForm.resetFields()
+      this.shopDialog.visible = false
     },
     // ----- 配置商品信息 -----
     handleProduct(row) {

@@ -10,10 +10,10 @@
       <el-container>
         <div v-if="step === 1" style="width: 800px; margin:0 auto; padding-top: 50px;">
           <el-form ref="companyForm" :model="companyForm" :rules="companyRules" label-width="100px">
-            <el-form-item label="企业名称" prop="name" required>
+            <el-form-item label="企业名称" prop="name">
               <el-input v-model="companyForm.name" />
             </el-form-item>
-            <el-form-item label="统一社会信用代码" prop="uscc" required>
+            <el-form-item label="统一社会信用代码" prop="uscc">
               <el-input v-model="companyForm.uscc" />
             </el-form-item>
             <el-row>
@@ -36,7 +36,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleNext">下一步</el-button>
-              <el-button @click="resetForm">重置</el-button>
+              <el-button @click="handleReset">重置</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -60,7 +60,7 @@
             <el-form-item>
               <el-button type="primary" @click="handlePrev">上一步</el-button>
               <el-button type="primary" @click="handleNext">完成</el-button>
-              <el-button @click="resetForm">重置</el-button>
+              <el-button @click="handleReset">重置</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -111,9 +111,12 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
+    register() {
+      register(this.companyForm, this.userForm).then(() => {
+        this.step += 1
+      })
+    },
     handleNext() {
       if (this.step === 1) {
         this.$refs.companyForm.validate((valid) => {
@@ -126,7 +129,7 @@ export default {
       } else if (this.step === 2) {
         this.$refs.userForm.validate((valid) => {
           if (valid) {
-            this.handleSubmit()
+            this.register()
           } else {
             return false
           }
@@ -138,14 +141,9 @@ export default {
       if (this.step === 2) this.$refs.userForm.clearValidate()
       this.step -= 1
     },
-    resetForm() {
+    handleReset() {
       if (this.step === 1) this.$refs.companyForm.resetFields()
       if (this.step === 2) this.$refs.userForm.resetFields()
-    },
-    handleSubmit() {
-      register(this.companyForm, this.userForm).then(() => {
-        this.step += 1
-      })
     },
     back() {
       this.$router.push('/')
