@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-table :data="content">
-      <el-table-column prop="title" width="200" label="标题">
+      <el-table-column label="标题" prop="title" width="200">
         <template slot-scope="scope">
           <el-input v-model="scope.row.title" />
         </template>
       </el-table-column>
-      <el-table-column prop="type" width="200" label="类型">
+      <el-table-column label="类型" prop="type" width="200">
         <template slot-scope="scope">
           <el-select v-model="scope.row.type" clearable>
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column prop="value" label="内容">
+      <el-table-column label="内容" prop="value">
         <template slot-scope="scope">
           <el-input v-if="scope.row.type==='text'" v-model="scope.row.value" />
           <UploadImage v-if="scope.row.type==='image'" :image.sync="scope.row.value" />
@@ -40,7 +40,7 @@ export default {
   props: {
     content: {
       type: Array,
-      default: () => []
+      required: true
     }
   },
   data() {

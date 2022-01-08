@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <el-upload
-      action=""
-      :http-request="handleUpload"
-      :show-file-list="true"
-      accept=".pdf, .txt, .doc, .docx, xls, xlsx"
-    >
-      <a v-if="file" :download="fileUrl">{{ file }}</a>
-      <i v-else class="el-icon-plus" />
-    </el-upload>
-  </div>
+  <el-upload
+    action=""
+    :http-request="handleUpload"
+    :show-file-list="true"
+    accept=".pdf, .txt, .doc, .docx, xls, xlsx"
+  >
+    <a v-if="file" :download="fileUrl">{{ file }}</a>
+    <i v-else class="el-icon-plus" />
+  </el-upload>
 </template>
 
 <script>

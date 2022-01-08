@@ -44,54 +44,26 @@
 
     <el-drawer :visible.sync="previewVisible" title="溯源预览" size="50%">
       <el-card>
-        <el-tabs>
-          <el-tab-pane v-if="shop = previewData.shop" label="店铺管理">
-            <el-form label-width="100px">
-              <el-form-item label="店铺名称">{{ shop.name }}</el-form-item>
-              <el-form-item label="店铺说明">{{ shop.content }}</el-form-item>
-              <el-form-item label="店铺图标"><image-preview :image="shop.icon" /></el-form-item>
-              <el-form-item label="店铺链接">{{ shop.url }}</el-form-item>
+        <el-tabs v-model="previewIndex">
+          <el-tab-pane label="店铺管理">
+            <el-form v-if="previewData && previewData.shop" label-width="100px">
+              <el-form-item label="店铺名称">{{ previewData.shop.name }}</el-form-item>
+              <el-form-item label="店铺说明">{{ previewData.shop.content }}</el-form-item>
+              <el-form-item label="店铺图标"><image-preview :image="previewData.shop.icon" /></el-form-item>
+              <el-form-item label="店铺链接">{{ previewData.shop.url }}</el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane v-if="product = previewData.product" label="商品管理">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>{{ product.name }}</span>
-              </div>
-              <el-form label-width="100px">
-                <el-form-item v-for="(item, i) in product.content" :key="i" :label="item.title">
-                  <span v-if="item.type === 'text'">{{ item.value }}</span>
-                  <image-preview v-if="item.type === 'image'" :image="item.value" />
-                  <video v-if="item.type === 'video'" controls><source :src="IPFS_GATEWAY + '/' + item.value"></video>
-                  <audio v-if="item.type === 'audio'" controls><source :src="IPFS_GATEWAY + '/' + item.value"></audio>
-                  <a v-if="item.type === 'file'" :href="IPFS_GATEWAY + '/' + item.value" download>{{ item.value }}</a>
-                </el-form-item>
-              </el-form>
-              <el-tag v-if="product.txId" type="success">已上链：{{ product.txId }}</el-tag>
-            </el-card>
+          <el-tab-pane label="商品管理">
+            <ItemsCard :items="previewData.product" />
           </el-tab-pane>
-          <el-tab-pane v-if="phases = previewData.phases" label="环节管理">
-            <div v-for="(phase, pi) in phases" :key="pi">
-              <el-card>
-                <div slot="header" class="clearfix">
-                  <span>{{ phase.name }}</span>
-                </div>
-                <el-form label-width="100px">
-                  <el-form-item v-for="(item, i) in phase.content" :key="i" :label="item.title">
-                    <span v-if="item.type === 'text'">{{ item.value }}</span>
-                    <img v-if="item.type === 'image'" :src="IPFS_GATEWAY + '/' + item.value" alt="">
-                    <video v-if="item.type === 'video'" controls><source :src="IPFS_GATEWAY + '/' + item.value"></video>
-                    <audio v-if="item.type === 'audio'" controls><source :src="IPFS_GATEWAY + '/' + item.value"></audio>
-                    <a v-if="item.type === 'file'" :download="IPFS_GATEWAY + '/' + item.value" />
-                  </el-form-item>
-                </el-form>
-                <el-tag v-if="phase.txId" type="success">已上链：{{ phase.txId }}</el-tag>
-              </el-card>
+          <el-tab-pane label="环节管理">
+            <div v-for="(phase, i) in previewData.phases" :key="i">
+              <ItemsCard :items="phase" />
               <el-divider />
             </div>
           </el-tab-pane>
-          <el-tab-pane v-if="history = previewData.history" label="扫码历史">
-            <el-table :data="history">
+          <el-tab-pane label="扫码历史">
+            <el-table :data="previewData.history">
               <el-table-column type="index" width="50" />
               <el-table-column label="IP" prop="ip" align="center" />
               <el-table-column label="地点" prop="location" align="center" />
@@ -110,10 +82,12 @@
 import { trace } from '@/api/service-trace/trace'
 import { list, status } from '@/api/service-trace/tag/record'
 import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
+import ItemsCard from '@/components/ItemsCard'
 
 export default {
   components: {
-    VueQr
+    VueQr,
+    ItemsCard
   },
   data() {
     return {
@@ -133,7 +107,8 @@ export default {
       selectStatus: undefined,
 
       previewVisible: false,
-      previewData: false,
+      previewIndex: undefined,
+      previewData: {},
 
       tagStatusOptions: [
         { label: '全部', value: '' },
@@ -183,6 +158,7 @@ export default {
     handlePreview(row) {
       trace(row.batchNo, row.code).then(res => {
         this.previewVisible = true
+        this.previewIndex = '1'
         this.previewData = res.data
       })
     }
