@@ -80,7 +80,7 @@ export default {
     },
     handleChangeRole(role) {
       // Token换取Key
-      change(role).then((res) => {
+      change(role).then(res => {
         // Key换取Token
         this.$store.dispatch('user/exchange', res.data).then(() => {
           this.$store.dispatch('user/resetRouter')

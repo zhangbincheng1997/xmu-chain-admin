@@ -80,15 +80,6 @@ export default {
     submitForm(item) {
       updatePhase(item.id, item).then(() => {})
     },
-    handleDelete(id) {
-      this.$confirm('是否删除？', '提示', {
-        type: 'warning'
-      }).then(() => {
-        delPhase(id).then(res => {
-          this.$router.go(0) // 刷新
-        })
-      })
-    },
     importClick(item) {
       this.selectItem = item
       this.importId = undefined
@@ -110,7 +101,7 @@ export default {
       this.$confirm('是否保存模板？', '提示', {
         type: 'warning'
       }).then(() => {
-        addTemplate(item).then(res => {
+        addTemplate(item).then(() => {
           const template = {
             name: item.name,
             content: item.content
@@ -126,9 +117,18 @@ export default {
       this.$confirm('是否上链？上链后不允许修改！', '提示', {
         type: 'warning'
       }).then(() => {
-        chain(item.id).then((res) => {
+        chain(item.id).then(res => {
           item.txId = res.data.txId
           this.$forceUpdate()
+        })
+      })
+    },
+    handleDelete(id) {
+      this.$confirm('是否删除？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        delPhase(id).then(() => {
+          this.$router.go(0) // 刷新
         })
       })
     },
@@ -139,7 +139,7 @@ export default {
         name: '新增环节',
         content: undefined
       }
-      addPhase(item).then((res) => {
+      addPhase(item).then(res => {
         item.id = res.data // 环节ID
         this.list.push(item)
         // 展开新增环节

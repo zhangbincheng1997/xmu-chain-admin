@@ -27,7 +27,7 @@
           <el-input v-model="form.name" />
         </el-form-item>
         <el-form-item label="商品内容" prop="content">
-          <Items :content="form.content" />
+          <Items :content.sync="form.content" />
         </el-form-item>
         <el-form-item v-if="form.id" prop="time">
           <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>

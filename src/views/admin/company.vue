@@ -127,7 +127,7 @@ export default {
     },
     handleGM(row) {
       // Token换取Key
-      gm(row.id).then((res) => {
+      gm(row.id).then(res => {
         // Key换取Token
         this.$store.dispatch('user/exchange', res.data).then(() => {
           this.$store.dispatch('user/resetRouter')

@@ -46,7 +46,7 @@
       <el-card>
         <el-tabs v-model="previewIndex">
           <el-tab-pane label="店铺管理">
-            <el-form v-if="previewData && previewData.shop" label-width="100px">
+            <el-form v-if="previewData.shop" label-width="100px">
               <el-form-item label="店铺名称">{{ previewData.shop.name }}</el-form-item>
               <el-form-item label="店铺说明">{{ previewData.shop.content }}</el-form-item>
               <el-form-item label="店铺图标"><image-preview :image="previewData.shop.icon" /></el-form-item>
@@ -54,7 +54,9 @@
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="商品管理">
-            <ItemsCard :items="previewData.product" />
+            <div v-if="product = previewData.product">
+              <ItemsCard :items="product" />
+            </div>
           </el-tab-pane>
           <el-tab-pane label="环节管理">
             <div v-for="(phase, i) in previewData.phases" :key="i">

@@ -4,9 +4,9 @@
     <br>
     <el-card>
       <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
-      <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form.id)">上链</el-button>
-      <el-button type="text" style="float: right;" @click="importClick">导入模板</el-button>
-      <el-button type="text" style="float: right;" @click="saveTemplate">保存模板</el-button>
+      <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form)">上链</el-button>
+      <el-button type="text" style="float: right;" @click="importClick(form)">导入模板</el-button>
+      <el-button type="text" style="float: right;" @click="saveTemplate(form)">保存模板</el-button>
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="商品名称" prop="name" required>
           <el-input v-model="form.name" />
@@ -15,7 +15,7 @@
           <Items :content="form.content" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm">保存</el-button>
+          <el-button type="primary" @click="submitForm(form)">保存</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -42,32 +42,30 @@ export default {
   },
   data() {
     return {
-      form: {
-        id: undefined,
-        name: undefined,
-        content: undefined,
-        txId: undefined
-      },
+      form: {},
+      batchId: undefined,
+      selectItem: undefined,
       importId: undefined,
       importVisible: false,
       templates: undefined
     }
   },
   mounted() {
-    const batchId = this.$route.query.batchId
-    if (!batchId) {
+    this.batchId = this.$route.query.batchId
+    if (!this.batchId) {
       this.$router.push('/trace/batch/admin')
       return
     }
-    getProductByBatchId(batchId).then(res => {
+    getProductByBatchId(this.batchId).then(res => {
       this.form = res.data
     })
   },
   methods: {
-    submitForm() {
-      updateProduct(this.form.id, this.form).then(() => {})
+    submitForm(item) {
+      updateProduct(item.id, item).then(() => {})
     },
-    importClick() {
+    importClick(item) {
+      this.selectItem = item
       this.importId = undefined
       this.importVisible = true
       if (!this.templates) {
@@ -78,19 +76,19 @@ export default {
     },
     importTemplate() {
       const template = this.templates.filter(item => item.id === this.importId)[0]
-      this.form.name = template.name
-      this.form.content = template.content
+      this.selectItem.name = template.name
+      this.selectItem.content = template.content
       this.importId = undefined
       this.importVisible = false
     },
-    saveTemplate() {
+    saveTemplate(item) {
       this.$confirm('是否保存模板？', '提示', {
         type: 'warning'
       }).then(() => {
-        addTemplate(this.form).then(res => {
+        addTemplate(item).then(res => {
           const template = {
-            name: this.form.name,
-            content: this.form.content
+            name: item.name,
+            content: item.content
           }
           if (this.templates) {
             this.templates.push(template)
@@ -99,12 +97,12 @@ export default {
         })
       })
     },
-    chain(id) {
+    chain(item) {
       this.$confirm('是否上链？上链后不允许修改！', '提示', {
         type: 'warning'
       }).then(() => {
-        chain(id).then((res) => {
-          this.form.txId = res.data.txId
+        chain(item.id).then(res => {
+          item.txId = res.data.txId
           this.$forceUpdate()
         })
       })

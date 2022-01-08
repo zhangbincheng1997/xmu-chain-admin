@@ -21,13 +21,13 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="100%">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="100%" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="环节名称" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
         <el-form-item label="环节内容" prop="content">
-          <Items :content="form.content" />
+          <Items :content.sync="form.content" />
         </el-form-item>
         <el-form-item v-if="form.id" prop="time">
           <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>
