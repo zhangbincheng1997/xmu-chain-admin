@@ -8,7 +8,7 @@
 import { list } from '@/api/service-trace/batch/admin'
 
 export default {
-  name: 'CodeComplete',
+  name: 'BatchComplete',
   props: {
     no: {
       type: String,

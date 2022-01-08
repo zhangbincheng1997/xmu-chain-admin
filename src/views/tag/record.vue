@@ -4,7 +4,7 @@
       <el-select v-model="query.status" placeholder="标签状态" style="width: 200px;" clearable>
         <el-option v-for="item in tagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <code-complete :no.sync="query.batchNo" />
+      <batch-complete :no.sync="query.batchNo" />
       <el-input v-model="query.code" placeholder="溯源码" style="width: 400px;" clearable />
       <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <br>
