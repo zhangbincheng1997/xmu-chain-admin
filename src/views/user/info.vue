@@ -35,7 +35,6 @@
 
 <script>
 import { getInfo, updateInfo } from '@/api/service-admin/me'
-import config from '@/config'
 
 export default {
   data() {
@@ -48,7 +47,11 @@ export default {
         birthday: undefined,
         gender: undefined
       },
-      genderOptions: config.genderOptions
+      genderOptions: [
+        { label: 0, value: '未知' },
+        { label: 1, value: '男' },
+        { label: 2, value: '女' }
+      ]
     }
   },
   mounted() {

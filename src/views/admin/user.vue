@@ -112,7 +112,6 @@
 <script>
 import { list, add, update, del, updatePassword, getRole, setRole, enabled } from '@/api/service-admin/user'
 import { listRole } from '@/api/service-admin/role'
-import config from '@/config'
 
 export default {
   data() {
@@ -153,7 +152,11 @@ export default {
       },
       roleData: undefined,
 
-      genderOptions: config.genderOptions
+      genderOptions: [
+        { label: 0, value: '未知' },
+        { label: 1, value: '男' },
+        { label: 2, value: '女' }
+      ]
     }
   },
   mounted() {

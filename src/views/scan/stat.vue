@@ -21,7 +21,7 @@ import Vue from 'vue'
 import VueBMap from 'vue-bmap-gl' // https://docs.guyixi.cn/vue-bmap-gl/#/
 import VueMapvgl from 'vue-mapvgl' // https://docs.guyixi.cn/vue-mapvgl/#/
 import 'vue-bmap-gl/dist/style.css'
-import config from '@/config'
+import config from '@/common'
 import { stat } from '@/api/service-trace/scan'
 
 Vue.use(VueBMap)

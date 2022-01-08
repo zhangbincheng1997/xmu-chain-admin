@@ -167,9 +167,8 @@ export default {
       })
     },
     closeDialog() {
-      // this.resetForm()
+      this.resetForm()
       this.dialog.visible = false
-      if (this.$refs.form) this.$refs.form.resetFields()
     },
     resetForm() {
       this.form = {}
