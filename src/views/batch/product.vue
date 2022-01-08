@@ -2,7 +2,7 @@
   <div class="app-container">
     <BatchInfo />
     <br>
-    <el-card class="box-card">
+    <el-card>
       <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
       <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form.id)">上链</el-button>
       <el-button type="text" style="float: right;" @click="importClick">导入模板</el-button>

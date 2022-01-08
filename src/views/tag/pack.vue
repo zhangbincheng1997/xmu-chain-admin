@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-card>
       <batch-complete :no.sync="query.batchNo" />
       <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成码包</el-button>

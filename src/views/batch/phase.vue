@@ -2,7 +2,7 @@
   <div class="app-container">
     <BatchInfo />
     <br>
-    <el-card class="box-card">
+    <el-card>
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item, i) in list" :key="i" :name="i.toString()">
           <template slot="title">

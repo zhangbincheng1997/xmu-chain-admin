@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-card>
       <el-container>
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="旧密码" prop="oldPwd" required>

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-card>
       <el-input v-model="searchKey" placeholder="请输入区块哈希或块高" style="width: 500px;float:right;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>

@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card>
     <el-page-header @back="$router.go(-1)" />
     <br>
     <el-descriptions title="批次信息">

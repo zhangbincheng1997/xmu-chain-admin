@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-card>
       <h1 style="text-align: center;">注册企业</h1>
       <el-steps :active="step" align-center>
         <el-step title="步骤 1" description="企业信息" icon="el-icon-edit" />

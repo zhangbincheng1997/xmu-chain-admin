@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-card>
       <el-select v-model="query.roleId" placeholder="角色" style="width: 200px;" clearable>
         <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
@@ -10,7 +10,7 @@
       <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加员工</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="头像" prop="avatar" width="100" align="center">
+        <el-table-column label="头像" prop="avatar" align="center">
           <template slot-scope="scope"><image-preview :image="scope.row.avatar" /></template>
         </el-table-column>
         <el-table-column label="姓名" prop="name" align="center" />
