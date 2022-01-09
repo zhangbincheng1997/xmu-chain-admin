@@ -42,25 +42,26 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
-    <el-drawer :visible.sync="previewVisible" title="溯源预览" size="50%">
+    <el-drawer :visible.sync="previewVisible" title="预览" size="50%">
       <el-card>
         <el-tabs v-model="previewIndex">
-          <el-tab-pane label="店铺管理">
-            <el-form v-if="previewData.shop" label-width="100px">
-              <el-form-item label="店铺名称">{{ previewData.shop.name }}</el-form-item>
-              <el-form-item label="店铺说明">{{ previewData.shop.content }}</el-form-item>
-              <el-form-item label="店铺图标"><image-preview :image="previewData.shop.icon" /></el-form-item>
-              <el-form-item label="店铺链接">{{ previewData.shop.url }}</el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="商品管理">
-            <div v-if="product = previewData.product">
-              <ItemsCard :items="product" />
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="环节管理">
-            <div v-for="(phase, i) in previewData.phases" :key="i">
-              <ItemsCard :items="phase" />
+          <el-tab-pane label="溯源信息">
+            <el-card v-if="previewData.shop">
+              <div slot="header" class="clearfix">
+                <span>店铺信息</span>
+              </div>
+              <div style="float: left;">
+                <img :src="IPFS_GATEWAY + '/' + previewData.shop.icon" height="120px" alt="">
+              </div>
+              <div style="height: 120px; margin-left: 20px; display: inline-block; vertical-align: middle;">
+                <strong>{{ previewData.shop.name }}</strong>
+                <p><small>{{ previewData.shop.content }}</small></p>
+                <p><el-button type="primary" size="mini" icon="el-icon-s-shop"><a :href="previewData.shop.url">进入官方店铺</a></el-button></p>
+              </div>
+            </el-card>
+            <el-divider />
+            <div v-for="(item, i) in previewData.items" :key="i">
+              <ItemsCard :items="item" />
               <el-divider />
             </div>
           </el-tab-pane>
@@ -162,7 +163,7 @@ export default {
     handlePreview(row) {
       trace(row.batchNo, row.code).then(res => {
         this.previewVisible = true
-        this.previewIndex = '1'
+        this.previewIndex = '0'
         this.previewData = res.data
       })
     }
