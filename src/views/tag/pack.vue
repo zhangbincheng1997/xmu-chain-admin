@@ -3,7 +3,7 @@
     <el-card>
       <batch-complete :no.sync="query.batchNo" />
       <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleGenerate">生成码包</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float: right;" @click="handleGenerate">生成码包</el-button>
       <br>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />

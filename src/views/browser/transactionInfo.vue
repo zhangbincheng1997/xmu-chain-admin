@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card>
-      <el-input v-model="searchKey" placeholder="请输入交易哈希/发送方/块高" style="width: 500px;float:right;" clearable>
+      <el-input v-model="searchKey" placeholder="请输入交易哈希/发送方/块高" style="width: 500px; float: right;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>
       <el-table ref="refTable" v-loading="loading" :data="list" @row-click="handleRowClick">
@@ -22,12 +22,12 @@
             {{ scope.row.transFrom }}
           </template>
         </el-table-column>
-        <el-table-column prop="blockNumber" label="块高" width="120" align="center">
+        <el-table-column label="块高" prop="blockNumber" width="120" align="center">
           <template slot-scope="scope">
             <span class="link" @click="link(scope.row.blockNumber)">{{ scope.row.blockNumber }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="blockTimestamp" label="创建时间" width="280" align="center" />
+        <el-table-column label="创建时间" prop="blockTimestamp" width="280" align="center" />
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="query.pageNumber" :limit.sync="query.pageSize" @pagination="getTransactionList" />
     </el-card>

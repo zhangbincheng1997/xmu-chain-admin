@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float: right;" @click="handleAdd">添加</el-button>
       <el-table v-loading="loading" :data="list.slice((query.page-1)*query.limit,query.page*query.limit)">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
         <el-table-column label="角色名字" prop="name" align="center" />

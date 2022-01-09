@@ -6,7 +6,7 @@
       <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
-      <el-button type="primary" icon="el-icon-plus" style="float:right;" @click="handleAdd">添加批次</el-button>
+      <el-button type="primary" icon="el-icon-plus" style="float: right;" @click="handleAdd">添加批次</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="批次号" prop="no" align="center">

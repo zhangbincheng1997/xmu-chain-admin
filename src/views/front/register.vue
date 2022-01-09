@@ -8,7 +8,7 @@
         <el-step title="步骤 3" description="完成" icon="el-icon-picture" />
       </el-steps>
       <el-container>
-        <div v-if="step === 1" style="width: 800px; margin:0 auto; padding-top: 50px;">
+        <div v-if="step === 1" style="width: 800px; margin: 0 auto; padding-top: 50px;">
           <el-form ref="companyForm" :model="companyForm" :rules="companyRules" label-width="100px">
             <el-form-item label="企业名称" prop="name">
               <el-input v-model="companyForm.name" />
@@ -40,7 +40,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <div v-if="step === 2" style="width: 500px; margin:0 auto; padding-top: 50px;">
+        <div v-if="step === 2" style="width: 500px; margin: 0 auto; padding-top: 50px;">
           <el-form ref="userForm" :model="userForm" :rules="userRules" label-width="100px">
             <el-form-item label="账号" prop="username">
               <el-input v-model="userForm.username" autocomplete="off" />
@@ -64,7 +64,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <div v-if="step === 3" style="width: 500px; margin:0 auto; padding-top: 50px;">
+        <div v-if="step === 3" style="width: 500px; margin: 0 auto; padding-top: 50px;">
           <el-result icon="success" title="成功" sub-title="请耐心等待管理员审核！！！">
             <template slot="extra">
               <el-button type="primary" @click="back">回到首页</el-button>

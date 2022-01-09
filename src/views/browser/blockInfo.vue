@@ -1,23 +1,23 @@
 <template>
   <div class="app-container">
     <el-card>
-      <el-input v-model="searchKey" placeholder="请输入区块哈希或块高" style="width: 500px;float:right;" clearable>
+      <el-input v-model="searchKey" placeholder="请输入区块哈希或块高" style="width: 500px; float: right;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>
       <el-table v-loading="loading" :data="list" @row-click="handleRowClick">
-        <el-table-column prop="blockNumber" label="块高" width="120" align="center">
+        <el-table-column label="块高" prop="blockNumber" width="120" align="center">
           <template slot-scope="scope">
             <span class="link" @click="link(scope.row.blockNumber)">{{ scope.row.blockNumber }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="transCount" label="交易" width="100" align="center" />
-        <el-table-column prop="pkHash" label="区块哈希" align="center">
+        <el-table-column label="交易" prop="transCount" width="100" align="center" />
+        <el-table-column label="区块哈希" prop="pkHash" align="center">
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.pkHash)" />
             {{ scope.row.pkHash }}
           </template>
         </el-table-column>
-        <el-table-column prop="blockTimestamp" label="创建时间" width="280" align="center" />
+        <el-table-column label="创建时间" prop="blockTimestamp" width="280" align="center" />
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="query.pageNumber" :limit.sync="query.pageSize" @pagination="getBlockList" />
     </el-card>

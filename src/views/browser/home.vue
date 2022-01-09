@@ -118,8 +118,8 @@
 </template>
 
 <script>
-import charts from './components/chart'
 import { getChartData, getNumberData, getNodeList, getBlockList, getTransactionList } from '@/api/chain/browser'
+import charts from './components/chart'
 
 export default {
   name: 'BrowserHome',
