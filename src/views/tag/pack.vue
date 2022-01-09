@@ -51,7 +51,7 @@ export default {
         page: 1,
         limit: 10,
         batchNo: undefined,
-        sort: false
+        sort: true // 降序
       },
       dialog: {
         title: '生成码包',

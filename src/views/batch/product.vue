@@ -85,7 +85,7 @@ export default {
       this.$confirm('是否保存模板？', '提示', {
         type: 'warning'
       }).then(() => {
-        addTemplate(item).then(res => {
+        addTemplate(item).then(() => {
           const template = {
             name: item.name,
             content: item.content

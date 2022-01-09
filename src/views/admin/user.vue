@@ -144,6 +144,8 @@ export default {
       },
       roleData: undefined,
 
+      selectId: undefined,
+
       genderOptions
     }
   },
@@ -170,14 +172,12 @@ export default {
       this.handleQuery()
     },
     handleAdd() {
-      this.handleReset()
       this.dialog = {
         title: '添加',
         visible: true
       }
     },
     handleEdit(row) {
-      this.handleReset()
       this.dialog = {
         title: '修改',
         visible: true

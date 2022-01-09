@@ -33,7 +33,7 @@
             <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" fixed="right">
+        <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handlePreview(scope.row)">预览</el-button>
           </template>
@@ -108,7 +108,7 @@ export default {
         batchNo: undefined,
         code: undefined,
         status: undefined,
-        sort: undefined
+        sort: undefined // 降序
       },
 
       selectIds: [],

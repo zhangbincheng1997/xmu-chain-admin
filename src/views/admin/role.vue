@@ -104,7 +104,9 @@ export default {
         title: '设置权限',
         visible: false
       },
-      permissionData: undefined
+      permissionData: undefined,
+
+      selectId: undefined
     }
   },
   mounted() {

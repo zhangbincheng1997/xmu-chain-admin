@@ -23,7 +23,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="handleQuery" />
     </el-card>
 
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @click="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="企业名称" prop="name" required>
           <el-input v-model="form.name" />

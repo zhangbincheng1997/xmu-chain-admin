@@ -36,7 +36,7 @@
             <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" fixed="right">
+        <el-table-column label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
@@ -50,15 +50,10 @@
         <el-form-item label="批次号" prop="no" required>
           <el-input v-model="form.no" />
         </el-form-item>
-        <!-- 添加可以选择商品模板；编辑不可以选择商品模板 -->
-        <el-form-item v-if="!form.id" label="商品模板" prop="productId" required>
+        <el-form-item label="商品模板" prop="productId" required>
           <el-select v-model="form.productId" filterable clearable>
             <el-option v-for="item in productTemplates" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
-        </el-form-item>
-        <el-form-item v-if="form.id" prop="time">
-          <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>
-          <el-tag type="warning">更新时间：{{ form.updateTime }}</el-tag>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
