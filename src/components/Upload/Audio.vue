@@ -5,7 +5,7 @@
     :show-file-list="false"
     accept=".mp3, .wav, .ogg"
   >
-    <audio v-if="audio" controls>
+    <audio v-if="audio" controls style="width: 200px;">
       <source :src="audioUrl">
     </audio>
     <i v-else class="el-icon-plus" />

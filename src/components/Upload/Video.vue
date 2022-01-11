@@ -5,7 +5,7 @@
     :show-file-list="false"
     accept=".mp4, .webm, .ogg"
   >
-    <video v-if="video" controls>
+    <video v-if="video" controls style="width: 200px;">
       <source :src="videoUrl">
     </video>
     <i v-else class="el-icon-plus" />

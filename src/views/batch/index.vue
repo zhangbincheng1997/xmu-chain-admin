@@ -71,7 +71,7 @@
           <el-input v-model="shopForm.content" />
         </el-form-item>
         <el-form-item label="店铺图标" prop="icon">
-          <UploadImage :image.sync="shopForm.icon" />
+          <UploadImage :image.sync="shopForm.icon" :height="120" />
         </el-form-item>
         <el-form-item label="店铺链接" prop="url">
           <el-input v-model="shopForm.url" />

@@ -11,7 +11,7 @@
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="头像" prop="avatar" align="center">
-          <template slot-scope="scope"><image-preview :image="scope.row.avatar" /></template>
+          <template slot-scope="scope"><image-preview :image="scope.row.avatar" :height="100" /></template>
         </el-table-column>
         <el-table-column label="姓名" prop="name" align="center" />
         <el-table-column label="手机" prop="phone" align="center" />
@@ -64,7 +64,7 @@
           </el-col>
         </el-row>
         <el-form-item v-if="form.id" label="头像" prop="avatar">
-          <UploadImage :image.sync="form.avatar" />
+          <UploadImage :image.sync="form.avatar" :height="100" />
         </el-form-item>
         <el-row>
           <el-col :span="12">

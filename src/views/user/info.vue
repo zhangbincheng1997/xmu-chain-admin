@@ -13,7 +13,7 @@
             <el-input v-model="form.email" />
           </el-form-item>
           <el-form-item label="头像" prop="avatar">
-            <UploadImage :image.sync="form.avatar" />
+            <UploadImage :image.sync="form.avatar" :height="100" />
           </el-form-item>
           <el-form-item label="生日" prop="birthday">
             <el-date-picker v-model="form.birthday" type="date" />

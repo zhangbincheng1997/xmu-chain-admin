@@ -21,19 +21,19 @@ export default {
       default: ''
     },
     width: {
-      type: String,
-      default: '100px'
+      type: Number,
+      required: false
     },
     height: {
-      type: String,
-      default: '100px'
+      type: Number,
+      required: false
     }
   },
   data() {
     return {
       style: {
-        width: this.width,
-        height: this.height
+        width: this.width + 'px',
+        height: this.height + 'px'
       }
     }
   },

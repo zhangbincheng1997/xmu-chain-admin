@@ -16,7 +16,7 @@
       <el-table-column label="内容" prop="value">
         <template slot-scope="scope">
           <el-input v-if="scope.row.type==='text'" v-model="scope.row.value" />
-          <UploadImage v-if="scope.row.type==='image'" :image.sync="scope.row.value" />
+          <UploadImage v-if="scope.row.type==='image'" :image.sync="scope.row.value" :width="200" />
           <UploadVideo v-if="scope.row.type==='video'" :video.sync="scope.row.value" />
           <UploadAudio v-if="scope.row.type==='audio'" :audio.sync="scope.row.value" />
           <UploadFile v-if="scope.row.type==='file'" :file.sync="scope.row.value" />

@@ -47,7 +47,7 @@
           <el-input v-model="form.contactInfo" />
         </el-form-item>
         <el-form-item label="营业执照" prop="businessLicense">
-          <UploadImage :image.sync="form.businessLicense" />
+          <UploadImage :image.sync="form.businessLicense" :height="200" />
         </el-form-item>
         <el-form-item v-if="form.id" prop="time">
           <el-tag type="success">创建时间：{{ form.createTime }}</el-tag>

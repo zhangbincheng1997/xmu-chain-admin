@@ -26,7 +26,7 @@
               <el-input v-model="form.contactInfo" />
             </el-form-item>
             <el-form-item label="营业执照" prop="businessLicense">
-              <UploadImage :image.sync="form.businessLicense" />
+              <UploadImage :image.sync="form.businessLicense" :height="200" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm">提交</el-button>
@@ -41,7 +41,7 @@
             <el-form-item label="法人姓名"><span>{{ form.legalPerson }}</span></el-form-item>
             <el-form-item label="法人身份证号"><span>{{ form.legalId }}</span></el-form-item>
             <el-form-item label="联系方式"><span>{{ form.contactInfo }}</span></el-form-item>
-            <el-form-item label="营业执照"><image-preview :image="form.businessLicense" /></el-form-item>
+            <el-form-item label="营业执照"><image-preview :image="form.businessLicense" :height="200" /></el-form-item>
           </el-form>
         </div>
       </el-container>

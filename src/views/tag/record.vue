@@ -46,19 +46,9 @@
       <el-card>
         <el-tabs v-model="previewIndex">
           <el-tab-pane label="溯源信息">
-            <el-card v-if="previewData.shop">
-              <div slot="header" class="clearfix">
-                <span>店铺信息</span>
-              </div>
-              <div style="float: left;">
-                <img :src="IPFS_GATEWAY + '/' + previewData.shop.icon" height="120px" alt="">
-              </div>
-              <div style="height: 120px; margin-left: 20px; display: inline-block; vertical-align: middle;">
-                <strong>{{ previewData.shop.name }}</strong>
-                <p><small>{{ previewData.shop.content }}</small></p>
-                <p><el-button type="primary" size="mini" icon="el-icon-s-shop"><a :href="previewData.shop.url">进入官方店铺</a></el-button></p>
-              </div>
-            </el-card>
+            <History v-if="previewData.history" :history="previewData.history" />
+            <el-divider />
+            <Shop v-if="previewData.shop" :shop="previewData.shop" />
             <el-divider />
             <div v-for="(item, i) in previewData.items" :key="i">
               <ItemsCard :items="item" />
@@ -85,7 +75,9 @@
 import { trace } from '@/api/service-trace/trace'
 import { list, status } from '@/api/service-trace/tag/record'
 import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
-import ItemsCard from '@/components/ItemsCard'
+import History from '@/views/tag/components/History'
+import Shop from '@/views/tag/components/Shop'
+import ItemsCard from '@/views/tag/components/ItemsCard'
 
 const tagStatusOptions = [
   { label: '全部', value: '' },
@@ -96,6 +88,8 @@ const tagStatusOptions = [
 export default {
   components: {
     VueQr,
+    History,
+    Shop,
     ItemsCard
   },
   data() {
