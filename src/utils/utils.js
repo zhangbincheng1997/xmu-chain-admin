@@ -7,21 +7,3 @@ export function copyText(val) {
     })
   })
 }
-
-export function linkFrom(val) {
-  this.$router.push({
-    path: '/browser/transactionInfo',
-    query: {
-      transFrom: val
-    }
-  })
-}
-
-export function linkHash(val) {
-  this.$router.push({
-    path: '/browser/transactionInfo',
-    query: {
-      transHash: val
-    }
-  })
-}

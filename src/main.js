@@ -53,8 +53,6 @@ import UploadVideo from '@/components/Upload/Video'
 import UploadAudio from '@/components/Upload/Audio'
 import UploadFile from '@/components/Upload/File'
 import ImagePreview from '@/components/ImagePreview'
-import CopyFrom from '@/components/Copy/From'
-import CopyHash from '@/components/Copy/Hash'
 import BatchComplete from '@/components/BatchComplete'
 Vue.component('Pagination', Pagination)
 Vue.component('UploadImage', UploadImage)
@@ -62,8 +60,6 @@ Vue.component('UploadVideo', UploadVideo)
 Vue.component('UploadAudio', UploadAudio)
 Vue.component('UploadFile', UploadFile)
 Vue.component('ImagePreview', ImagePreview)
-Vue.component('CopyFrom', CopyFrom)
-Vue.component('CopyHash', CopyHash)
 Vue.component('BatchComplete', BatchComplete)
 
 // 全局指令注册
