@@ -2,13 +2,6 @@ import request from '@/utils/request'
 
 const API = '/service-admin/api/v1/menu'
 
-export function getMenuRouteList() {
-  return request({
-    url: API + '/route',
-    method: 'get'
-  })
-}
-
 export function treeMenu() {
   return request({
     url: API + '/tree',

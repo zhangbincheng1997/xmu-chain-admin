@@ -1,6 +1,6 @@
 import { constantRoutes } from '@/router'
 import Layout from '@/layout'
-import { getMenuRouteList } from '@/api/service-admin/menu'
+import { getRouteList } from '@/api/service-admin/route'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -60,7 +60,7 @@ const mutations = {
 const actions = {
   generateRoutes({ commit }, role) {
     return new Promise(resolve => {
-      getMenuRouteList().then(response => {
+      getRouteList().then(response => {
         const accessedRoutes = filterAsyncRoutes(response.data, role)
         // NOTE: 刷新页面 跳转404
         accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
