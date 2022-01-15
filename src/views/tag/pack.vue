@@ -38,10 +38,14 @@
 </template>
 
 <script>
-import fileDownload from 'js-file-download'
 import { list, generate, downloadText, downloadImage } from '@/api/service-trace/tag/pack'
+import BatchComplete from '@/components/BatchComplete'
+import fileDownload from 'js-file-download'
 
 export default {
+  components: {
+    BatchComplete
+  },
   data() {
     return {
       loading: false,

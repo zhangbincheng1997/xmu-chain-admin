@@ -48,19 +48,17 @@ Vue.use(eIconPicker, { ElementUI: true })
 
 // 全局组件挂载
 import Pagination from '@/components/Pagination'
+import ImagePreview from '@/components/ImagePreview'
 import UploadImage from '@/components/Upload/Image'
 import UploadVideo from '@/components/Upload/Video'
 import UploadAudio from '@/components/Upload/Audio'
 import UploadFile from '@/components/Upload/File'
-import ImagePreview from '@/components/ImagePreview'
-import BatchComplete from '@/components/BatchComplete'
 Vue.component('Pagination', Pagination)
+Vue.component('ImagePreview', ImagePreview)
 Vue.component('UploadImage', UploadImage)
 Vue.component('UploadVideo', UploadVideo)
 Vue.component('UploadAudio', UploadAudio)
 Vue.component('UploadFile', UploadFile)
-Vue.component('ImagePreview', ImagePreview)
-Vue.component('BatchComplete', BatchComplete)
 
 // 全局指令注册
 import permission from '@/directive/permission'

@@ -25,8 +25,12 @@
 
 <script>
 import { list } from '@/api/service-trace/scan'
+import BatchComplete from '@/components/BatchComplete'
 
 export default {
+  components: {
+    BatchComplete
+  },
   data() {
     return {
       loading: false,

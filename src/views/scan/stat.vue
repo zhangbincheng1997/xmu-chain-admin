@@ -18,6 +18,7 @@
 
 <script>
 import { stat } from '@/api/service-trace/scan'
+import BatchComplete from '@/components/BatchComplete'
 
 // ----- baidu map -----
 import Vue from 'vue'
@@ -35,6 +36,9 @@ VueBMap.initBMapApiLoader({
 // ----- baidu map -----
 
 export default {
+  components: {
+    BatchComplete
+  },
   data() {
     return {
       loading: false,

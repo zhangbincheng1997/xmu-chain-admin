@@ -74,10 +74,11 @@
 <script>
 import { trace } from '@/api/service-trace/trace'
 import { list, status } from '@/api/service-trace/tag/record'
-import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
+import BatchComplete from '@/components/BatchComplete'
 import History from '@/views/tag/components/History'
 import Shop from '@/views/tag/components/Shop'
 import ItemsCard from '@/views/tag/components/ItemsCard'
+import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
 
 const tagStatusOptions = [
   { label: '全部', value: '' },
@@ -88,6 +89,7 @@ const tagStatusOptions = [
 export default {
   components: {
     VueQr,
+    BatchComplete,
     History,
     Shop,
     ItemsCard
