@@ -60,7 +60,7 @@ export default {
       return map[this.role]
     },
     avatarSrc() {
-      return this.IPFS_GATEWAY + '/' + this.avatar + '?imageView2/1/w/80/h/80'
+      return this.avatar ? this.IPFS_GATEWAY + '/' + this.avatar + '?imageView2/1/w/80/h/80' : ''
     },
     ...mapGetters([
       'sidebar',

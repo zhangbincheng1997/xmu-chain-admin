@@ -1,6 +1,6 @@
 import { token, logout } from '@/api/oauth'
 import { getInfo } from '@/api/service-admin/me'
-import { getToken, setToken, removeToken, setRefreshToken, removeRefreshToken, setRole, removeRole } from '@/utils/auth'
+import { getToken, setToken, removeToken, setRefreshToken, removeRefreshToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import store from '@/store'
 
@@ -109,7 +109,6 @@ const actions = {
         commit('SET_ROLE', role)
         commit('SET_ADDRESS', address)
         commit('SET_COMPANY_ID', companyId)
-        setRole(role)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -137,7 +136,6 @@ const actions = {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       removeRefreshToken()
-      removeRole()
       commit('RESET_STATE')
       resolve()
     })
@@ -147,7 +145,6 @@ const actions = {
   exchange({ commit }, key) {
     removeToken() // must remove  token  first
     removeRefreshToken()
-    removeRole()
     commit('RESET_STATE')
     return new Promise((resolve, reject) => {
       token({

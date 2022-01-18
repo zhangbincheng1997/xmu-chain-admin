@@ -1,6 +1,5 @@
 const accessTokenKey = 'ACCESS_TOKEN'
 const refreshTokenKey = 'REFRESH_TOKEN'
-const roleKey = 'ROLE'
 
 export function getToken() {
   return window.localStorage.getItem(accessTokenKey)
@@ -24,16 +23,4 @@ export function setRefreshToken(token) {
 
 export function removeRefreshToken() {
   return window.localStorage.removeItem(refreshTokenKey)
-}
-
-export function getRole() {
-  return window.localStorage.getItem(roleKey)
-}
-
-export function setRole(role) {
-  window.localStorage.setItem(roleKey, role)
-}
-
-export function removeRole() {
-  return window.localStorage.removeItem(roleKey)
 }

@@ -43,7 +43,7 @@ service.interceptors.response.use(
         const config = response.config
         if (!refreshing) {
           refreshing = true
-          return store.dispatch('user/refreshToken', getRefreshToken()).then((token) => {
+          return store.dispatch('user/refreshToken', getRefreshToken()).then(token => {
             // token续期成功
             config.headers['Authorization'] = token
             config.baseURL = '' // url已包含baseURL
