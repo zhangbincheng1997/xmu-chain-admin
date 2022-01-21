@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getCaptcha } from '@/api/base/captcha'
+import { getCaptcha } from '@/api/service-auth/captcha'
 import { validUsername, validPassword } from '@/utils/validate'
 
 export default {

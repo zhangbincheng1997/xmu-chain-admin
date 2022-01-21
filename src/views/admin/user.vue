@@ -16,7 +16,6 @@
         <el-table-column label="姓名" prop="name" align="center" />
         <el-table-column label="手机" prop="phone" align="center" />
         <el-table-column label="邮箱" prop="email" align="center" />
-        <el-table-column label="地址" prop="address" align="center" show-overflow-tooltip />
         <el-table-column label="设置" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handlePwd(scope.row)">密码</el-button>
@@ -37,9 +36,6 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item v-if="form.id" label="地址" prop="address" required>
-          <el-input v-model="form.address" autocomplete="off" disabled />
-        </el-form-item>
         <el-form-item label="账号" prop="username" required>
           <el-input v-model="form.username" autocomplete="off" :disabled="form.id !== undefined" />
         </el-form-item>

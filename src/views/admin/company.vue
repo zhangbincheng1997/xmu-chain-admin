@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { gm } from '@/api/oauth'
+import { gm } from '@/api/service-auth/oauth'
 import { list, update, del } from '@/api/service-admin/company'
 
 export default {

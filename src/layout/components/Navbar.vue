@@ -42,7 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { change } from '@/api/oauth'
+import { change } from '@/api/service-auth/oauth'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 

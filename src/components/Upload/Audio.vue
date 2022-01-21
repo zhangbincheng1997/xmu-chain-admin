@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { upload } from '@/api/base/ipfs'
+import { upload } from '@/api/ipfs'
 
 export default {
   name: 'UploadAudio',

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const API = '/service-admin/api/v1/captcha'
+const API = '/service-auth/captcha'
 
 export function getCaptcha() {
   return request({
