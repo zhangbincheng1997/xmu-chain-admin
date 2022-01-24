@@ -7,6 +7,7 @@
         <el-table-column label="名字" prop="name" align="center" />
         <el-table-column label="路由路径" prop="path" align="center" />
         <el-table-column label="组件路径" prop="component" align="center" />
+        <el-table-column label="重定向路径" prop="redirect" align="center" />
         <el-table-column label="图标" prop="icon" align="center">
           <template slot-scope="scope"><i :class="scope.row.icon" /></template>
         </el-table-column>
@@ -41,11 +42,14 @@
         <el-form-item label="名字" prop="name" required>
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="路由路径" prop="path" required>
+        <el-form-item label="路由路径" prop="path">
           <el-input v-model="form.path" />
         </el-form-item>
-        <el-form-item label="组件路径" prop="component" required>
+        <el-form-item label="组件路径" prop="component">
           <el-input v-model="form.component" />
+        </el-form-item>
+        <el-form-item label="重定向路径" prop="redirect">
+          <el-input v-model="form.redirect" />
         </el-form-item>
         <el-form-item label="图标" prop="icon">
           <e-icon-picker v-model="form.icon" />

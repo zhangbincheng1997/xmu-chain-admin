@@ -5,8 +5,9 @@
       <el-table v-loading="loading" :data="list.slice((query.page-1)*query.limit,query.page*query.limit)" row-key="id" default-expand-all>
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" />
         <el-table-column label="名字" prop="name" align="center" />
-        <el-table-column label="路径" prop="url" align="center" />
-        <el-table-column label="方法" prop="method" align="center" />
+        <el-table-column label="接口路径" prop="url" align="center" />
+        <el-table-column label="接口方法" prop="method" align="center" />
+        <el-table-column label="按钮权限" prop="btnPerm" align="center" />
         <el-table-column label="图标" prop="icon" align="center">
           <template slot-scope="scope"><i :class="scope.row.icon" /></template>
         </el-table-column>
@@ -35,16 +36,19 @@
             clearable
           />
         </el-form-item>
-        <el-form-item label="名字" prop="name" required>
+        <el-form-item label="名字" prop="name">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="路径" prop="url" required>
+        <el-form-item label="接口路径" prop="url">
           <el-input v-model="form.url" />
         </el-form-item>
-        <el-form-item label="方法" prop="method" required>
+        <el-form-item label="接口方法" prop="method">
           <el-select v-model="form.method" clearable>
             <el-option v-for="item in methodOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="按钮权限" prop="btnPerm">
+          <el-input v-model="form.btnPerm" />
         </el-form-item>
         <el-form-item label="图标" prop="icon">
           <e-icon-picker v-model="form.icon" />

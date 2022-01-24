@@ -95,7 +95,7 @@ export default {
       form: {},
 
       menuDialog: {
-        title: '设置角色',
+        title: '设置菜单',
         visible: false
       },
       menuData: undefined,
