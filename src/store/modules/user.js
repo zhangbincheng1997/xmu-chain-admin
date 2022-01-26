@@ -10,8 +10,7 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     roles: [],
-    role: '',
-    companyId: 0
+    perms: []
   }
 }
 
@@ -33,11 +32,8 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
-  SET_ROLE: (state, role) => {
-    state.role = role
-  },
-  SET_COMPANY_ID: (state, companyId) => {
-    state.companyId = companyId
+  SET_PERMS: (state, perms) => {
+    state.perms = perms
   }
 }
 
@@ -97,13 +93,12 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, roles, role, companyId } = data
+        const { name, avatar, roles, perms } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
-        commit('SET_ROLE', role)
-        commit('SET_COMPANY_ID', companyId)
+        commit('SET_PERMS', perms)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -162,11 +157,10 @@ const actions = {
   async resetRouter() {
     resetRouter()
 
-    const { role } = await store.dispatch('user/getInfo')
+    const { roles } = await store.dispatch('user/getInfo')
 
     // generate accessible routes map based on roles
-    // const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-    const accessRoutes = await store.dispatch('permission/generateRoutes', role)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)

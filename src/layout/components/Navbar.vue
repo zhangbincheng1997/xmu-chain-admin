@@ -33,7 +33,7 @@
           {{ roleName }}<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(item, i) in roles" :key="i" :command="item.value">{{ item.name }}</el-dropdown-item>
+          <el-dropdown-item v-for="(item, i) in roleList" :key="i" :command="item.value">{{ item.name }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -42,6 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getRoles } from '@/api/service-admin/me'
 import { change } from '@/api/service-auth/oauth'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
@@ -51,24 +52,33 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      roleList: [],
+      roleMap: {}
+    }
+  },
   computed: {
-    roleName() {
-      const map = {}
-      this.roles.forEach(item => {
-        map[item.value] = item.name
-      })
-      return map[this.role]
-    },
     avatarSrc() {
       return this.avatar ? this.IPFS_GATEWAY + '/' + this.avatar + '?imageView2/1/w/80/h/80' : ''
+    },
+    roleName() {
+      return this.roles.length > 0 ? this.roleMap[this.roles[0]] : ''
     },
     ...mapGetters([
       'sidebar',
       'avatar',
       'name',
-      'roles',
-      'role'
+      'roles'
     ])
+  },
+  mounted() {
+    getRoles().then(res => {
+      this.roleList = res.data
+      this.roleList.forEach(item => {
+        this.roleMap[item.value] = item.name
+      })
+    })
   },
   methods: {
     toggleSideBar() {

@@ -4,15 +4,16 @@ import { getRouteList } from '@/api/service-admin/route'
 
 /**
  * Use meta.role to determine if the current user has permission
- * @param role
+ * @param roles
  * @param route
  */
-function hasPermission(role, route) {
-  if (role === 'SUPER_ADMIN') {
+function hasPermission(roles, route) {
+  // 超级管理员放行
+  if (roles.includes('SUPER_ADMIN')) {
     return true
   }
   if (route.meta && route.meta.roles) {
-    return route.meta.roles.includes(role)
+    return roles.some(role => route.meta.roles.includes(role))
   } else {
     return true
   }
@@ -21,13 +22,13 @@ function hasPermission(role, route) {
 /**
  * Filter asynchronous routing tables by recursion
  * @param routes asyncRoutes
- * @param role
+ * @param roles
  */
-export function filterAsyncRoutes(routes, role) {
+export function filterAsyncRoutes(routes, roles) {
   const res = []
   routes.forEach(route => {
     const tmp = { ...route }
-    if (hasPermission(role, tmp)) {
+    if (hasPermission(roles, tmp)) {
       const component = tmp.component
       if (route.component) {
         if (component === 'Layout') {
@@ -36,7 +37,7 @@ export function filterAsyncRoutes(routes, role) {
           tmp.component = (resolve) => require([`@/views/${component}`], resolve)
         }
         if (tmp.children) {
-          tmp.children = filterAsyncRoutes(tmp.children, role)
+          tmp.children = filterAsyncRoutes(tmp.children, roles)
         }
       }
       res.push(tmp)
@@ -58,10 +59,10 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, role) {
+  generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       getRouteList().then(response => {
-        const accessedRoutes = filterAsyncRoutes(response.data, role)
+        const accessedRoutes = filterAsyncRoutes(response.data, roles)
         // NOTE: 刷新页面 跳转404
         accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_ROUTES', accessedRoutes)

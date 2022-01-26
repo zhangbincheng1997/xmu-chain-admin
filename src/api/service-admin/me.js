@@ -9,6 +9,13 @@ export function getInfo() {
   })
 }
 
+export function getRoles() {
+  return request({
+    url: API + '/roles',
+    method: 'get'
+  })
+}
+
 export function updateInfo(data) {
   return request({
     url: API + '/info',
