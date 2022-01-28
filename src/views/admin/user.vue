@@ -16,6 +16,11 @@
         <el-table-column label="姓名" prop="name" align="center" />
         <el-table-column label="手机" prop="phone" align="center" />
         <el-table-column label="邮箱" prop="email" align="center" />
+        <el-table-column label="角色" prop="roles" align="center">
+          <template slot-scope="scope">
+            <el-tag v-for="(item, i) in scope.row.roles" :key="i">{{ item.name }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="设置" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handlePwd(scope.row)">密码</el-button>

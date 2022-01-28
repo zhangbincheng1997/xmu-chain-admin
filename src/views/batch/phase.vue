@@ -6,11 +6,11 @@
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item, i) in list" :key="i" :name="i.toString()">
           <template slot="title">
-            <el-tag v-if="item.id">{{ item.name }}</el-tag>
-            <i v-if="item.id" class="el-icon-delete" style="margin-left: 20px;" @click="handleDelete(item.id)">删除</i>
+            <el-tag>{{ item.name }}</el-tag>
+            <i v-has-permission="['DELETE_PHASE']" class="el-icon-delete" style="margin-left: 20px;" @click="handleDelete(item.id)">删除</i>
           </template>
           <el-tag v-if="item.txId" type="success">已上链：{{ item.txId }}</el-tag>
-          <el-button v-else type="text" :disabled="item.id === undefined" @click="chain(item)">上链</el-button>
+          <el-button v-has-permission="['CHAIN_PHASE']" type="text" :disabled="item.id === undefined" @click="chain(item)">上链</el-button>
           <el-button type="text" style="float: right;" @click="importClick(item)">导入模板</el-button>
           <el-button type="text" style="float: right;" @click="saveTemplate(item)">保存模板</el-button>
           <el-form ref="form" :model="item" label-width="100px">
@@ -20,12 +20,12 @@
             <el-form-item label="环节内容" prop="content">
               <Items :content.sync="item.content" />
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-has-permission="['EDIT_PHASE']">
               <el-button type="primary" @click="submitForm(item)">保存</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
-        <div style="text-align: center">
+        <div v-if="checkHasPermission(['ADD_PHASE'])" style="text-align: center">
           <el-button type="text" @click="addContent">新增环节</el-button>
         </div>
       </el-collapse>

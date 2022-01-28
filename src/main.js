@@ -70,7 +70,9 @@ Vue.use(global)
 
 // 全局方法注册
 import checkPermission from '@/utils/permission'
+import checkHasPermission from '@/utils/hasPermission'
 Vue.prototype.checkPermission = checkPermission
+Vue.prototype.checkHasPermission = checkHasPermission
 
 import * as utils from '@/utils/utils'
 Object.keys(utils).forEach(key => {

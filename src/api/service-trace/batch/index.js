@@ -35,12 +35,12 @@ export function del(id) {
 export function updateShop(id, data) {
   return request({
     url: API + '/shop/' + id,
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
 
-export function status(id, status) {
+export function updateStatus(id, status) {
   return request({
     url: API + '/status/' + id,
     method: 'post',

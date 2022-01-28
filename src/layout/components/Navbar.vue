@@ -54,8 +54,7 @@ export default {
   },
   data() {
     return {
-      roleList: [],
-      roleMap: {}
+      roleList: []
     }
   },
   computed: {
@@ -63,7 +62,12 @@ export default {
       return this.avatar ? this.IPFS_GATEWAY + '/' + this.avatar + '?imageView2/1/w/80/h/80' : ''
     },
     roleName() {
-      return this.roles.length > 0 ? this.roleMap[this.roles[0]] : ''
+      const role = this.roles[0]
+      const roleMap = {}
+      this.roleList.forEach(item => {
+        roleMap[item.value] = item.name
+      })
+      return roleMap[role]
     },
     ...mapGetters([
       'sidebar',
@@ -75,9 +79,6 @@ export default {
   mounted() {
     getRoles().then(res => {
       this.roleList = res.data
-      this.roleList.forEach(item => {
-        this.roleMap[item.value] = item.name
-      })
     })
   },
   methods: {

@@ -3,10 +3,10 @@
     <el-alert title="注：同一批次下的商品的溯源信息是一样的，如果溯源信息不一样请分不同批次。" type="warning" />
     <br>
     <el-card>
-      <el-input v-model="query.keyword" placeholder="请输入关键词" style="width: 300px;" clearable>
+      <el-input v-model="query.keyword" v-has-permission="['VIEW_BATCH']" placeholder="请输入关键词" style="width: 300px;" clearable>
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
       </el-input>
-      <el-button type="primary" icon="el-icon-plus" style="float: right;" @click="handleAdd">添加批次</el-button>
+      <el-button v-has-permission="['ADD_BATCH']" type="primary" icon="el-icon-plus" style="float: right;" @click="handleAdd">添加批次</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
         <el-table-column label="批次号" prop="no" align="center">
@@ -16,27 +16,27 @@
           </template>
         </el-table-column>
         <el-table-column label="商品名称" prop="productName" align="center" />
-        <el-table-column label="店铺信息" align="center">
-          <template slot-scope="scope">
-            <el-button type="text" @click="handleShop(scope.row)">配置</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column label="商品信息" align="center">
+        <el-table-column v-if="checkHasPermission(['VIEW_PRODUCT'])" label="商品信息" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="handleProduct(scope.row)">配置</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="环节信息" align="center">
+        <el-table-column v-if="checkHasPermission(['VIEW_PHASE'])" label="环节信息" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="handlePhase(scope.row)">配置</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="状态" prop="status" align="center">
+        <el-table-column v-if="checkHasPermission(['EDIT_BATCH_SHOP'])" label="店铺信息" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleShop(scope.row)">配置</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="checkHasPermission(['EDIT_BATCH_STATUS'])" label="状态" prop="status" align="center">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <el-table-column v-if="checkHasPermission(['DELETE_BATCH'])" label="操作" width="120" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { list, add, del, updateShop, status } from '@/api/service-trace/batch'
+import {list, add, del, updateShop, updateStatus } from '@/api/service-trace/batch'
 import { allTemplate } from '@/api/service-trace/template/product'
 
 export default {
@@ -163,7 +163,7 @@ export default {
     },
     // ----- 修改状态 -----
     handleSwitchChange(row) {
-      status(row.id, row.status).then(() => {})
+      updateStatus(row.id, row.status).then(() => {})
     },
     // ----- 配置店铺信息 -----
     handleShop(row) {

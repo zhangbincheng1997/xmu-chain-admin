@@ -4,7 +4,7 @@
     <br>
     <el-card>
       <el-tag v-if="form.txId" type="success">已上链：{{ form.txId }}</el-tag>
-      <el-button v-else type="text" :disabled="form.id === undefined" @click="chain(form)">上链</el-button>
+      <el-button v-has-permission="['CHAIN_PRODUCT']" type="text" :disabled="form.id === undefined" @click="chain(form)">上链</el-button>
       <el-button type="text" style="float: right;" @click="importClick(form)">导入模板</el-button>
       <el-button type="text" style="float: right;" @click="saveTemplate(form)">保存模板</el-button>
       <el-form ref="form" :model="form" label-width="100px">
@@ -14,7 +14,7 @@
         <el-form-item label="商品内容" prop="content">
           <Items :content="form.content" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-has-permission="['EDIT_PRODUCT']">
           <el-button type="primary" @click="submitForm(form)">保存</el-button>
         </el-form-item>
       </el-form>

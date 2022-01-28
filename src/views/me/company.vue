@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card>
       <el-container>
-        <div v-if="checkPermission([SUPER_ADMIN, COMPANY_ADMIN])">
+        <div v-if="checkPermission(['SUPER_ADMIN', 'COMPANY_ADMIN'])">
           <el-form ref="form" :model="form" label-width="100px">
             <el-form-item label="企业名称" prop="name" required>
               <el-input v-model="form.name" />
