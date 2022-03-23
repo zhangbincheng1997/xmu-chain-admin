@@ -1,6 +1,6 @@
 <template>
-  <el-select v-model="currentNo" placeholder="批次号" filterable clearable @change="handleChange">
-    <el-option v-for="item in batchList" :key="item.no" :label="item.label" :value="item.no" />
+  <el-select v-model="currentId" placeholder="批次号" filterable clearable @change="handleChange">
+    <el-option v-for="item in batchList" :key="item.id" :label="item.label" :value="item.id" />
   </el-select>
 </template>
 
@@ -10,7 +10,7 @@ import { list } from '@/api/service-trace/batch'
 export default {
   name: 'BatchComplete',
   props: {
-    no: {
+    id: {
       type: String,
       default: ''
     },
@@ -25,17 +25,17 @@ export default {
   },
   data() {
     return {
-      currentNo: this.no,
+      currentId: this.id,
       batchList: []
     }
   },
   mounted() {
     list().then(res => {
-      res.data.forEach(item => this.batchList.push({ no: item.no, label: item.no + '-' + item.productName }))
+      res.data.forEach(item => this.batchList.push({ id: item.id, label: item.no + '-' + item.productName }))
       // 设置默认值
       if (this.isDefault && this.batchList.length > 0) {
-        this.currentNo = this.batchList[0].no
-        this.handleChange(this.currentNo)
+        this.currentId = this.batchList[0].id
+        this.handleChange(this.currentId)
       }
       // 加载完成回调
       if (this.onFinish) {
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     handleChange(value) {
-      this.$emit('update:no', value)
+      this.$emit('update:id', value)
     }
   }
 }

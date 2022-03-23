@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card>
-      <batch-complete :no.sync="query.batchNo" />
+      <batch-complete :id.sync="query.batchId" />
       <el-date-picker v-model="query.start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" />
       <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
       <br>
@@ -43,7 +43,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        batchNo: undefined,
+        batchId: undefined,
         code: undefined,
         start: undefined,
         end: undefined,

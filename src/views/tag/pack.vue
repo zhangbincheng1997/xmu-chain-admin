@@ -4,7 +4,7 @@
       <el-select v-model="query.status" placeholder="标签状态" style="width: 200px;" clearable>
         <el-option v-for="item in tagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <batch-complete :no.sync="query.batchNo" />
+      <batch-complete :id.sync="query.batchId" />
       <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button type="primary" icon="el-icon-plus" style="float: right;" @click="handleGenerate">生成码包</el-button>
       <br>
@@ -41,8 +41,8 @@
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" @close="handleClose">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="批次号" prop="batchNo" required>
-          <batch-complete :no.sync="form.batchNo" />
+        <el-form-item label="批次" prop="batchId" required>
+          <batch-complete :id.sync="form.batchId" />
         </el-form-item>
         <el-form-item label="数量" prop="count" required>
           <el-input v-model="form.count" />
@@ -79,7 +79,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        batchNo: undefined,
+        batchId: undefined,
         sort: true // 降序
       },
       dialog: {
@@ -136,7 +136,7 @@ export default {
       this.dialog.visible = true
     },
     handleSubmit() {
-      generate(this.form.batchNo, this.form.count).then(() => {
+      generate(this.form.batchId, this.form.count).then(() => {
         this.handleClose()
         this.handleQuery()
       })

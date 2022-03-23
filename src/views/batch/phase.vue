@@ -118,7 +118,7 @@ export default {
         type: 'warning'
       }).then(() => {
         chain(item.id).then(res => {
-          item.txId = res.data.txId
+          item.txId = res.data
           this.$forceUpdate()
         })
       })

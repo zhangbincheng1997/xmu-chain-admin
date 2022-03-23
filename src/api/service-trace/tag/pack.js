@@ -23,12 +23,12 @@ export function status(ids, status) {
   })
 }
 
-export function generate(batchNo, count) {
+export function generate(batchId, count) {
   return request({
     url: API + '/generate',
     method: 'post',
     data: {
-      batchNo: batchNo,
+      batchId: batchId,
       count: count
     }
   })

@@ -4,7 +4,7 @@
       <el-select v-model="query.status" placeholder="标签状态" style="width: 200px;" clearable>
         <el-option v-for="item in tagStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <batch-complete :no.sync="query.batchNo" />
+      <batch-complete :id.sync="query.batchId" />
       <el-input v-model="query.code" placeholder="溯源码" style="width: 400px;" clearable />
       <el-button icon="el-icon-search" @click="handleQuery">查询</el-button>
       <br>
@@ -49,25 +49,14 @@
     <el-drawer :visible.sync="previewVisible" title="预览" size="50%">
       <el-card>
         <el-tabs v-model="previewIndex">
-          <el-tab-pane label="溯源信息">
-            <History v-if="previewData.history" :history="previewData.history" />
+          <el-tab-pane v-for="(preview, i) in previewData" :key="i" :label="preview.productName">
             <el-divider />
-            <Shop v-if="previewData.shop" :shop="previewData.shop" />
+            <Shop v-if="preview.shop" :shop="preview.shop" />
             <el-divider />
-            <div v-for="(item, i) in previewData.items" :key="i">
+            <div v-for="(item, ii) in preview.items" :key="ii">
               <ItemsCard :items="item" />
               <el-divider />
             </div>
-          </el-tab-pane>
-          <el-tab-pane label="扫码历史">
-            <el-table :data="previewData.history">
-              <el-table-column type="index" width="50" />
-              <el-table-column label="IP" prop="ip" align="center" />
-              <el-table-column label="地点" prop="location" align="center" />
-              <el-table-column label="经度" prop="longitude" align="center" />
-              <el-table-column label="纬度" prop="latitude" align="center" />
-              <el-table-column label="扫码时间" prop="createTime" align="center" />
-            </el-table>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -79,7 +68,6 @@
 import { trace } from '@/api/service-trace/trace'
 import { list, status } from '@/api/service-trace/tag/record'
 import BatchComplete from '@/components/BatchComplete'
-import History from '@/views/tag/components/History'
 import Shop from '@/views/tag/components/Shop'
 import ItemsCard from '@/views/tag/components/ItemsCard'
 import VueQr from 'vue-qr' // https://github.com/Binaryify/vue-qr
@@ -94,7 +82,6 @@ export default {
   components: {
     VueQr,
     BatchComplete,
-    History,
     Shop,
     ItemsCard
   },
@@ -106,7 +93,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        batchNo: undefined,
+        batchId: undefined,
         code: undefined,
         status: undefined,
         sort: undefined // 降序
