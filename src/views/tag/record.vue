@@ -17,7 +17,11 @@
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" />
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="批次号" prop="batchNo" align="center" />
+        <el-table-column label="批次信息" prop="batchInfo" align="center">
+          <template slot-scope="scope">
+            <span class="link" @click="linkBatch(scope.row.batchId)">{{ scope.row.productName + '(' + scope.row.batchNo + ')' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="溯源码" prop="code" align="center" />
         <el-table-column label="二维码" prop="qrcode" align="center">
           <template slot-scope="scope">
@@ -157,7 +161,7 @@ export default {
     },
     // ----- 预览 -----
     handlePreview(row) {
-      trace(row.batchNo, row.code).then(res => {
+      trace(row.batchId).then(res => {
         this.previewVisible = true
         this.previewIndex = '0'
         this.previewData = res.data

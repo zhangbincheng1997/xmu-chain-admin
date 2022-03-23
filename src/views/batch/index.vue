@@ -12,7 +12,7 @@
         <el-table-column label="批次号" prop="no" align="center">
           <template slot-scope="scope">
             <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.no)" />
-            <span class="link" @click="linkTagRecord(scope.row.no)">{{ scope.row.no }}</span>
+            <span class="link" @click="linkStat(scope.row.no)">{{ scope.row.no }}</span>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" prop="productName" align="center" />
@@ -31,9 +31,14 @@
             <el-button type="text" @click="handleShop(scope.row)">配置</el-button>
           </template>
         </el-table-column>
+        <el-table-column v-if="checkHasPermission(['EDIT_BATCH_SOURCES'])" label="关联批次" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleSources(scope.row)">配置</el-button>
+          </template>
+        </el-table-column>
         <el-table-column v-if="checkHasPermission(['EDIT_BATCH_STATUS'])" label="状态" prop="status" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" active-text="启用" inactive-text="禁用" @change="handleSwitchChange(scope.row)" />
+            <el-switch v-model="scope.row.status" active-text="ON" inactive-text="OFF" @change="handleSwitchChange(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column v-if="checkHasPermission(['DELETE_BATCH'])" label="操作" width="120" align="center" fixed="right">
@@ -62,6 +67,16 @@
       </div>
     </el-dialog>
 
+    <el-dialog :title="sourcesDialog.title" :visible.sync="sourcesDialog.visible" @close="handleSourcesClose">
+      <el-form ref="sourcesForm" :model="sourcesForm" label-width="100px">
+        <batch-multi-complete :sources.sync="sourcesForm.sources" />
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSourcesSubmit">确 定</el-button>
+        <el-button @click="handleSourcesClose">取 消</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog :title="shopDialog.title" :visible.sync="shopDialog.visible" @close="handleShopClose">
       <el-form ref="shopForm" :model="shopForm" label-width="100px">
         <el-form-item label="店铺名称" prop="name">
@@ -86,10 +101,14 @@
 </template>
 
 <script>
-import {list, add, del, updateShop, updateStatus } from '@/api/service-trace/batch'
+import { list, add, del, updateSources, updateShop, updateStatus } from '@/api/service-trace/batch'
 import { allTemplate } from '@/api/service-trace/template/product'
+import BatchMultiComplete from '@/components/BatchMultiComplete'
 
 export default {
+  components: {
+    BatchMultiComplete
+  },
   data() {
     return {
       loading: false,
@@ -106,6 +125,12 @@ export default {
         visible: false
       },
       form: {},
+
+      sourcesDialog: {
+        title: '批次关联',
+        visible: false
+      },
+      sourcesForm: {},
 
       shopDialog: {
         title: '店铺配置',
@@ -161,9 +186,26 @@ export default {
         })
       })
     },
+    // ----- 关联批次 -----
+    handleSources(row) {
+      this.sourcesForm = row.sources ? JSON.parse(row.sources) : {}
+      this.sourcesForm.id = row.id
+      this.sourcesDialog.visible = true
+    },
+    handleSourcesSubmit() {
+      updateSources(this.sourcesForm.id, this.sourcesForm).then(() => {
+        this.handleSourcesClose()
+        this.handleQuery()
+      })
+    },
+    handleSourcesClose() {
+      this.sourcesForm = {}
+      this.$refs.sourcesForm.resetFields()
+      this.sourcesDialog.visible = false
+    },
     // ----- 修改状态 -----
     handleSwitchChange(row) {
-      updateStatus(row.id, row.status).then(() => {})
+      updateStatus([row.id], row.status).then(() => {})
     },
     // ----- 配置店铺信息 -----
     handleShop(row) {
@@ -201,9 +243,9 @@ export default {
       })
     },
     // ----- 跳转标签记录 -----
-    linkTagRecord(val) {
+    linkStat(val) {
       this.$router.push({
-        path: '/tag/record',
+        path: '/scan/stat',
         query: {
           batchNo: val
         }

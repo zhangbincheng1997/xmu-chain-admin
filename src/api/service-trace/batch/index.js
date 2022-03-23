@@ -32,6 +32,14 @@ export function del(id) {
   })
 }
 
+export function updateSources(id, data) {
+  return request({
+    url: API + '/sources/' + id,
+    method: 'post',
+    data: data
+  })
+}
+
 export function updateShop(id, data) {
   return request({
     url: API + '/shop/' + id,
@@ -40,11 +48,12 @@ export function updateShop(id, data) {
   })
 }
 
-export function updateStatus(id, status) {
+export function updateStatus(ids, status) {
   return request({
-    url: API + '/status/' + id,
+    url: API + '/status',
     method: 'post',
     data: {
+      ids: ids,
       status: status
     }
   })

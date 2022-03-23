@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { upload } from '@/api/ipfs'
+import { upload } from '@/api/service-evidence/ipfs'
 
 export default {
   name: 'UploadVideo',

@@ -12,6 +12,28 @@ export function list(data) {
   })
 }
 
+export function status(ids, status) {
+  return request({
+    url: API + '/status',
+    method: 'post',
+    data: {
+      ids: ids,
+      status: status
+    }
+  })
+}
+
+export function generate(batchNo, count) {
+  return request({
+    url: API + '/generate',
+    method: 'post',
+    data: {
+      batchNo: batchNo,
+      count: count
+    }
+  })
+}
+
 export function downloadText(id) {
   return axios({
     url: process.env.VUE_APP_BASE_API + API + '/download/text/' + id,
@@ -30,17 +52,6 @@ export function downloadImage(id) {
     responseType: 'blob',
     headers: {
       Authorization: getToken()
-    }
-  })
-}
-
-export function generate(batchNo, count) {
-  return request({
-    url: API + '/generate',
-    method: 'post',
-    data: {
-      batchNo: batchNo,
-      count: count
     }
   })
 }
