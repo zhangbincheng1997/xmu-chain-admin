@@ -80,6 +80,7 @@ export default {
         page: 1,
         limit: 10,
         batchId: undefined,
+        status: undefined,
         sort: true // 降序
       },
       dialog: {

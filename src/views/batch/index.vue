@@ -9,13 +9,12 @@
       <el-button v-has-permission="['ADD_BATCH']" type="primary" icon="el-icon-plus" style="float: right;" @click="handleAdd">添加批次</el-button>
       <el-table v-loading="loading" :data="list" @sort-change="handleSortChange">
         <el-table-column label="#" prop="id" width="100" align="center" fixed="left" sortable="custom" />
-        <el-table-column label="批次号" prop="no" align="center">
+        <el-table-column label="批次信息" prop="batchInfo" align="center">
           <template slot-scope="scope">
-            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.no)" />
-            <span class="link" @click="linkStat(scope.row.no)">{{ scope.row.no }}</span>
+            <i class="el-icon-copy-document" title="复制" @click="copyText(scope.row.productName + '(' + scope.row.no + ')')" />
+            <span class="link" @click="linkStat(scope.row.id)">{{ scope.row.productName + '(' + scope.row.no + ')' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" prop="productName" align="center" />
         <el-table-column v-if="checkHasPermission(['VIEW_PRODUCT'])" label="商品信息" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="handleProduct(scope.row)">配置</el-button>
@@ -117,6 +116,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
+        batchId: this.$route.query.batchId,
         keyword: undefined,
         sort: false
       },
@@ -188,8 +188,8 @@ export default {
     },
     // ----- 关联批次 -----
     handleSources(row) {
-      this.sourcesForm = row.sources ? JSON.parse(row.sources) : {}
       this.sourcesForm.id = row.id
+      this.sourcesForm.sources = row.sources ? JSON.parse(row.sources) : []
       this.sourcesDialog.visible = true
     },
     handleSourcesSubmit() {
@@ -203,14 +203,10 @@ export default {
       this.$refs.sourcesForm.resetFields()
       this.sourcesDialog.visible = false
     },
-    // ----- 修改状态 -----
-    handleSwitchChange(row) {
-      updateStatus([row.id], row.status).then(() => {})
-    },
     // ----- 配置店铺信息 -----
     handleShop(row) {
-      this.shopForm = row.shopInfo ? JSON.parse(row.shopInfo) : {}
       this.shopForm.id = row.id
+      this.shopForm = row.shopInfo ? JSON.parse(row.shopInfo) : {}
       this.shopDialog.visible = true
     },
     handleShopSubmit() {
@@ -223,6 +219,10 @@ export default {
       this.shopForm = {}
       this.$refs.shopForm.resetFields()
       this.shopDialog.visible = false
+    },
+    // ----- 修改状态 -----
+    handleSwitchChange(row) {
+      updateStatus([row.id], row.status).then(() => {})
     },
     // ----- 配置商品信息 -----
     handleProduct(row) {
@@ -247,7 +247,7 @@ export default {
       this.$router.push({
         path: '/scan/stat',
         query: {
-          batchNo: val
+          batchId: val
         }
       })
     }

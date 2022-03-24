@@ -110,9 +110,6 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.batchNo) {
-      this.query.batchNo = this.$route.query.batchNo
-    }
     this.handleQuery()
   },
   methods: {

@@ -12,11 +12,7 @@ export default {
   props: {
     id: {
       type: String,
-      default: ''
-    },
-    isDefault: {
-      type: Boolean,
-      default: false
+      default: undefined
     },
     onFinish: {
       type: Function,
@@ -33,7 +29,7 @@ export default {
     list().then(res => {
       res.data.forEach(item => this.batchList.push({ id: item.id, label: item.no + '-' + item.productName }))
       // 设置默认值
-      if (this.isDefault && this.batchList.length > 0) {
+      if (this.currentId === undefined && this.batchList.length > 0) {
         this.currentId = this.batchList[0].id
         this.handleChange(this.currentId)
       }

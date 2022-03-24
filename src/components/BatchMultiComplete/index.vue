@@ -23,7 +23,7 @@ export default {
   },
   mounted() {
     list().then(res => {
-      res.data.forEach(item => this.batchList.push({ id: item.id, label: item.no + '-' + item.productName }))
+      res.data.forEach(item => this.batchList.push({ id: parseInt(item.id), label: item.no + '-' + item.productName }))
     })
   },
   methods: {

@@ -12,7 +12,7 @@ export function copyText(val) {
 // ----- 跳转批次 -----
 export function linkBatch(val) {
   this.$router.push({
-    path: '/batch',
+    path: '/batch/index',
     query: {
       batchId: val
     }

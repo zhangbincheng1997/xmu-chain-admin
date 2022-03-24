@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card>
-      <batch-complete :id.sync="query.batchId" :on-finish="search" is-default />
+      <batch-complete :id.sync="query.batchId" :on-finish="search" />
       <el-date-picker v-model="query.start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" />
       <el-date-picker v-model="query.end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" />
       <el-button icon="el-icon-search" @click="search">查询</el-button>
@@ -45,7 +45,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        batchId: undefined,
+        batchId: this.$route.query.batchId,
         start: undefined,
         end: undefined
       },
