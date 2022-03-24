@@ -43,11 +43,12 @@ export default {
       query: {
         page: 1,
         limit: 10,
+        keyword: undefined,
+        sort: true,
         batchId: undefined,
         code: undefined,
         start: undefined,
-        end: undefined,
-        sort: false
+        end: undefined
       }
     }
   },

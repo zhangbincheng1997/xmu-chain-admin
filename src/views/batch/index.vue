@@ -116,9 +116,9 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        batchId: this.$route.query.batchId,
         keyword: undefined,
-        sort: false
+        sort: true,
+        batchId: this.$route.query.batchId
       },
       dialog: {
         title: '批次配置',

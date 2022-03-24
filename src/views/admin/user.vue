@@ -127,8 +127,8 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        sort: false,
         keyword: undefined,
+        sort: true,
         roleId: undefined
       },
       dialog: {

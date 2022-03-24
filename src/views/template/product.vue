@@ -59,7 +59,7 @@ export default {
         page: 1,
         limit: 10,
         keyword: undefined,
-        sort: false
+        sort: true
       },
       dialog: {
         title: undefined,

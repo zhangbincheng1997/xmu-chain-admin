@@ -79,9 +79,9 @@ export default {
       query: {
         page: 1,
         limit: 10,
+        sort: true,
         batchId: undefined,
-        status: undefined,
-        sort: true // 降序
+        status: undefined
       },
       dialog: {
         title: '生成码包',

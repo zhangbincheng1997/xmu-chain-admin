@@ -93,10 +93,10 @@ export default {
       query: {
         page: 1,
         limit: 10,
+        sort: true,
         batchId: undefined,
         code: undefined,
-        status: undefined,
-        sort: undefined // 降序
+        status: undefined
       },
 
       selectIds: [],

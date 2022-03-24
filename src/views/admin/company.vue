@@ -76,7 +76,7 @@ export default {
         page: 1,
         limit: 10,
         keyword: undefined,
-        sort: false
+
       },
       dialog: {
         title: '编辑',

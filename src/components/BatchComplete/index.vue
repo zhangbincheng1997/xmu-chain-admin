@@ -28,15 +28,6 @@ export default {
   mounted() {
     list().then(res => {
       res.data.forEach(item => this.batchList.push({ id: item.id, label: item.no + '-' + item.productName }))
-      // 设置默认值
-      if (this.currentId === undefined && this.batchList.length > 0) {
-        this.currentId = this.batchList[0].id
-        this.handleChange(this.currentId)
-      }
-      // 加载完成回调
-      if (this.onFinish) {
-        this.onFinish()
-      }
     })
   },
   methods: {
