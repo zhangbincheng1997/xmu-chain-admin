@@ -50,12 +50,6 @@ location ^~ /prod-api/ {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 }
-
-location ^~ /prod-chain-api/ {
-    proxy_pass http://139.198.106.18:8080/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-}
 ```
 
 ### 代码目录
