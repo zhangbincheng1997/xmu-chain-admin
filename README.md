@@ -35,7 +35,6 @@
 * nginx -s quit
 * nginx -s reload
 
-
 ### 默认端口
 
 * vim /etc/nginx/nginx.conf
